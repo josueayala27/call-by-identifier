@@ -1,0 +1,66 @@
+ticket: 5
+
+Your clone: /Users/josueayala/call-by-identifier-devagent/clones/builder-5-2
+
+The ticket's branch: ticket-5, on https://github.com/josueayala27/call-by-identifier
+
+The tests-first commit: the head of ticket-5 is now the test author's correction e55d52c679fd670f901946481902631efb1bc489, on the earlier builder's commit 9ccaa333279d5651af12347d8f2ace442cea47d3, on the tests-first commit 5e7ed8ac061212742d15ad85db9bd399a089bcad. Build on top of e55d52c.
+
+The dev setup record, read only, your harness contract: /Users/josueayala/call-by-identifier-devagent/dev-setup.txt
+
+The published ticket, its body and part comments joined: /Users/josueayala/call-by-identifier-devagent/tickets/5-plain.md
+
+The ticket's regression rows: ROW-093.
+
+The deploy-owed rows, which you do not run: DIF-001, SEAM-001.
+
+From the test author's requests, requests-5.txt, its builder heading, whole and word for word (no question stops any of it now):
+
+> builder
+> 1. The test switch doors above (mail recorder read, mail failure, clock, storage fault, account count), under
+>    VID_TEST=1 alone — once the test manager authorises them.
+> 2. The tests drive the product's own forms over HTTP and in Chromium: the email step at / is a form with the email box
+>    and a submit labelled with "code" (as now); the code-entry step is a form with a field named with "code" or "otp" (or
+>    autocomplete="one-time-code"); a form post sends the browser's Origin. "Signed in" is read as: / answers 200 and shows
+>    neither step. The code email body carries the code as its only run of 3 or more digits.
+> 3. The code-entry step needs a control (link or button) other than its submit that leads back to the email step (ROW-096).
+> 4. ROW-204: Chromium turns an IDN domain typed into an <input type="email"> (e.g. user@exämple.test) into punycode
+>    before sending, so a server-side ASCII check alone cannot refuse it; the screen itself has to refuse it.
+>
+> TA (test-author-22, 2026-11-27T16:46:40Z):
+> 5. The hourly wrong-try limit is per rolling hour (REQ-037, "within an hour"): the new ROW-200 and ROW-209 cases cross
+>    the end of a window counted from an address's first use, with the clock door.
+> 6. Past the 10th wrong try, the right code and a wrong code must get the same answer (ROW-200's new case): the
+>    refusal must not depend on the code.
+> 7. ROW-142: the switch-off product must hand its code email to the mail binding (the harness reads it, item 5 for the
+>    test manager); no request header, query value, cookie or form field turns a test path on.
+
+"The test switch doors above", as the same file's test manager heading words them, quoted; the test manager has authorised all five (the record's stand-in: lines; the account count by the owner's answer on #5):
+
+>    - GET  /__test/mail?to=<email>  → {"messages":[{"to":["…"],"cc":[],"bcc":[],"from":"…","subject":"…","text":"…"}]},
+>      the messages whose recipient equals <email> ignoring letter case, oldest first; "to" is exactly the recipient list
+>      the adapter handed to the binding (setup-2 question 2's default, with its JSON shape fixed). Measuring tool, DIF-001.
+>    - POST /__test/mail/fail?to=<email>  → the fake mailer's next send to <email> throws; nothing is recorded (ROW-196, HOS-029).
+>    - POST /__test/clock?advance=<seconds>  → the Clock port reads <seconds> later from then on, for every later read
+>      (ROW-004, HOS-004; and the 61 s step past REQ-023's 60-second rule before any second request for one email:
+>      ROW-007, ROW-196, ROW-117, ROW-201, HOS-007, HOS-029). It has no replacing step: time cannot be moved publicly.
+>    - POST /__test/fault?at=codes|codes-write|none  → every code-store operation (codes) or every code-store write
+>      (codes-write) fails until at=none (ROW-126).
+>    - GET  /__test/account?email=<email>  → {"accounts": <number of stored accounts with that email>} (ROW-146, ROW-117).
+>      A measuring tool; no spec decision names one yet — see questions.
+
+The owner's answer on #5 that authorises the account door, quoted:
+
+> RM: Question: ROW-146, ROW-117 — may the ledger read the account count through a test-switch door (GET /__test/account)?
+>
+> Yes, under the test switch alone and never in production, like the other test doors. Name it in the pull request's Decisions section so it is recorded.
+
+The test manager's setup pass, for the product's entry (the secret variants of RULE-013 and HOS-028), quoted:
+
+> **For the builder:** in `src/worker/entry.mjs`, `VID_SECRET_SHORT=<NAME>` should give that secret the first `VID_SECRET_LENGTH` characters of `VID_TEST_SECRET` (8 when unset). The mail reader needs nothing more: it only needs product-off to send its code email through the binding, which it already does.
+
+The owner's answer on #5 that this rests on, quoted:
+
+> RM: Question: RULE-013, HOS-028 — how short is "short" for a secret?
+>
+> Not 8: the code secret keys HMAC-SHA-256 (D-009, D-025; RFC 2104), so a secret under 32 bytes is short, and the Worker refuses to sign anyone in (RULE-013, HOS-028).
