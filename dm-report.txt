@@ -221,3 +221,44 @@ Stopped agents: none.
 used: loop: 636 s of 86400 s; agents: 867 s, 139 turns; 10 ended, 1 running (this dev manager).
 Free memory: 11948 MB; measured: 2 804 2026-11-27T14:51:38Z.
 list: loop: alive, pid 61102, for 10 min; dev manager: dev-manager-11, alive, for 1 min; agents: none.
+
+## 2026-11-27T16:30:07Z — dev-manager-12 (plugin 0.26.11.2.1), DM_WORK=/Users/josueayala/call-by-identifier-devagent
+
+Known limits ruled: none.
+
+Moved:
+- #5 (step S2, sign-in by emailed code, 40 rows, regression ROW-093, deploy-owed DIF-001 SEAM-001): claimed (vid: claimed, by: DM);
+  branch ticket-5 from 663a11e with empty commit 5974e97 (Role: DM); draft pull request #6.
+- Test author test-author-13: commit 5e7ed8a (Role: TA), 74 cases in 16 files; requests-5.txt. Its 7 product questions posted on #5
+  (Question:, by TA, no label, defaults). Doors: /__test/mail/fail, /__test/clock, /__test/fault authorised as set-up doors
+  (3 stand-in: lines); /__test/mail's first use said on #5; /__test/account NOT authorised (Q1, needs a spec decision) and held
+  from the builder.
+- Setup setup-14: harness moved into this work folder's harness/ (record's commands now point here); product-off, restart hook,
+  secret variants; environments 3 -> 2; measured: 80 3334 2026-11-27T15:45:31Z; 3 more stand-in: lines; its 2 questions posted (TM).
+- Red run red-5-1 at 5e7ed8a: 3 passed, 9 failed, 64 errored (setup:); reds in 8 rows; no-red-5.txt holds the other 30.
+- Builder builder-15: commit 9ccaa33 (Role: BU); untouched.sh exit 0; its lifecycle question posted (BU, no label).
+- Head run pr-6-9ccaa333279d-1: 75 passed, 0 failed, 3 errored (ROW-146 both cases, one ROW-117 case: held account door).
+- Decisions section of PR #6 rewritten for 9ccaa33 (8 builder lines + 1 settled: placeholder D1 database_id).
+- Breaks grader-16: 29 patches; fault run pr-6-9ccaa333279d-2 (control ROW-093 for each).
+- Grade (T5) grader-17 + grader-18, joined: vid-results/grade-pr-6-9ccaa333279d-1 — 33 kept; breached product ROW-117, ROW-200,
+  ROW-209, HOS-006; breached test ROW-124, ROW-142, ROW-146.
+- Weak-test breaks grader-19 (3 patches) and fault run pr-6-9ccaa333279d-3: ROW-124 and ROW-142 missed; ROW-146 inconclusive
+  (errored on the held door; TM: comment on #5).
+- Sort second-reviewer-20: vid-results/sort-pr-6-9ccaa333279d-1 — ROW-200 test it, ROW-209 test it, ROW-117 note it, HOS-006 note it.
+  The test it lines wait for the decision's test author pass.
+- PR #6 marked ready; vid: decide 9ccaa333279d5651af12347d8f2ace442cea47d3 (by: MR) posted. Waiting for ViD's decision.
+
+Each `next` line, word for word (before, then after):
+claim 5
+wait 5
+
+Questions (all on #5, no label, each with its default): Q1 account-count door (ROW-146, ROW-117: rows wait on it, door held);
+Q2 what "signed in" shows; Q3 "short" secret length; Q4 invisible characters at the ends of an email; Q5 ROW-124's Math.random
+clause; Q6 ROW-204's call-box half; Q7 ROW-158 restart standing for eviction; Q8 no staging test inbox (DIF-001, SEAM-001);
+Q9 a refusing secret variant reads as setup; Q10 the code lifecycle has no state-machine rule row.
+
+Stopped agents: none.
+used: loop: 5677 s of 86400 s; agents: 9433 s, 498 turns; 19 ended, 1 running (this dev manager).
+Free memory: 11948 MB; measured: 80 3334 2026-11-27T15:45:31Z.
+list: loop: alive, pid 61102, for 94 min; dev manager: dev-manager-12, alive, for 81 min; agents: none.
+Left for the merge's clean-up: clones test-author-5-1, setup-5-1, builder-5-1; blind copies keZlBD, i1XxDu, KOcRRP, 07Bhvx, UY69W0.

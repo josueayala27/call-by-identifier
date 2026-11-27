@@ -17,3 +17,4 @@ GR	5	claude-opus-5-5	373	29
 GR	5	claude-opus-5-5	320	30
 GR	5	claude-opus-5-5	37	7
 SR	5	claude-opus-5-5	64	8
+DM	-	claude-opus-5-5	1426	114
