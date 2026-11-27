@@ -1,4 +1,4 @@
-// Purpose: the Worker's platform configuration: entry module, compatibility, and the variables it reads.
+// Purpose: the Worker's platform configuration: entry module, compatibility, bindings, and the variables it reads.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "call-by-identifier",
@@ -7,5 +7,22 @@
   "observability": { "enabled": true },
   "vars": {
     "VID_TEST": "0"
-  }
+  },
+  // D-004: accounts, codes, sessions and counters. The database id is the deployer's to set when the database is created.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "call-by-identifier",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // D-008, SEAM-001: the Cloudflare Email Service binding; only the sending address may send.
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "allowed_sender_addresses": ["no-reply@call-by-identifier.josueayala.me"]
+    }
+  ]
+  // The secret SIGNIN_SECRET (D-009, D-025) is set with `wrangler secret put SIGNIN_SECRET`, never here.
 }
