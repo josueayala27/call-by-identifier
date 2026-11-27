@@ -102,3 +102,4 @@ Stopped agents: none.
 used: loop: 102 s of 86400 s; agents: 190 s, 34 turns; 3 ended, 1 running (this dev manager).
 Free memory: 11948 MB; measured: none.
 list: loop: alive, pid 25972, for 1 min;dev manager: dev-manager-4, alive, for 0 min;none;
+2026-11-27T14:47:20Z the loop stopped: a pass ended twice with the line it began with: claim 3
