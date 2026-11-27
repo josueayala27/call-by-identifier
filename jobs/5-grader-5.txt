@@ -1,0 +1,36 @@
+ticket: 5
+
+Your job: the breaks, the ticket's ask T4's first half, quoted from it: "T4 (GR, then TM): at the same head, GR writes each needed fault's change: make this row's fail-if true, and nothing else; a later head may plant a row's earlier patch again. TM plants it and runs the faulted row's test and the control's, in the primary engine; TM picks each control, a row or another case of the faulted row that passed at this head's T3. The needed faults: the faulted rows', each row with no red's, each retested row's." The break job alone: for each row below, one patch to the product that makes the row's fail-if true, and nothing else.
+
+The blind copy: /Users/josueayala/call-by-identifier-devagent/blind/copy.mVL79l
+
+The head's full commit id: b0b7b16c82d828cdea037ec6af1e23d93a776636
+
+The plain ticket, joined (its body and parts, each decision's why: dropped): /Users/josueayala/call-by-identifier-devagent/tickets/5-plain-grader.md
+
+The export: the spec repository https://github.com/josueayala27/call-by-identifier-spec at f2c578aa0fa62b0dda999c62d92d54e6085c8d4e, read only.
+
+The rows to break, each quoted as the ticket has it. Each row's fail-if is its own line's "this never happens:" or "this must always hold:" clause; for RULE-013, a rule row, its rule; for HOS-005, a hostility row, its disable: note, make this row's protection go.
+
+> ROW-114 | behavior | REQ-001 | anonymous | n/a | this must always hold: the email box refuses commas, line breaks, display names, several @ and more than 254 characters; the code email has exactly one recipient, equal to the normalised address; and this must always hold: only one bare address is accepted: semicolons, spaces and angle brackets are refused, apostrophes accepted | REQ-001 | owed: spec-only — first stage | origin: domain
+- ROW-114 marks: none
+
+> ROW-117 | behavior | REQ-002 | anonymous | n/a | this must always hold: parallel wrong guesses against one code evaluate at most 5; one code entered twice at once yields one session; parallel first sign-ins make one account; parallel code requests from one network address leave one working code | REQ-002 | owed: spec-only — first stage | origin: domain
+- ROW-117 marks: none
+
+> ROW-204 | behavior | sign-in screen | anonymous | n/a | this never happens: an email holding any non-ASCII or invisible character is accepted at sign-in or in the call box | REQ-039 | owed: spec-only — first stage | origin: REQ-039
+- ROW-204 marks: none
+
+> ROW-209 | behavior | REQ-037 | anonymous | n/a | this never happens: after 10 wrong tries within an hour from one network address, a further try from that address signs someone in, even with a working code | REQ-037 | owed: spec-only — first stage | origin: REQ-037
+- ROW-209 marks: none
+
+> ROW-212 | behavior | code request response | anonymous | n/a | at the code request response: this never happens: an email holding any non-ASCII or invisible character is accepted — network address means the edge-reported client address, IPv6 counted per /64 | REQ-039 | owed: spec-only — first stage | origin: REQ-039
+- ROW-212 marks: none
+
+> rule | RULE-013 | every secret read refuses to run when the secret is missing or short | 0 | owed: census-armed — no site exists before the code skeleton; armed when its first site and test land | origin: REQ-024
+- RULE-013 marks: rule
+
+> hostility | HOS-005 | submit a correct code a second time after it signed in once, expect no second session | protects: REQ-002 | disable: remove single-use consumption | owed: guard-first — the protection of REQ-002 does not exist yet; paid in the slice that builds it
+- HOS-005 marks: protection
+
+Where each patch goes: /Users/josueayala/call-by-identifier-devagent/faults/5/<row id>.patch, one file a row (for example faults/5/ROW-114.patch), replacing any patch there.
