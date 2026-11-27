@@ -10,6 +10,8 @@ export function createD1Stores(db: D1Database): {
   accounts: AccountStore;
   sessions: SessionStore;
   throttle: RequestThrottle;
+  /** The number of stored accounts with this email; read only by the test switch's account door (ROW-146, ROW-117). */
+  accountCount(email: string): Promise<number>;
 } {
   const codes: CodeStore = {
     async addSent(c) {
@@ -71,24 +73,29 @@ export function createD1Stores(db: D1Database): {
 
   const throttle: RequestThrottle = {
     async take(key, limit, windowMs, now) {
-      // One statement: a new window starts when the old one has ended; otherwise a slot is taken only under the limit.
-      const r = await db
-        .prepare(
-          `INSERT INTO request_counters (key, count, window_start) VALUES (?1, 1, ?2)
-           ON CONFLICT (key) DO UPDATE SET
-             count = CASE WHEN window_start <= ?2 - ?3 THEN 1 ELSE count + 1 END,
-             window_start = CASE WHEN window_start <= ?2 - ?3 THEN ?2 ELSE window_start END
-           WHERE window_start <= ?2 - ?3 OR count < ?4
-           RETURNING count`,
-        )
-        .bind(key, now, windowMs, limit)
-        .all();
-      return r.results.length === 1;
+      // One batch is one transaction: the key's uses older than the window are dropped, then a use is recorded only
+      // while fewer than <limit> remain within the window (a rolling window, REQ-037).
+      const [, inserted] = await db.batch<{ id: number }>([
+        db.prepare('DELETE FROM request_counters WHERE key = ?1 AND at <= ?2 - ?3').bind(key, now, windowMs),
+        db
+          .prepare(
+            `INSERT INTO request_counters (key, at)
+             SELECT ?1, ?2 WHERE (SELECT count(*) FROM request_counters WHERE key = ?1 AND at > ?2 - ?3) < ?4
+             RETURNING id`,
+          )
+          .bind(key, now, windowMs, limit),
+      ]);
+      return inserted.results.length === 1 ? inserted.results[0].id : null;
     },
-    async giveBack(key) {
-      await db.prepare('UPDATE request_counters SET count = count - 1 WHERE key = ? AND count > 0').bind(key).run();
+    async giveBack(key, slot) {
+      await db.prepare('DELETE FROM request_counters WHERE key = ? AND id = ?').bind(key, slot).run();
     },
   };
 
-  return { codes, accounts, sessions, throttle };
+  async function accountCount(email: string): Promise<number> {
+    const r = await db.prepare('SELECT count(*) AS n FROM accounts WHERE email = lower(?)').bind(email).first<{ n: number }>();
+    return r?.n ?? 0;
+  }
+
+  return { codes, accounts, sessions, throttle, accountCount };
 }

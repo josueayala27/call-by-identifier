@@ -10,7 +10,8 @@ export type TestRig = {
   mailer: FakeMailer;
   clock: Clock;
   wrapCodes(codes: CodeStore): CodeStore;
-  doors: TestDoors;
+  /** The doors, given the stores of the request being served. */
+  doors(stores: { accountCount(email: string): Promise<number> }): TestDoors;
 };
 
 /**
@@ -51,7 +52,8 @@ export function createTestRig(): TestRig {
         },
       };
     },
-    doors: {
+    doors: (stores) => ({
+      accountCount: (email) => stores.accountCount(email),
       mailFor: (to) => mailer.messagesFor(to),
       failNextMail: (to) => mailer.failNextTo(to),
       advanceClock: (seconds) => {
@@ -60,6 +62,6 @@ export function createTestRig(): TestRig {
       setFault: (at) => {
         fault = at;
       },
-    },
+    }),
   };
 }

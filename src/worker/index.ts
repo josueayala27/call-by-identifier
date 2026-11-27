@@ -58,7 +58,7 @@ export default {
       throttle: stores.throttle,
     };
 
-    const app = createApp({ testSwitch, identity, testDoors: testRig?.doors });
+    const app = createApp({ testSwitch, identity, testDoors: testRig?.doors(stores) });
     return app.fetch(request, env, ctx);
   },
 } satisfies ExportedHandler<Env>;

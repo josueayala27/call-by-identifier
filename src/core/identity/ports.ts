@@ -56,12 +56,12 @@ export interface SessionStore {
 /** Per-address counters kept in storage under keyed hashes (D-025). */
 export interface RequestThrottle {
   /**
-   * Takes one slot of the key's window atomically: true when the key had fewer than <limit> uses in its current
-   * window (a window ends <windowMs> after its first use), false otherwise (nothing changes then).
+   * Records one use of the key at <now> atomically when the key had fewer than <limit> uses in the <windowMs> before
+   * <now> (a rolling window), and returns the slot's id; returns null otherwise (nothing changes then).
    */
-  take(key: string, limit: number, windowMs: number, now: number): Promise<boolean>;
-  /** Gives back one slot taken by take(). */
-  giveBack(key: string, now: number): Promise<void>;
+  take(key: string, limit: number, windowMs: number, now: number): Promise<number | null>;
+  /** Gives back the slot take() returned, so it no longer counts. */
+  giveBack(key: string, slot: number): Promise<void>;
 }
 
 export type IdentityDeps = {

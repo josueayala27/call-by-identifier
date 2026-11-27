@@ -5,8 +5,8 @@
 // VID_TEST_SECRET — never a real one.
 //
 // `--secrets` prints, as its last line, the JSON list of every secret the Worker reads, and exits at once.
-// VID_SECRET_MISSING=<NAME> starts with that secret unset; VID_SECRET_SHORT=<NAME> gives it the first 8 characters of
-// VID_TEST_SECRET (RULE-013, HOS-028).
+// VID_SECRET_MISSING=<NAME> starts with that secret unset; VID_SECRET_SHORT=<NAME> gives it the first
+// VID_SECRET_LENGTH characters of VID_TEST_SECRET, 8 when unset (RULE-013, HOS-028).
 
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
@@ -23,6 +23,7 @@ const port = process.env.PORT || '8787';
 const testSwitch = process.env.VID_TEST === '1' ? '1' : '0';
 const wrangler = 'node_modules/.bin/wrangler';
 const testSecret = process.env.VID_TEST_SECRET || '';
+const shortLength = Number.parseInt(process.env.VID_SECRET_LENGTH || '8', 10);
 
 // D1 migrations: applied to the local database before the Worker starts, once a database and its migrations exist.
 const D1_BINDING = 'DB';
@@ -46,7 +47,7 @@ const args = [
 
 for (const { secret } of SECRETS) {
   if (process.env.VID_SECRET_MISSING === secret) continue;
-  const value = process.env.VID_SECRET_SHORT === secret ? testSecret.slice(0, 8) : testSecret;
+  const value = process.env.VID_SECRET_SHORT === secret ? testSecret.slice(0, Number.isFinite(shortLength) && shortLength >= 0 ? shortLength : 8) : testSecret;
   if (value) args.push('--var', `${secret}:${value}`);
 }
 

@@ -77,7 +77,9 @@ export async function verifyCode(
 
   // The address's slot is taken before any code is looked at, so no try past the 10th is ever checked (ROW-200).
   const now = deps.clock.now();
-  if (!(await deps.throttle.take(tryKey, WRONG_TRIES_PER_ADDRESS, WRONG_TRY_WINDOW_MS, now))) return { kind: 'address-limited' };
+  // The hour is rolling: a try counts for the 60 minutes after it was made (REQ-037 "within an hour").
+  const slot = await deps.throttle.take(tryKey, WRONG_TRIES_PER_ADDRESS, WRONG_TRY_WINDOW_MS, now);
+  if (slot === null) return { kind: 'address-limited' };
 
   const typed = await keys.codeHash(email, code);
   const live = await deps.codes.live(email, now);
@@ -87,7 +89,7 @@ export async function verifyCode(
     return { kind: 'wrong' };
   }
   // A right code is no wrong try: its slot is given back.
-  await deps.throttle.giveBack(tryKey, now);
+  await deps.throttle.giveBack(tryKey, slot);
   if (!(await deps.codes.consume(match.id, now))) return { kind: 'wrong' };
 
   await deps.accounts.ensure(email, now);

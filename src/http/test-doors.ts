@@ -1,4 +1,4 @@
-// Purpose: the test-switch doors (VID_TEST=1 only): the fake mailer's reader and failure, the clock and the code-store fault.
+// Purpose: the test-switch doors (VID_TEST=1 only): the fake mailer's reader and failure, the clock, the code-store fault and the account count.
 
 import type { Hono } from 'hono';
 
@@ -11,6 +11,8 @@ export type TestDoors = {
   failNextMail(to: string): void;
   advanceClock(seconds: number): void;
   setFault(at: FaultAt): void;
+  /** The number of stored accounts with an email (a measuring tool, ROW-146, ROW-117). */
+  accountCount(email: string): Promise<number>;
 };
 
 export function mountTestDoors(app: Hono, doors: TestDoors): void {
@@ -43,5 +45,12 @@ export function mountTestDoors(app: Hono, doors: TestDoors): void {
     if (at !== 'codes' && at !== 'codes-write' && at !== 'none') return c.json({ error: 'at must be codes, codes-write or none' }, 400);
     doors.setFault(at);
     return c.json({ ok: true });
+  });
+
+  // ROW-146, ROW-117: how many accounts are stored with ?email= (authorised by the owner's answer on #5).
+  app.get('/__test/account', async (c) => {
+    const email = c.req.query('email') ?? '';
+    if (!email) return c.json({ error: 'email is required' }, 400);
+    return c.json({ accounts: await doors.accountCount(email) });
   });
 }

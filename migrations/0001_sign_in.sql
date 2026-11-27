@@ -31,9 +31,11 @@ CREATE TABLE sessions (
   expires_at INTEGER NOT NULL CHECK (expires_at > created_at)
 );
 
--- D-025: per-address counters, keyed by an HMAC of the address; a window lasts one hour from its first use.
+-- D-025: per-address counters, keyed by an HMAC of the address. One row is one counted use at <at> (milliseconds); a
+-- key's count is its rows within the last hour (a rolling hour, REQ-037), and older rows count for nothing.
 CREATE TABLE request_counters (
-  key TEXT PRIMARY KEY NOT NULL CHECK (length(key) = 64),
-  count INTEGER NOT NULL CHECK (count >= 0),
-  window_start INTEGER NOT NULL
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  key TEXT NOT NULL CHECK (length(key) = 64),
+  at INTEGER NOT NULL
 );
+CREATE INDEX request_counters_by_key ON request_counters (key, at);
