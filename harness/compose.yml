@@ -1,0 +1,45 @@
+# Purpose: the test environment of call-by-identifier, one per run (project cbi-<RUN_ID>): the product as one service,
+# started by its own entry, and the tests' runner, on a network of their own with no route out and no host port.
+services:
+  product:
+    build:
+      context: ${CHECKOUT:-.}
+      dockerfile: ${HARNESS:-.}/product.Dockerfile
+    init: true
+    restart: "no"
+    environment:
+      VID_TEST: "1"                       # the test switch; never set in production
+      PORT: "8787"
+      CI: "1"
+      WRANGLER_SEND_METRICS: "false"
+      # a throwaway value, never a real secret: the code-hashing key and any other secret the entry asks for
+      VID_TEST_SECRET: "test-only-not-a-secret-0000000000000000"
+    networks: [ledger]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8787/').then(r=>process.exit(r.status<500?0:1)).catch(()=>process.exit(1))"]
+      interval: 2s
+      timeout: 5s
+      retries: 150
+      start_period: 5s
+  tests:
+    image: ${TESTS_IMAGE:-cbi-tests:latest}
+    init: true
+    restart: "no"
+    working_dir: /app
+    networks: [ledger]
+    volumes:
+      - ${CHECKOUT:-.}:/app:ro
+      - ${HARNESS:-.}:/harness:ro
+      - ${RESULTS_DIR:-/tmp}:/vid-results
+    environment:
+      CI: "1"
+      ENGINE: ${ENGINE:-chromium}
+      SELECTION: ${SELECTION:-}
+      CASE_LIMIT: ${CASE_LIMIT:-180}
+      NO_PRODUCT: ${NO_PRODUCT:-}
+      BASE_URL: ${BASE_URL:-}
+      RESULTS_NAME: ${RESULTS_NAME:-results.xml}
+    command: ["sh", "/harness/runtests.sh"]
+networks:
+  ledger:
+    internal: true

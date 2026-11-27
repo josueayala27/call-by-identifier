@@ -1,0 +1,9 @@
+{
+  "name": "cbi-ledger-toolchain",
+  "private": true,
+  "description": "Purpose: the tests image's own runners, installed at / in the image once, never at a run",
+  "dependencies": {
+    "@playwright/test": "1.65.1",
+    "vitest": "5.1.2"
+  }
+}
