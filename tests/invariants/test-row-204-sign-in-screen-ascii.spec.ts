@@ -13,6 +13,9 @@
 // ROW-204 given: a fresh browser at a fresh address. when: the visitor types into the email box an address holding one
 //   such character (a Latin-looking letter, an IDN domain, a zero-width space, a no-break space inside, a soft hyphen)
 //   and presses the send-code button. then: the code-entry step does not show (no visible code box).
+// ROW-204 given (the edges): by the owner's answer on #5 (ROW-204, ROW-212: refused, never trimmed), a no-break space,
+//   a zero-width space, a BOM and an ideographic space typed at the very start or the very end of a fresh address;
+//   then: the code-entry step does not show.
 // ROW-204 controls: a plain ASCII address with dots, plus and apostrophe, typed the same way, reaches the code-entry step.
 // ROW-204 technique: operation in the browser — the screen as a person meets it; the request's own refusal is ROW-212's.
 //   The call box half waits for the call box (a later step): no case of it here, named in the hand-back.
@@ -48,6 +51,19 @@ test('ROW-204 an email holding a non-ASCII or invisible character typed on the s
     `row204 x-${fresh()}@example.test`,
     `row204­-${fresh()}@example.test`,
     `row204-${fresh()}@example.tеst`,
+  ];
+  for (const e of inputs) {
+    expect(await typeAndSend(page, e), `ROW-204: the sign-in screen accepted ${JSON.stringify(e)} (the code-entry step showed)`).toBe(false);
+  }
+});
+
+test('ROW-204 an email with a non-ASCII or invisible character at its start or end typed on the sign-in screen is not accepted', async ({ page }) => {
+  const inputs = [
+    `\u00a0row204e-${fresh()}@example.test`,
+    `row204e-${fresh()}@example.test\u00a0`,
+    `\u200brow204e-${fresh()}@example.test`,
+    `row204e-${fresh()}@example.test\ufeff`,
+    `\u3000row204e-${fresh()}@example.test`,
   ];
   for (const e of inputs) {
     expect(await typeAndSend(page, e), `ROW-204: the sign-in screen accepted ${JSON.stringify(e)} (the code-entry step showed)`).toBe(false);

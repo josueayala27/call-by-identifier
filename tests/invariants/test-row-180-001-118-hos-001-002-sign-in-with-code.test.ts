@@ -25,6 +25,10 @@
 //   code-entry step), or that accepts an empty or wrong code.
 // ROW-001 given: a fresh email whose code was requested; when: the browser enters nothing, an empty code, or a wrong
 //   6-digit code (a fresh value differing from the emailed one); then: the browser is not signed in after each.
+// ROW-001 given (near misses): a fresh email's live code; when: 6 codes that differ from it in one digit each (one per
+//   position), its digits rotated and reversed, are entered, each from its own fresh address (A-055: such a try counts
+//   against no code, so the code stays live for every try); then: none signs in. Wrong product: a comparison of part
+//   of the code (5 digits, the digits as a set, a numeric closeness).
 // ROW-001 controls: the emailed code, entered after those tries in the same browser, signs it in — so the tries were
 //   reached on a live code and refused for being wrong.
 // ROW-001 technique: decoy codes beside the one right code; before and after on the same browser.
@@ -38,6 +42,8 @@
 // ROW-118 given: two fresh emails A and B, each with its own live code, requested from two addresses; when: A's code is
 //   entered on B's code-entry step and B's on A's, from a third address (so no wrong try counts against either code);
 //   then: neither browser is signed in.
+// ROW-118 given (near miss): B is A with one letter of its local part changed, same domain; when and then as above.
+//   Wrong product: an email compared on its domain, its length or a prefix.
 // ROW-118 controls: B's own code then entered on B's step signs B in.
 // ROW-118 technique: the neighbouring entity — the other email's live code is the decoy.
 // cases: ROW-118 target=ROW-118 a code issued to one email does not sign in as another email control=ROW-118 control the other email's own code signs it in
@@ -64,7 +70,8 @@
 // cases: HOS-002 target=HOS-002 the correct code entered within 10 minutes gives a session control=ROW-180 control asking for a code shows the code-entry step
 
 import { test, expect } from 'vitest';
-import { Client, requestCode, codeFlow, enterCode, signedIn, latestCode, freshMail, wrongCode, needCodeForm } from './signin';
+import { randomInt } from 'node:crypto';
+import { Client, requestCode, codeFlow, enterCode, signedIn, latestCode, freshMail, wrongCode, needCodeForm, fresh } from './signin';
 
 test('ROW-180 control asking for a code shows the code-entry step', async () => {
   const flow = await requestCode(freshMail('row180'));
@@ -146,4 +153,31 @@ test('HOS-002 the correct code entered within 10 minutes gives a session', async
   const flow = await codeFlow(freshMail('hos002'));
   await enterCode(flow, flow.code);
   expect(await signedIn(flow.client), 'vid-forbidden-effect: HOS-002\nHOS-002: the correct code, entered at once, gave no session').toBe(true);
+});
+
+test('ROW-001 codes one digit away from the emailed code do not sign the person in', async () => {
+  const flow = await codeFlow(freshMail('row001n'));
+  const c = flow.code;
+  const near = new Set<string>();
+  for (let i = 0; i < 6; i++) near.add(c.slice(0, i) + String((Number(c[i]) + 1 + randomInt(0, 9)) % 10) + c.slice(i + 1));
+  near.add(c.slice(1) + c[0]);
+  near.add(c.split('').reverse().join(''));
+  near.delete(c);
+  for (const n of near) {
+    const other = flow.client.clone(new Client().address);
+    await enterCode(flow, n, other);
+    expect(await signedIn(other), `ROW-001: ${n}, a near miss of the emailed code ${c}, signed the person in`).toBe(false);
+  }
+});
+
+test('ROW-118 a code issued to one email does not sign in as a near-identical email', async () => {
+  const local = `row118n-${fresh()}`;
+  const a = await codeFlow(`${local}a@example.test`);
+  const b = await codeFlow(`${local}b@example.test`);
+  const onB = b.client.clone(new Client().address);
+  await enterCode(b, a.code, onB);
+  expect(await signedIn(onB), `ROW-118: ${a.email}'s code, entered on ${b.email}'s code-entry step, signed in`).toBe(false);
+  const onA = a.client.clone(new Client().address);
+  await enterCode(a, b.code, onA);
+  expect(await signedIn(onA), `ROW-118: ${b.email}'s code, entered on ${a.email}'s code-entry step, signed in`).toBe(false);
 });

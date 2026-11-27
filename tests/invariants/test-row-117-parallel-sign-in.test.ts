@@ -1,6 +1,7 @@
 // Purpose: ROW-117's ledger tests — sign-in holds under parallel requests: wrong guesses, one code twice, first sign-ins, code requests.
 //
-// The account count is read through the test-switch door GET /__test/account?email= (a measuring tool; asked).
+// The account count is read through the test-switch door GET /__test/account?email= (a measuring tool, authorised by
+// the owner's answer on #5 to Q1: "Yes, under the test switch alone and never in production").
 //
 // The test argument (ROW-117)
 // ROW-117 promise: this must always hold: parallel wrong guesses against one code evaluate at most 5; one code entered

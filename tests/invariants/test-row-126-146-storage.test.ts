@@ -2,7 +2,8 @@
 //
 // Both read or move what no page can show, through test-switch doors (requested; a case errors "setup:" without them):
 // POST /__test/fault?at=codes|codes-write|none (every code-store operation, or every code-store write, fails until
-// at=none) and GET /__test/account?email= (a measuring tool; asked, as no spec decision names one yet).
+// at=none) and GET /__test/account?email= (a measuring tool, authorised by the owner's answer on #5 to Q1: "Yes, under
+// the test switch alone and never in production").
 //
 // The test argument (ROW-126)
 // ROW-126 promise: this must always hold: a storage error while checking or counting a code signs nobody in.

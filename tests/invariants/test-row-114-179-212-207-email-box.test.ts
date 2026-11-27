@@ -37,6 +37,12 @@
 //   soft hyphen, no-break space, BOM, right-to-left override) and ASCII control characters (tab, 0x01, 0x7F);
 //   when: each is sent as the code request; then: refused — no code-entry step, and no email to it or to its
 //   cleaned form.
+// ROW-212 given (the edges): by the owner's answer on #5 (ROW-204, ROW-212: "Refused, never trimmed … a no-break space
+//   is non-ASCII at the edges as anywhere else"), 10 characters (no-break space, zero-width space and joiner, BOM,
+//   soft hyphen, right-to-left override, line separator, ideographic space, é, Cyrillic а), each placed at the very
+//   start and at the very end of a fresh plain address; when: each is sent; then: refused — no code-entry step, and no
+//   email to it or to its trimmed form. Wrong product: a Unicode-aware trim (String.prototype.trim removes a no-break
+//   space, a BOM, a line separator and an ideographic space) before the ASCII check.
 // ROW-212 controls: two of the same addresses without the inserted character are accepted.
 // ROW-212 technique: a property over generated inputs, plus the named examples.
 // cases: ROW-212 target=ROW-212 emails holding a non-ASCII or invisible character are refused at the code request control=ROW-212 control the same addresses without the added character are accepted
@@ -144,5 +150,18 @@ test('ROW-212 control the same addresses without the added character are accepte
     const e = freshMail('row212');
     const flow = await requestCode(e);
     expect(!!flow.form, `ROW-212: the plain address ${e} is not accepted at the code request`).toBe(true);
+  }
+});
+
+const EDGE = ['\u00a0', '\u200b', '\u200d', '\ufeff', '\u00ad', '\u202e', '\u2028', '\u3000', 'é', 'а'];
+
+test('ROW-212 emails with a non-ASCII or invisible character at their start or end are refused at the code request', async () => {
+  for (const ch of EDGE) {
+    for (const where of ['start', 'end'] as const) {
+      const plain = freshMail('row212e');
+      const input = where === 'start' ? ch + plain : plain + ch;
+      const why = await refused(input, [input, plain]);
+      expect(why, `ROW-212: (U+${ch.codePointAt(0)!.toString(16).padStart(4, '0')} at the ${where}) ${why}`).toBeNull();
+    }
   }
 });
