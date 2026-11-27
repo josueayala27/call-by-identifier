@@ -258,3 +258,78 @@ Questions (step 4), each with the default this setup goes on with
    that measuring door yet, and this pass does not. Default: no line; the cases reading it error "setup:" or wait on that answer.
 3. A secret variant that refuses to start answers nothing at its URL; the RULE-013 and HOS-028 cases may read that as a setup
    error rather than as refused. Default: kept as is, the variant listed with its URL; the test author's to read.
+
+Amended 2026-11-27T16:58:54Z by setup-23, ticket 5, at the test author's correction e55d52c (on the builder's 9ccaa33), steps 2, 4, 5, 6,
+9 and 3, for the test author's requests 5 to 8 in requests-5.txt and the owner's answer on #5 that a secret under 32 bytes is short.
+What it changes from the record above:
+
+The switch-off product's mail (request 5, ROW-142)
+- product-off now runs under the harness's mail tap (new: harness/mail-tap.mjs; compose.yml gives product-off the command
+  node /harness/mail-tap.mjs and the harness mounted read-only). The tap runs pnpm run entry in its own process group, exactly as
+  before, and answers GET http://product-off:8789/?to=<email>, a port the product does not serve. run: hands that address to the
+  tests as PRODUCT_OFF_MAIL_URL; it is empty with NO_PRODUCT=1 and on a staging run (that run's inbox reader is STAGING_INBOX_URL,
+  in its own form).
+- What it reads, found by looking: under wrangler dev --local (wrangler 4.169.0, miniflare 5.20261127.0-beta, pinned by the
+  product's lockfile) the EMAIL binding sends nothing. Miniflare keeps every message handed to send() in its local email store
+  and logs "send_email binding called with MessageBuilder" with the text in a temp file under /app/.wrangler/tmp/email/. The tap
+  reads the store through wrangler's own explorer API on the container's loopback (/cdn-cgi/explorer/api/local/email/sending,
+  newest first, cursor pages of 100; each message's text by ?email_id=). It walks all the pages, reverses them to oldest first,
+  keeps the messages with a recipient equal to <email> ignoring letter case, and answers {"messages":[{"to","from","subject","text"}]}
+  with "to" as the store holds it: the binding's own list, each address unchanged (proved: alice+tag@example.test handed, the same
+  string read back). After a stop the tap waits up to 10 s for the entry's whole group to end.
+- Proved at e55d52c (RUN_ID s23a): the five ROW-142 cases pass. That includes "…sends the code through its mail binding, not the
+  fake mailer" and "no answer … carries the code just sent", which read the tap. product-off still answers every test door 404.
+- From the product, for the reader (the builder's): nothing new. The tap needs the switch-off product to hand its code email to
+  env.EMAIL.send(), which it does at 9ccaa33, and the store keeps only what goes through the binding. One thing the product does
+  not own: wrangler dev's own /cdn-cgi/explorer is on product-off's port 8787, as it is on every local product. It is the local
+  platform's, not the Worker's, and Cloudflare's edge does not serve it (DIF-003). ROW-142's 40 reader paths do not include it.
+
+The secret variants (request 6, RULE-013, HOS-028)
+- Three products per declared secret, no longer two: missing, short (31 characters) and exact (32 characters). Each is started
+  with VID_SECRET_SHORT=<NAME> and VID_SECRET_LENGTH=<31|32>, or VID_SECRET_MISSING=<NAME> as before. PRODUCT_SECRET_VARIANTS
+  entries carry "length" for short and exact, plus "name": variant-<k>, which the tests do not read. variants.mjs writes the list.
+- start: no longer trusts what it asked for. Once each variant is healthy, it reads the length the variant was given from that
+  container's own process command lines (wrangler's --var <NAME>:<value>; the length alone, never the value). It then rewrites the
+  list: "length" becomes the length given. A variant given other than its state is dropped from the list, and start: says so. A
+  variant that ended before it was healthy stays listed as asked: its URL answers nothing, which the cases read as refused.
+- The product's entry, for the builder (step 8): VID_SECRET_SHORT=<NAME> gives that secret the first VID_SECRET_LENGTH characters
+  of VID_TEST_SECRET (8 when unset); VID_TEST_SECRET is 39 characters. The entry at 9ccaa33 ignores VID_SECRET_LENGTH and gives 8.
+  So today start: lists the short variant with "length": 8 and drops the exact one ("was given 8 characters, not 32"). As a result
+  "RULE-013 control with each secret exactly 32 bytes the product starts and signs in" errors "setup: … has no state exact"
+  until the entry reads VID_SECRET_LENGTH (proved at e55d52c, RUN_ID s23a). The other RULE-013 and HOS-028 cases run.
+- Proved with a throwaway copy of e55d52c whose entry read VID_SECRET_LENGTH (/tmp, deleted): the variants were given 31 and 32
+  characters and listed so, and RULE-013's four cases passed, HOS-028 among them: missing and short refused, exact started and
+  signed in.
+
+The clock (request 7): nothing changed. Vitest's files still run one after another, and Playwright still starts after Vitest.
+Cleanup (request 8): nothing of cbi-ta52check was left (leftovers: with RUN_ID=ta52check printed nothing; no cbi- container,
+network or state folder); nothing to stop.
+
+Measure, pick and prove (step 3), again at e55d52c, because each run now has one more product per secret
+- Measure: the heaviest selection there is, the whole suite (96 cases: 13 Vitest files, 89 cases; 3 Playwright files, 7 cases), in one
+  environment, RUN_ID s23m1. It ran from the throwaway copy above (e55d52c with only the entry's VID_SECRET_LENGTH added), so all
+  three variants were up as they will be. Results: 88 passed, 8 failed. 3 failed on the product's own assertions: ROW-200 and two
+  ROW-209 cases. 3 cases errored "setup:" because GET /__test/account answered 404 (ROW-117, two ROW-146; the door is the
+  builder's). 2 cases errored "setup:" because they are staging's (DIF-001, SEAM-001). No harness error.
+- Peaks, each from its own container's cgroup memory.peak: tests 506 MiB, product 569, product-off (with the tap) 464, variant-1
+  427, variant-2 424, variant-3 428. Sum: 2,818 MiB, an upper bound. Engine total: 11,948 MiB. Other work using it: none
+  (free-memory: 11,948 before). Case seconds: median 0.077, longest 2.57. Run phase: 21 s alone. start: 16 s, since the entry now
+  answers --secrets at once.
+- Pick: (11,948 - 2,048 kept free) / 2,818 = 3.5, so environments: 3 (was 2). Setup-14's 3,334 rested on a probe Worker with two
+  secrets and a heavier tests peak (803). Even taking that peak with today's products, the sum is 3,115, and 3 still fit.
+  max-environments: not set here; this pass never sets it.
+- Prove: the measured selection three times at once, start, run and stop each (RUN_IDs pa, pb, pc, from the same copy). They
+  overlapped: run phases 1795798658.381..712.120, 1795798659.958..715.513 and 1795798660.723..716.743 (epoch s); Playwright from
+  16:57:40Z, 16:57:41Z and 16:57:42Z. All three wrote reports, and all three equal the measured run's case results: 96 cases,
+  digest d279978acd46 for s23m1, pa, pb and pc. stop: left nothing of any of them (no cbi- container, network, state folder or
+  product image after). No fixed port, shared file or shared fixture was found. Each run took 54 to 56 s with three at once.
+- case-limit: stays 60 s. The longest case is 2.6 s. The clock cases move the product's clock and do not wait on it.
+
+Questions (step 4), each with the default this setup goes on with
+1. The entry must read VID_SECRET_LENGTH for the exact variant to exist. Default: the builder adds it (one line in
+   src/worker/entry.mjs). Until then the short variant is listed with its true 8 characters, and the exact control errors "setup:".
+2. The tap reads Miniflare's local email store through wrangler's /cdn-cgi/explorer API. That is a local-dev surface, which a
+   wrangler upgrade could move. Default: kept, pinned by the product's lockfile. If it moves, ROW-142's two binding cases error
+   "setup: the binding reader answered …" (the tap answers 502), which is a reason for a setup pass.
+3. setup-14's questions 1 (the staging inbox) and 3 (a variant that refuses to start answers nothing, which the owner's answer
+   now reads as refused) stand as they were. Question 2 is settled: the account door's stand-in line is above.
