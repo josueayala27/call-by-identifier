@@ -13,12 +13,13 @@ if [ -n "${BASE_URL:-}" ]; then
   docker image inspect "$TESTS_IMAGE" > /dev/null 2>&1 || docker build -q -t "$TESTS_IMAGE" -f "$H/tests.Dockerfile" "$H" > /dev/null
   exec docker run --rm --init -w /app -v "$CHECKOUT:/app:ro" -v "$H:/harness:ro" -v "$RESULTS_DIR:/vid-results" -v "$WORK/captures:/captures" \
     -e CI=1 -e NO_COLOR=1 -e FORCE_COLOR=0 -e ENGINE="${ENGINE:-chromium}" -e SELECTION="${SELECTION:-}" -e CASE_LIMIT="${CASE_LIMIT:-180}" -e NO_PRODUCT= \
-    -e PRODUCT_URL="$BASE_URL" -e PRODUCT_OFF_URL="$BASE_URL" -e SIGNIN="${SIGNIN:-}" \
+    -e PRODUCT_URL="$BASE_URL" -e PRODUCT_OFF_URL="$BASE_URL" -e PRODUCT_OFF_MAIL_URL= -e SIGNIN="${SIGNIN:-}" \
     -e STAGING_INBOX="${STAGING_INBOX:-}" -e STAGING_INBOX_URL="${STAGING_INBOX_URL:-}" -e CAPTURES_DIR=/captures \
     -e RESULTS_NAME="$RESULTS_NAME" "$TESTS_IMAGE" sh /harness/runtests.sh
 fi
-if [ "${NO_PRODUCT:-}" = 1 ]; then PRODUCT_URL=''; PRODUCT_OFF_URL=''; PRODUCT_RESTART_URL=''; PRODUCT_SECRET_VARIANTS=''
-else PRODUCT_URL=http://product:8787; PRODUCT_OFF_URL=http://product-off:8787; PRODUCT_RESTART_URL=http://product:8788/restart
+if [ "${NO_PRODUCT:-}" = 1 ]; then PRODUCT_URL=''; PRODUCT_OFF_URL=''; PRODUCT_OFF_MAIL_URL=''; PRODUCT_RESTART_URL=''; PRODUCT_SECRET_VARIANTS=''
+else PRODUCT_URL=http://product:8787; PRODUCT_OFF_URL=http://product-off:8787; PRODUCT_OFF_MAIL_URL=http://product-off:8789/
+  PRODUCT_RESTART_URL=http://product:8788/restart
   PRODUCT_SECRET_VARIANTS=$(cat "$STATE/variants.json" 2>/dev/null || true); fi
-export PRODUCT_URL PRODUCT_OFF_URL PRODUCT_RESTART_URL PRODUCT_SECRET_VARIANTS
+export PRODUCT_URL PRODUCT_OFF_URL PRODUCT_OFF_MAIL_URL PRODUCT_RESTART_URL PRODUCT_SECRET_VARIANTS
 dc run --rm --no-deps -T tests

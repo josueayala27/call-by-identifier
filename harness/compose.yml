@@ -1,6 +1,7 @@
 # Purpose: the test environment of call-by-identifier, one per run (project cbi-<RUN_ID>): the product as one service, started by its own entry
 # (under the harness's restart supervisor), the same image again with the test switch off (product-off), and the tests' runner, on a network of
-# their own with no route out and no host port. The secret variants (variant-<n>) are added per run by start: in the state folder's compose file.
+# their own with no route out and no host port; product-off runs under the harness's mail tap, which reads what it hands its mail binding
+# (PRODUCT_OFF_MAIL_URL). The secret variants (variant-<n>) are added per run by start: in the state folder's compose file.
 x-product: &product
   image: ${PRODUCT_IMAGE:-cbi-manual-product}
   init: true
@@ -33,6 +34,10 @@ services:
       VID_TEST: "1"                       # the test switch; never set in production
   product-off:
     <<: *product
+    # the entry under the harness's mail tap, which answers GET :8789/?to=<email> with what the binding was handed (PRODUCT_OFF_MAIL_URL, ROW-142)
+    command: ["node", "/harness/mail-tap.mjs"]
+    volumes:
+      - ${HARNESS:-.}:/harness:ro
     environment:
       <<: *product-env
       VID_TEST: "0"                       # the deployed shape (ROW-142): the same image, the test switch off
@@ -56,6 +61,7 @@ services:
       NO_PRODUCT: ${NO_PRODUCT:-}
       PRODUCT_URL: ${PRODUCT_URL:-}          # where the product answers; empty with NO_PRODUCT=1 (BASE_URL is not used: Vite overwrites it)
       PRODUCT_OFF_URL: ${PRODUCT_OFF_URL:-}  # the same build with VID_TEST=0 (ROW-142)
+      PRODUCT_OFF_MAIL_URL: ${PRODUCT_OFF_MAIL_URL:-}          # GET ?to=<email>: what product-off handed its mail binding (ROW-142)
       PRODUCT_RESTART_URL: ${PRODUCT_RESTART_URL:-}            # POST: restarts the product, its local D1 kept; answers once / is up (ROW-158)
       PRODUCT_SECRET_VARIANTS: ${PRODUCT_SECRET_VARIANTS:-}    # JSON list, one product per secret and state (RULE-013, HOS-028)
       RESULTS_NAME: ${RESULTS_NAME:-results.xml}
