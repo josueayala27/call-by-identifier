@@ -1,0 +1,62 @@
+ticket: 1
+
+Your job: the dev setup's first pass for this project, before the first run and ahead of the test author: steps 1, 2, 4, 5, 6, 7 and 9 of your role file (no tests exist yet, so step 3 waits; step 8 is named now, as the first ticket's builder starts on it). Write the record at the work folder's dev-setup.txt and return as your role file says.
+
+The dev side's work folder: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent
+
+Your clone, of the code repository, on the ticket's branch ticket-1: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/clones/setup-1-1
+
+The code repository's clone address: https://github.com/josueayala27/call-by-identifier
+
+The ticket, #1 on josueayala27/call-by-identifier, the parts you receive, quoted from it:
+
+Its stack and hosting:
+
+> ## The stack and hosting
+>
+> The stack, decided at init:
+>
+> >
+> > | Layer | Choice | FORBIDDEN alternatives (named) |
+> > |---|---|---|
+> > | Runtime | Cloudflare Workers, TypeScript (strict) | Node.js servers, Vercel Functions, AWS Lambda, Cloudflare Pages Functions |
+> > | HTTP framework | Hono (with `hono/jsx` for server-rendered pages) | Express, Fastify, Koa, itty-router, Next.js |
+> > | Architecture | Hexagonal: `src/core` (pure domain + ports) ← `src/adapters` (D1, mail, switchboard) ← `src/http` (Hono) ← `src/worker` (composition root) | Layered MVC, ORM-model-centric design, logic in route handlers |
+> > | Accounts, sessions, codes, request counters, daily total | Cloudflare D1 (SQLite) through prepared SQL statements in `src/adapters/d1` | Prisma, Drizzle ORM, TypeORM, Sequelize, Neon/Postgres, Supabase, Firebase, Workers KV for accounts |
+> > | Live state (online, busy, calls) | One Durable Object (`Switchboard`), in memory only, WebSocket Hibernation API; never written to Durable Object storage | Durable Object storage, D1, KV, Redis, Socket.IO, Pusher, Ably |
+> > | Voice | Browser WebRTC (`RTCPeerConnection`), audio only, peer to peer; STUN `stun.cloudflare.com` | Video tracks, SFU/media servers, any encryption layer of the product's own (A-005), Twilio, Agora |
+> > | Email | Cloudflare Email Service (Worker binding), sender `no-reply@call-by-identifier.josueayala.me` | Nodemailer, SendGrid, Mailgun, SMTP from the Worker |
+> > | Client UI | Server-rendered Hono JSX + one vanilla TypeScript client bundle; plain CSS with design tokens | React, Vue, Svelte, Tailwind CSS, any SPA framework |
+> > | Validation | Zod via `@hono/zod-validator` | Hand-rolled request parsing, Yup, Joi |
+> > | Crypto | Web Crypto API (`crypto.getRandomValues`, HMAC-SHA-256, SHA-256) | bcrypt, jsonwebtoken (JWT sessions), Math.random for secrets |
+> > | Tests | Vitest + `@cloudflare/vitest-pool-workers`; Playwright (Chromium, fake media devices) for browser call flows | Jest, Mocha, Cypress, Puppeteer |
+> > | Tooling | pnpm, Wrangler, Node 22 (tooling only) | npm/yarn lockfiles, global installs |
+> >
+>
+> The hosting, decided at init:
+>
+> > platform: cloudflare
+> > region: global
+> > staging: the platform's own (a workers.dev address)
+> > production: call-by-identifier.josueayala.me
+> > sending: no-reply@call-by-identifier.josueayala.me (domain call-by-identifier.josueayala.me)
+> > spend-cap: 5 USD a month (Workers Paid plan)
+> > access: cli-login cloudflare
+> > dns-access: cli-login cloudflare
+> > owner-only: wrangler login; setting the OPERATOR_EMAIL variable to the operator's own address; enabling Cloudflare Email Service sending for call-by-identifier.josueayala.me; setting the code-hashing secret value with wrangler secret put
+> > providers: cloudflare-email-service: live-restricted on staging; stun.cloudflare.com: live-restricted on staging; cloudflare-realtime-turn: fake on staging (later)
+
+Its rows and marks:
+
+> ## Rows
+>
+> > ROW-093 | shell | / | anonymous | n/a | a signed-out visitor sees only the sign-in screen (email box and a send-code button): no call box, no sign-out control, no incoming-call area | REQ-001, REQ-005 | owed: spec-only — first stage | origin: REQ-001
+> - ROW-093 marks: shell
+
+Its test differences: the ticket names the spec repository's TEST-DIFFERENCES.md, https://github.com/josueayala27/call-by-identifier-spec, at the export 58f607cec86a644120dfd82bef80d1401cf7f2b7, among its further reading; that file, quoted whole:
+
+> # The test differences: INVENTORY.md's difference rows, verbatim
+>
+> difference | DIF-001 | the code email sender | a fake mailer that records the one recipient and the body in memory | Cloudflare Email Service binding sending from no-reply@call-by-identifier.josueayala.me | the fake records exactly what the adapter hands to the binding, so the product's choice of recipient and body is still tested | paying-step: staging — one real code email to a test inbox through the binding, SPF, DKIM and DMARC passing
+> difference | DIF-002 | the connection-helping server | none needed: both test browsers share one Docker host and connect over host candidates | stun.cloudflare.com for browsers behind home and mobile networks | the product's signalling and media gate are the same; only the path discovery differs | paying-step: staging — a real two-browser call with host candidates filtered out
+> difference | DIF-003 | the edge in front of the Worker | local workerd serves plain HTTP and the test sets the client-address header itself | Cloudflare's edge enforces HTTPS and sets the client address | the product reads one address header and sets one HSTS header; only the edge's own enforcement differs | paying-step: staging — plain HTTP and a spoofed forwarding header against staging
