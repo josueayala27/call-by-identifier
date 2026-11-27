@@ -1,5 +1,5 @@
 // Purpose: inside the main product's container: runs the product's entry (pnpm run entry) and answers POST /restart on port 8788
-// (PRODUCT_RESTART_URL, ROW-158) by stopping the entry with SIGTERM, starting it again in the same container (its local D1 under
+// (PRODUCT_RESTART_URL, ROW-158) by stopping the entry's whole process group with SIGTERM, starting it again in the same container (its local D1 under
 // /app/.wrangler kept) and answering 200 once GET / answers below 500, 504 when it does not within 120 s. The harness's, never the product's.
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -9,7 +9,7 @@ let child = null;
 let stopping = false;
 
 function startEntry() {
-  child = spawn('pnpm', ['run', '--silent', 'entry'], { stdio: 'inherit' });
+  child = spawn('pnpm', ['run', '--silent', 'entry'], { stdio: 'inherit', detached: true }); // its own process group: pnpm, node, wrangler, workerd
   const me = child;
   me.on('exit', (code, signal) => {
     if (me !== child) return;              // a restart's old process: expected
@@ -18,15 +18,18 @@ function startEntry() {
   });
 }
 
-function stopEntry() {
-  return new Promise((resolve) => {
-    const old = child;
-    child = null;
-    if (!old || old.exitCode !== null || old.signalCode !== null) return resolve();
-    const t = setTimeout(() => old.kill('SIGKILL'), 15000);
-    old.once('exit', () => { clearTimeout(t); resolve(); });
-    old.kill('SIGTERM');
-  });
+const alive = (pgid) => { try { process.kill(-pgid, 0); return true; } catch { return false; } };
+
+// stops the entry's whole process group (pnpm leaves before wrangler and workerd do), SIGKILL after 15 s, and waits until none of it is left
+async function stopEntry() {
+  const old = child;
+  child = null;
+  if (!old) return;
+  try { process.kill(-old.pid, 'SIGTERM'); } catch { /* already gone */ }
+  const until = Date.now() + 15000;
+  while (alive(old.pid) && Date.now() < until) await new Promise((r) => setTimeout(r, 100));
+  if (alive(old.pid)) { try { process.kill(-old.pid, 'SIGKILL'); } catch { /* gone */ } }
+  while (alive(old.pid)) await new Promise((r) => setTimeout(r, 100));
 }
 
 async function up(deadline) {
