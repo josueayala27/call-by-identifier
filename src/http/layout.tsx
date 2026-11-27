@@ -28,6 +28,9 @@ body { margin: 0; background: var(--color-bg); color: var(--color-text); font-fa
 .label { font-size: 13px; font-weight: 500; }
 .input { font: inherit; padding: var(--space-2) 12px; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg); color: var(--color-text); }
 .input:focus { outline: 2px solid var(--color-accent); outline-offset: -1px; }
+.error { margin: 0; font-size: 13px; color: var(--color-text); }
+.aside { margin: var(--space-3) 0 0; font-size: 13px; }
+.link { color: var(--color-muted); }
 .button { font: inherit; font-weight: 500; margin-top: var(--space-2); padding: var(--space-2) 12px; border: 1px solid var(--color-accent); border-radius: var(--radius); background: var(--color-accent); color: var(--color-on-accent); cursor: pointer; }
 `;
 

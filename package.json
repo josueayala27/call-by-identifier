@@ -4,6 +4,9 @@
   "type": "module",
   "packageManager": "pnpm@10.34.5",
   "imports": {
+    "#core/identity": "./src/core/identity/index.ts",
+    "#adapters/d1": "./src/adapters/d1/index.ts",
+    "#adapters/mail": "./src/adapters/mail/index.ts",
     "#http": "./src/http/index.tsx",
     "#worker": "./src/worker/index.ts"
   },
