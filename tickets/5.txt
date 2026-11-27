@@ -54,3 +54,6 @@
 2026-11-27T17:10:15Z breaks: grader-25 handed back 7 patches in faults/5/ (ROW-114, ROW-117, ROW-204, ROW-209, ROW-212, RULE-013, HOS-005; notes: ROW-212 also breaks ROW-204 at the server, HOS-005 also ROW-005 and ROW-117's twice-entered clause); taken
 2026-11-27T17:10:15Z fault run: reached rows' breaks at b0b7b16, list faults/5/list-b0b7b16.txt (24 faults, control ROW-093 each), folder /Users/josueayala/call-by-identifier-devagent/runs/20261127T171015Z-93183
 2026-11-27T17:10:33Z decisions: PR #6 body's Decisions section rewritten for head b0b7b16 (2 builder-24 lines + settled account door added; jobs/pr-5-body.md)
+2026-11-27T17:33:52Z fault run: pushed vid-results/pr-6-b0b7b16c82d8-2, leftovers none, 77 passed 31 failed 0 errored; faults with no failing case: ROW-114, ROW-117, ROW-124 (reported as they stand); ROW-209's own control case also failed under its fault
+2026-11-27T17:33:54Z asked b0b7b16c82d828cdea037ec6af1e23d93a776636: vid: decide (by: MR) posted on PR #6
+2026-11-27T17:34:12Z pass end: next reads wait 5; report section in dm-report.txt

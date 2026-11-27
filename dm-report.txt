@@ -262,3 +262,39 @@ used: loop: 5677 s of 86400 s; agents: 9433 s, 498 turns; 19 ended, 1 running (t
 Free memory: 11948 MB; measured: 80 3334 2026-11-27T15:45:31Z.
 list: loop: alive, pid 61102, for 94 min; dev manager: dev-manager-12, alive, for 81 min; agents: none.
 Left for the merge's clean-up: clones test-author-5-1, setup-5-1, builder-5-1; blind copies keZlBD, i1XxDu, KOcRRP, 07Bhvx, UY69W0.
+
+## 2026-11-27T17:34:00Z — dev-manager-21 (plugin 0.26.11.2.1), DM_WORK=/Users/josueayala/call-by-identifier-devagent
+
+Known limits ruled: none.
+
+Moved:
+- #5: ViD's decision on 9ccaa33 read (ticket: not yet): failing, a weak test ROW-124, ROW-142, ROW-200; evidence missing
+  ROW-114, ROW-212, RULE-013 (no fault folder), ROW-117, ROW-146 (its test could not run); HOS rows held; DIF-001,
+  SEAM-001 owed. Incident noted in the record: the owner had answered Q1 (account door: yes) before builder-15 started,
+  and the door was held needlessly. Door now authorised (stand-in: line added).
+- Test author test-author-22: commit e55d52c (Role: TA), weak-test lines with siblings, test it ROW-200 ROW-209, and the
+  owner's answers (short secret = under 32 bytes; edges refused; refusal-by-not-starting). Its Q8 (ROW-124) and Q9
+  (ROW-200) posted on #5 (TA, no label, defaults).
+- Setup setup-23: mail tap for the switch-off product (PRODUCT_OFF_MAIL_URL), secret variants missing/31/32;
+  environments 2 -> 3; measured: 96 2818 2026-11-27T16:58:54Z. Its Wrangler-API question posted on #5 (TM, no label).
+- Builder builder-24: commit b0b7b16 (Role: BU): rolling-hour wrong-try counter, GET /__test/account, entry
+  VID_SECRET_LENGTH. untouched.sh exit 0. Note: it reshaped request_counters inside migrations/0001 rather than adding
+  a migration (its own Decisions line); not judged here.
+- Head run pr-6-b0b7b16c82d8-1 (T3 whole, 4 stand-in: lines, 12 retested rows): 94 passed, 0 failed, 0 errored.
+- Breaks grader-25 (7 new patches); fault run pr-6-b0b7b16c82d8-2 over 24 reached rows: 77 passed, 31 failed;
+  ROW-114, ROW-117, ROW-124 faults show no failing case; reported as they stand.
+- PR #6 Decisions section rewritten for b0b7b16; vid: decide b0b7b16c82d828cdea037ec6af1e23d93a776636 (by: MR) posted.
+
+Each `next` line, word for word (before, then after):
+not-yet 5
+wait 5
+
+Questions (new, on #5, no label, defaults): Q8 ROW-124 random-source clause to the grader; Q9 ROW-200 meaning of
+"checked"; TM: the switch-off mail reader rests on Wrangler's local email API.
+
+Stopped agents: none.
+used: loop: 9516 s of 86400 s; agents: 11568 s, 639 turns; 24 ended, 1 running (this dev manager).
+Free memory: about 4757 MB free+inactive now (Docker engine holds 11948 MB); measured: 96 2818 2026-11-27T16:58:54Z.
+list: loop: alive, pid 61102, for 158 min; dev manager: dev-manager-21, alive, for 62 min; agents: none.
+Left for the merge's clean-up: clones test-author-5-1, test-author-5-2, setup-5-1, setup-5-2, builder-5-1, builder-5-2;
+blind copies keZlBD, i1XxDu, KOcRRP, 07Bhvx, UY69W0, mVL79l.
