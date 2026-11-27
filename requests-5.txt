@@ -30,6 +30,27 @@ test manager
    door). Observed on the base locally: real reds only in ROW-180, ROW-179, ROW-207, ROW-114 (recipient case), ROW-096,
    the controls of ROW-212, ROW-204 and RULE-013. Every other row needs its fault proven at the head.
 
+TA (test-author-22, 2026-11-27T16:46:40Z), the correction after the red run on head 9ccaa33:
+5. PRODUCT_OFF_MAIL_URL (ROW-142, class=harness): a reader, outside the product, of what the switch-off product
+   (product-off) hands its mail binding: GET <url>?to=<email> → {"messages":[{"to":["…"],"from":"…","subject":"…",
+   "text":"…"}]}, oldest first, recipients exactly as handed to the binding. Under wrangler dev --local the Email
+   binding does not send; it writes or logs the message inside the product-off container, so the harness can serve
+   it (a supervisor-like hook on a port the product does not serve). The two ROW-142 cases that read it ("…sends the
+   code through its mail binding, not the fake mailer" and "no answer … carries the code just sent") error "setup:"
+   until it is there. On a staging run it is the staging inbox reader, or unset.
+6. PRODUCT_SECRET_VARIANTS (RULE-013, HOS-028), by the owner's answer "a secret under 32 bytes is short": please give
+   the short variant 31 characters (the longest short value; 8 convicts only checks under 9), add a third state per
+   secret, "exact", given exactly 32 characters (the owner's control: "with a 32-byte secret the same product starts
+   and signs in"), and carry "length": <characters given> on short and exact entries. The cases now read a variant
+   that answers nothing as refused (owner's answer); the new control "RULE-013 control with each secret exactly 32
+   bytes the product starts and signs in" errors "setup:" until the exact variants exist.
+7. The clock: the new ROW-200, ROW-209 and ROW-002 cases move the product's clock by up to 3660 s per case (3601 s
+   for ROW-200 and each ROW-209 case). Files still run one after another, so nothing else is needed; a case later in
+   any file sees that later clock.
+8. Cleanup: my check run (RUN_ID=ta52check, at 9ccaa33) was cut off when Docker Desktop quit at 16:45Z; I restarted
+   Docker Desktop. If cbi-ta52check is left anywhere, stop.sh with RUN_ID=ta52check removes it (I ran it once Docker
+   answered — see my hand-back).
+
 builder
 1. The test switch doors above (mail recorder read, mail failure, clock, storage fault, account count), under
    VID_TEST=1 alone — once the test manager authorises them.
@@ -40,6 +61,14 @@ builder
 3. The code-entry step needs a control (link or button) other than its submit that leads back to the email step (ROW-096).
 4. ROW-204: Chromium turns an IDN domain typed into an <input type="email"> (e.g. user@exämple.test) into punycode
    before sending, so a server-side ASCII check alone cannot refuse it; the screen itself has to refuse it.
+
+TA (test-author-22, 2026-11-27T16:46:40Z):
+5. The hourly wrong-try limit is per rolling hour (REQ-037, "within an hour"): the new ROW-200 and ROW-209 cases cross
+   the end of a window counted from an address's first use, with the clock door.
+6. Past the 10th wrong try, the right code and a wrong code must get the same answer (ROW-200's new case): the
+   refusal must not depend on the code.
+7. ROW-142: the switch-off product must hand its code email to the mail binding (the harness reads it, item 5 for the
+   test manager); no request header, query value, cookie or form field turns a test path on.
 
 questions
 Q1 (ROW-146, ROW-117): may the ledger read the account count through a test-switch door (GET /__test/account)?
@@ -58,3 +87,12 @@ Q6 (ROW-204): the call-box half of the row waits for the call box, a later step.
    ticket; it is written with the call step.
 Q7 (ROW-158): eviction and a second server instance cannot be caused in this harness. Default: a restart of the
    product stands for all three.
+
+TA (test-author-22, 2026-11-27T16:46:40Z):
+Q8 (ROW-124): the clause "codes are drawn from a cryptographic random source" — like the composition-root clause, a
+   statistically good but non-cryptographic generator (Math.random) leaves nothing a sample of codes can show. May it
+   stand with the composition-root clause as a census and grader matter? Default I build on: yes; the ledger tests
+   what a weak source leaves behind (a counter, a clock, a short-period generator) and the range, zeros and session bits.
+Q9 (ROW-200): "checked against a code" — a product that compares the 11th try and throws the result away, leaving no
+   count and the same answer, is visible only by timing. Default I build on: the ledger reads "checked" as a count
+   against the code or an answer that depends on the code; the rest is the grader's.
