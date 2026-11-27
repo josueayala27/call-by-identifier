@@ -160,3 +160,99 @@ Measure, pick and prove again (step 3), at the product's first start: done 2026-
 - What this does not cover: the call cases. Two browsers in one tests container and a busier Switchboard will add to the
   tests' peak; even at three times 804 MiB, 3 environments fit with 2 GB free. Not a reason to measure again by itself
   (cases grew); a run killed for memory is.
+
+Amended 2026-11-27T15:45:31Z by setup-14, ticket 5, at the test author's tests-first commit 5e7ed8a (steps 2, 4, 5, 6, 9 and 3), for
+the test author's requests in requests-5.txt (harness additions and running order). What it changes from the record above:
+
+Where the harness lives
+- The harness now lives in this work folder: /Users/josueayala/call-by-identifier-devagent/harness/. Its copy here was first brought
+  level with /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/ (that one had NO_COLOR and Playwright's channel
+  'chromium', this one did not), then amended; the head's commands name it. The tecoloco copy is no longer read by the record and is
+  left untouched. Wherever the text above names the tecoloco harness, read this folder. The tests image's hash (tests.Dockerfile and
+  the toolchain lockfile) did not change: the same cbi-tests image.
+- New files: supervisor.mjs (the restart hook) and variants.mjs (start:'s helper for the secret variants). Changed: compose.yml,
+  lib.sh, start.sh, stop.sh, run-tests.sh, services.sh, leftovers.sh.
+
+The products of one run (step 2): every one from the one product image the run builds from the checkout, $P-product:run
+- product, http://product:8787 (PRODUCT_URL), VID_TEST=1, its entry run under the harness's supervisor (node /harness/supervisor.mjs,
+  the harness mounted read-only), which also answers POST http://product:8788/restart (PRODUCT_RESTART_URL, ROW-158).
+- product-off, http://product-off:8787 (PRODUCT_OFF_URL, ROW-142): the same image and entry, VID_TEST=0, no supervisor.
+- variant-1 … variant-<2n>, http://variant-<k>:8787, one per secret the entry declares and per state, missing then short
+  (PRODUCT_SECRET_VARIANTS, RULE-013 and HOS-028): VID_TEST=1, with VID_SECRET_MISSING=<NAME> or VID_SECRET_SHORT=<NAME> set.
+  start: asks the entry which secrets the Worker reads (below), writes the variants' compose file and their JSON list in the run's
+  state folder /tmp/cbi-state/cbi-<RUN_ID>/ (variants.yml, variants.json), and run: hands the list to the tests. stop: removes the
+  folder; leftovers: names it while it is there.
+- start: waits for product and product-off by their healthchecks (compose up --wait), then for each variant until it is healthy or
+  has ended: a variant whose entry refuses to start without its secret is one way of refusing, so start: goes on and says so
+  ("variant-<k> ended before it was healthy"), and its URL answers nothing. services: names a variant that ended only for exit 137
+  (memory); product and product-off as before.
+- No host port, no fixed name: every name is per Compose project (cbi-<RUN_ID>), the state folder per RUN_ID.
+- Before the entry declares its secrets (the base today): start: tries the declaration for at most 45 s (the base entry ignores the
+  flag and runs wrangler dev until the timeout ends it), then starts no variant, and PRODUCT_SECRET_VARIANTS stays unset: RULE-013's
+  and HOS-028's variant cases error "setup:". That costs 45 s of start-up a run until the builder adds --secrets.
+
+The restart (ROW-158), as proved
+- The supervisor runs pnpm run entry in its own process group, and on POST /restart stops the whole group (SIGTERM, SIGKILL after
+  15 s), waits until none of it is left, starts the entry again and answers 200 once GET / answers below 500 (504 after 120 s).
+  Restarts are one at a time. Stopping only pnpm left wrangler holding port 8787 (found by the probe, fixed). The supervisor stops
+  the group on the container's SIGTERM too: stop: took 1.2 s, no forced kill.
+- Proved with a throwaway probe product (a D1 table, two declared secrets): two rows written, POST /restart answered 200 after 3.7 s
+  with a new wrangler and workerd, the two rows still there. In-memory state (the Durable Object, the test switch's clock offset and
+  armed faults, if the product keeps them in memory) does not survive a restart: that is the restart.
+
+Staging runs (run.sh --against), for DIF-001 and SEAM-001
+- PRODUCT_URL and PRODUCT_OFF_URL are the staging address; PRODUCT_RESTART_URL and PRODUCT_SECRET_VARIANTS are unset (those cases
+  error "setup:" on staging, as they are local rows).
+- STAGING_INBOX and STAGING_INBOX_URL: from the caller's environment, else from the work folder's staging-inbox.env (two KEY=value
+  lines, read by sh; never committed, never in the product). Neither exists on this machine yet (question 1 below).
+- CAPTURES_DIR=/captures, the work folder's captures/ (/Users/josueayala/call-by-identifier-devagent/captures, made by run:),
+  mounted writable; it is outside the code repository, so never committed.
+
+Running order (the test author's request 3)
+- Vitest runs its files one after another (fileParallelism: false); Playwright runs with one worker and starts only after Vitest
+  has ended (runtests.sh, one after the other, in the one tests container); one ENGINE only, chromium. So no two cases ever move the
+  product's clock or arm its faults at once. Each environment has its own products, so two environments never share one. A staging
+  run's chunks may overlap on staging, where the test switch is off and no clock or fault door exists.
+
+The product's entry, more for the builder (step 8), still pnpm run entry, start: and stop: unchanged for a new process
+- pnpm run entry --secrets: prints, as its last line, a JSON list of every secret the Worker reads,
+  [{"secret":"<NAME>","role":"code-hashing"|"<another word>"}], and exits 0 at once, starting nothing. The role "code-hashing"
+  marks D-009's secret. A new secret the Worker reads goes into that list.
+- VID_SECRET_MISSING=<NAME>: start with that secret unset; VID_SECRET_SHORT=<NAME>: give it the first 8 characters of
+  VID_TEST_SECRET. Every other secret keeps its throwaway value from VID_TEST_SECRET.
+- It must stop wholly on SIGTERM to its process group (the restart), and its local D1 must live under /app/.wrangler (wrangler's own
+  default), which a restart keeps.
+
+Measure, pick and prove (step 3), at 5e7ed8a
+- Measure: the heaviest selection there is, the whole suite (80 cases: 13 Vitest files, 3 Playwright files), RUN_ID m1, from the
+  clean clone at 5e7ed8a, one environment, start: through the base product's entry. Results: 5 passed, 9 failed on their
+  assertions (ROW-179, ROW-207, ROW-114, ROW-212's control, ROW-180 twice, RULE-013's control, ROW-096, ROW-204), 66 errored
+  "setup:" — the test author's observed reds. Peaks, each from its own container's cgroup memory.peak: tests 803 MiB, product
+  456, product-off 428. The base entry declares no secrets, so no variant came up; the variants' weight was measured with the probe
+  product (two declared secrets, four variants, the same suite, RUN_ID m2): each variant 408 to 415 MiB, together 1,647. The
+  measured: peak, 3,334 MiB, is the sum of those peaks (tests 803 + product 456 + product-off 428 + four variants 1,647): an upper
+  bound, for a Worker that reads two secrets. Engine total 11,948 MiB; other work using it: none (free-memory: 11,948 before).
+  Case seconds (m1): median 0.009, the longest 5.2 (ROW-096's Playwright case to its assertion); the run phase 13 s; start: 54 s,
+  45 of them the base entry's missing --secrets.
+- Pick: (11,948 - 2,048 kept free) / 3,334 = 2.97, so environments: 2 (was 3). With the base product alone (1,687 MiB) 3 would fit;
+  the variants are what the tests ask for, so the record is set for them. max-environments: not set here; this pass never sets it.
+- Prove: the measured selection twice at once, start, run and stop each, RUN_IDs pa and pb, from the clean clone. They overlapped:
+  run phases 1795794258.185..272.818 and 1795794258.222..272.828 (epoch s); Playwright suites from 15:44:23.433Z and
+  15:44:23.412Z. Both wrote reports; both equal the measured run's case results (same names and outcomes, digest 0dbfa8179068 for
+  m1, pa and pb). stop: left nothing of either. Then, with the probe, two runs' start: at once (qa, qb): 12 products healthy side by
+  side, free-memory 7,318 with them idle; stopped clean. No fixed port, shared file or shared fixture found.
+- case-limit: stays 60 s; the longest case today is 5.2 s, and a restart case waits at most 40 s of its own for the product.
+
+Proved by this pass, besides the above, with the probe product and by hand, then deleted (/tmp/cbi-probe, /tmp/cbi-measure): the
+switch-off product answers a test-switch door 404 where the product answers 200, and reads VID_TEST 0; each variant gets exactly
+its secret unset or 8 characters long and the other at full length; a variant whose entry exits 3 without its secret lets start:
+go on (exit 0) and services: print nothing; every run's state folder and product image gone after stop:.
+
+Questions (step 4), each with the default this setup goes on with
+1. The staging test inbox for DIF-001 and SEAM-001: no inbox taking +tags and no reader answering GET ?to= with raw RFC 5322
+   messages exists on this machine, and neither can be settled by looking. Default: those two cases error "setup:" on staging
+   until whoever runs the dev side writes staging-inbox.env in the work folder (STAGING_INBOX=…, STAGING_INBOX_URL=…).
+2. GET /__test/account (ROW-146, ROW-117), asked by the test author as their Q1, has no stand-in: line: no spec decision authorises
+   that measuring door yet, and this pass does not. Default: no line; the cases reading it error "setup:" or wait on that answer.
+3. A secret variant that refuses to start answers nothing at its URL; the RULE-013 and HOS-028 cases may read that as a setup
+   error rather than as refused. Default: kept as is, the variant listed with its URL; the test author's to read.
