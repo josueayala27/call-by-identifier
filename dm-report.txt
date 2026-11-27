@@ -26,3 +26,27 @@ Stopped agents: none.
 used: loop: 62 s of 86400 s; agents: 56 s, 0 turns; 0 ended, 1 running (this dev manager).
 Free memory: 11229 MB; measured: none.
 list: loop: alive, pid 331; dev manager: dev-manager-1, alive; agents: none.
+
+## 2026-11-27T14:40:20Z — dev-manager-2 (plugin 0.26.11.2.1), DM_WORK=/Users/josueayala/call-by-identifier-devagent
+
+Known limits ruled: none.
+
+Moved: nothing. Same stop as dev-manager-1, re-checked at 14:40Z: the other DevAgent in
+/Users/josueayala/Code/tecoloco/call-by-identifier-devagent (plugin 0.26.11.1.13) is still live: loop pid 71626,
+dev manager pid 71933, setup agent setup-2 pid 73370, all alive. No claim, comment, branch, clone or agent here;
+its processes left alone (not started by this dm.sh or run.sh).
+- #1: open, one comment (`vid: claimed` / `by: DM`, 14:29:08Z, the other DM's); its setup agent runs there.
+- #3: open, no comments, a second "Skeleton ticket S1" with the same rows; not claimed.
+
+Each `next` line, word for word:
+work 1
+claim 3
+
+Questions (for the owner, not on GitHub; unchanged from dev-manager-1): which DevAgent is meant to run, this
+folder's or Code/tecoloco's? Is #3 meant to replace #1? Until answered, every pass here will stop the same way;
+stopping one of the two loops ends the conflict.
+
+Stopped agents: none.
+used: loop: 168 s of 86400 s; agents: 98 s, 13 turns; 1 ended, 1 running (this dev manager).
+Free memory: 2760 MB (free+inactive); measured: none.
+list: loop: alive, pid 331; dev manager: dev-manager-2, alive; agents: none.
