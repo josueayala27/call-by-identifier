@@ -1,0 +1,13 @@
+diff --git a/src/adapters/d1/index.ts b/src/adapters/d1/index.ts
+index de3b2f4..45a7b8c 100644
+--- a/src/adapters/d1/index.ts
++++ b/src/adapters/d1/index.ts
+@@ -3,7 +3,7 @@
+ import type { AccountStore, CodeStore, LiveCode, RequestThrottle, SessionStore } from '#core/identity';
+ 
+ /** The code-store condition under which a code can still sign in (REQ-002): unused, not superseded, under 5 wrong tries, in time. */
+-const LIVE = 'used_at IS NULL AND superseded = 0 AND wrong_tries < 5 AND expires_at >= ?';
++const LIVE = 'used_at IS NULL AND superseded = 0 AND wrong_tries < 6 AND expires_at >= ?';
+ 
+ export function createD1Stores(db: D1Database): {
+   codes: CodeStore;

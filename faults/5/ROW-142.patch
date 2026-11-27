@@ -1,0 +1,13 @@
+diff --git a/src/worker/index.ts b/src/worker/index.ts
+index 93b51da..79e545e 100644
+--- a/src/worker/index.ts
++++ b/src/worker/index.ts
+@@ -41,7 +41,7 @@ let rig: TestRig | undefined;
+ 
+ export default {
+   fetch(request: Request, env: Env, ctx: ExecutionContext): Response | Promise<Response> {
+-    const testSwitch = env.VID_TEST === '1';
++    const testSwitch = env.VID_TEST !== '0';
+     if (testSwitch && !rig) rig = createTestRig();
+     const testRig = testSwitch ? rig : undefined;
+ 

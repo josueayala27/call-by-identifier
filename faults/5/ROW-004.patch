@@ -1,0 +1,13 @@
+diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
+index 4e80a44..0641ebf 100644
+--- a/src/core/identity/signin.ts
++++ b/src/core/identity/signin.ts
+@@ -6,7 +6,7 @@ import { normaliseEmail } from './email';
+ import type { IdentityDeps } from './ports';
+ 
+ /** REQ-002: a code works for 10 minutes after it was sent. */
+-export const CODE_LIFETIME_MS = 10 * 60 * 1000;
++export const CODE_LIFETIME_MS = 11 * 60 * 1000;
+ /** REQ-037: one network address gets at most 10 wrong code tries an hour. */
+ export const WRONG_TRIES_PER_ADDRESS = 10;
+ export const WRONG_TRY_WINDOW_MS = 60 * 60 * 1000;

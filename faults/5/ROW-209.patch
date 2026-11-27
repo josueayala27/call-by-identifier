@@ -1,0 +1,25 @@
+diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
+index 4e80a44..c64e83a 100644
+--- a/src/core/identity/signin.ts
++++ b/src/core/identity/signin.ts
+@@ -77,17 +77,18 @@ export async function verifyCode(
+ 
+   // The address's slot is taken before any code is looked at, so no try past the 10th is ever checked (ROW-200).
+   const now = deps.clock.now();
+-  if (!(await deps.throttle.take(tryKey, WRONG_TRIES_PER_ADDRESS, WRONG_TRY_WINDOW_MS, now))) return { kind: 'address-limited' };
++  const limited = !(await deps.throttle.take(tryKey, WRONG_TRIES_PER_ADDRESS, WRONG_TRY_WINDOW_MS, now));
+ 
+   const typed = await keys.codeHash(email, code);
+   const live = await deps.codes.live(email, now);
+   const match = live.find((c) => sameHash(c.codeHash, typed));
+   if (!match) {
++    if (limited) return { kind: 'address-limited' };
+     await deps.codes.countWrongTry(email, requester, now);
+     return { kind: 'wrong' };
+   }
+   // A right code is no wrong try: its slot is given back.
+-  await deps.throttle.giveBack(tryKey, now);
++  if (!limited) await deps.throttle.giveBack(tryKey, now);
+   if (!(await deps.codes.consume(match.id, now))) return { kind: 'wrong' };
+ 
+   await deps.accounts.ensure(email, now);

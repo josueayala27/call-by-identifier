@@ -1,0 +1,13 @@
+diff --git a/src/adapters/d1/index.ts b/src/adapters/d1/index.ts
+index de3b2f4..77d22fe 100644
+--- a/src/adapters/d1/index.ts
++++ b/src/adapters/d1/index.ts
+@@ -21,7 +21,7 @@ export function createD1Stores(db: D1Database): {
+           .bind(c.email, c.codeHash, c.requester, c.createdAt, c.expiresAt),
+         db
+           .prepare(
+-            'UPDATE codes SET superseded = 1 WHERE email = ?1 AND requester = ?2 AND superseded = 0 AND id < (SELECT max(id) FROM codes WHERE email = ?1 AND requester = ?2)',
++            'UPDATE codes SET superseded = 0 WHERE email = ?1 AND requester = ?2 AND superseded = 0 AND id < (SELECT max(id) FROM codes WHERE email = ?1 AND requester = ?2)',
+           )
+           .bind(c.email, c.requester),
+       ]);

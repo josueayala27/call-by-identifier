@@ -1,0 +1,13 @@
+diff --git a/src/adapters/d1/index.ts b/src/adapters/d1/index.ts
+index de3b2f4..ab8c328 100644
+--- a/src/adapters/d1/index.ts
++++ b/src/adapters/d1/index.ts
+@@ -40,7 +40,7 @@ export function createD1Stores(db: D1Database): {
+     async countWrongTry(email, requester, now) {
+       // Atomic increment in the database: parallel wrong tries are never lost (HOS-006, ROW-117).
+       await db
+-        .prepare(`UPDATE codes SET wrong_tries = wrong_tries + 1 WHERE email = ? AND requester = ? AND ${LIVE}`)
++        .prepare(`UPDATE codes SET wrong_tries = wrong_tries + 1 WHERE email = ? AND ? IS NOT NULL AND ${LIVE}`)
+         .bind(email, requester, now)
+         .run();
+     },

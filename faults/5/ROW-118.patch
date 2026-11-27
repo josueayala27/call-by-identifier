@@ -1,0 +1,26 @@
+diff --git a/src/adapters/d1/index.ts b/src/adapters/d1/index.ts
+index de3b2f4..64a560c 100644
+--- a/src/adapters/d1/index.ts
++++ b/src/adapters/d1/index.ts
+@@ -28,7 +28,7 @@ export function createD1Stores(db: D1Database): {
+     },
+     async live(email, now) {
+       const r = await db
+-        .prepare(`SELECT id, code_hash, requester FROM codes WHERE email = ? AND ${LIVE} ORDER BY id`)
++        .prepare(`SELECT id, code_hash, requester FROM codes WHERE (email = ? OR 1) AND ${LIVE} ORDER BY id`)
+         .bind(email, now)
+         .all<{ id: number; code_hash: string; requester: string }>();
+       return r.results.map((x): LiveCode => ({ id: x.id, codeHash: x.code_hash, requester: x.requester }));
+diff --git a/src/core/identity/crypto.ts b/src/core/identity/crypto.ts
+index a198c04..5031ad6 100644
+--- a/src/core/identity/crypto.ts
++++ b/src/core/identity/crypto.ts
+@@ -54,7 +54,7 @@ export async function deriveKeys(secret: string): Promise<Keys> {
+   const codeKey = await hmacRaw(secret, 'call-by-identifier/code-hash/v1');
+   const addressKey = await hmacRaw(secret, 'call-by-identifier/address-hash/v1');
+   return {
+-    codeHash: async (email, code) => toHex(await hmacRaw(codeKey, `${email}\n${code}`)),
++    codeHash: async (email, code) => toHex(await hmacRaw(codeKey, `${code}`)),
+     addressHash: async (purpose, address) => toHex(await hmacRaw(addressKey, `${purpose}\n${address}`)),
+   };
+ }

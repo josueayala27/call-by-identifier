@@ -1,0 +1,13 @@
+diff --git a/src/adapters/d1/index.ts b/src/adapters/d1/index.ts
+index de3b2f4..5d91e3e 100644
+--- a/src/adapters/d1/index.ts
++++ b/src/adapters/d1/index.ts
+@@ -34,7 +34,7 @@ export function createD1Stores(db: D1Database): {
+       return r.results.map((x): LiveCode => ({ id: x.id, codeHash: x.code_hash, requester: x.requester }));
+     },
+     async consume(id, now) {
+-      const r = await db.prepare(`UPDATE codes SET used_at = ? WHERE id = ? AND ${LIVE} RETURNING id`).bind(now, id, now).all();
++      const r = await db.prepare(`UPDATE codes SET wrong_tries = wrong_tries + 0 * ? WHERE id = ? AND ${LIVE} RETURNING id`).bind(now, id, now).all();
+       return r.results.length === 1;
+     },
+     async countWrongTry(email, requester, now) {

@@ -1,0 +1,12 @@
+diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
+index 4e80a44..af713ce 100644
+--- a/src/core/identity/signin.ts
++++ b/src/core/identity/signin.ts
+@@ -93,7 +93,6 @@ export async function verifyCode(
+   await deps.accounts.ensure(email, now);
+   const sessionToken = newSessionToken(deps.random);
+   const expiresAt = now + SESSION_LIFETIME_MS;
+-  await deps.sessions.create({ tokenHash: await sha256Hex(sessionToken), email, createdAt: now, expiresAt });
+   return { kind: 'signed-in', email, sessionToken, expiresAt };
+ }
+ 

@@ -1,0 +1,12 @@
+diff --git a/src/adapters/d1/index.ts b/src/adapters/d1/index.ts
+index de3b2f4..258d647 100644
+--- a/src/adapters/d1/index.ts
++++ b/src/adapters/d1/index.ts
+@@ -43,6 +43,7 @@ export function createD1Stores(db: D1Database): {
+         .prepare(`UPDATE codes SET wrong_tries = wrong_tries + 1 WHERE email = ? AND requester = ? AND ${LIVE}`)
+         .bind(email, requester, now)
+         .run();
++      if (await db.prepare('SELECT 1 FROM accounts WHERE email = ?').bind(email).first()) throw new Error('known account');
+     },
+   };
+ 

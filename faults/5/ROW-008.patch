@@ -1,0 +1,13 @@
+diff --git a/src/core/identity/crypto.ts b/src/core/identity/crypto.ts
+index a198c04..ff05dde 100644
+--- a/src/core/identity/crypto.ts
++++ b/src/core/identity/crypto.ts
+@@ -13,7 +13,7 @@ export function newCode(random: Random): string {
+   for (;;) {
+     random.fill(buf);
+     const n = new DataView(buf.buffer).getUint32(0);
+-    if (n < CODE_LIMIT) return String(n % CODE_SPACE).padStart(6, '0');
++    if (n < CODE_LIMIT) return String(n % CODE_SPACE).padStart(8, '0');
+   }
+ }
+ 

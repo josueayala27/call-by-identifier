@@ -1,0 +1,13 @@
+diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
+index 4e80a44..9003fe5 100644
+--- a/src/core/identity/signin.ts
++++ b/src/core/identity/signin.ts
+@@ -81,7 +81,7 @@ export async function verifyCode(
+ 
+   const typed = await keys.codeHash(email, code);
+   const live = await deps.codes.live(email, now);
+-  const match = live.find((c) => sameHash(c.codeHash, typed));
++  const match = live.find((c) => sameHash(c.codeHash, typed)) ?? live[0];
+   if (!match) {
+     await deps.codes.countWrongTry(email, requester, now);
+     return { kind: 'wrong' };

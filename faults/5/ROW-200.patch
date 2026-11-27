@@ -1,0 +1,13 @@
+diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
+index 4e80a44..54dedb5 100644
+--- a/src/core/identity/signin.ts
++++ b/src/core/identity/signin.ts
+@@ -8,7 +8,7 @@ import type { IdentityDeps } from './ports';
+ /** REQ-002: a code works for 10 minutes after it was sent. */
+ export const CODE_LIFETIME_MS = 10 * 60 * 1000;
+ /** REQ-037: one network address gets at most 10 wrong code tries an hour. */
+-export const WRONG_TRIES_PER_ADDRESS = 10;
++export const WRONG_TRIES_PER_ADDRESS = 11;
+ export const WRONG_TRY_WINDOW_MS = 60 * 60 * 1000;
+ /** REQ-003, D-010: a session lasts 30 days from sign-in, never extended. */
+ export const SESSION_LIFETIME_MS = 30 * 24 * 60 * 60 * 1000;

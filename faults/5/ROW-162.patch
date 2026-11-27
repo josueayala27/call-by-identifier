@@ -1,0 +1,13 @@
+diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
+index 4e80a44..bf58794 100644
+--- a/src/core/identity/signin.ts
++++ b/src/core/identity/signin.ts
+@@ -69,7 +69,7 @@ export async function verifyCode(
+ ): Promise<VerifyCodeResult> {
+   const email = normaliseEmail(input.email);
+   const code = input.code.trim();
+-  if (!email || !/^[0-9]{6}$/.test(code)) return { kind: 'malformed' };
++  if (!email || code.length === 0) return { kind: 'malformed' };
+   const keys = await deriveKeys(deps.secrets.signingSecret());
+   const address = networkAddress(input.clientAddress);
+   const requester = await keys.addressHash(SENDER_PURPOSE, address);

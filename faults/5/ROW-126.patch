@@ -1,0 +1,13 @@
+diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
+index 4e80a44..931703c 100644
+--- a/src/core/identity/signin.ts
++++ b/src/core/identity/signin.ts
+@@ -88,7 +88,7 @@ export async function verifyCode(
+   }
+   // A right code is no wrong try: its slot is given back.
+   await deps.throttle.giveBack(tryKey, now);
+-  if (!(await deps.codes.consume(match.id, now))) return { kind: 'wrong' };
++  if (!(await deps.codes.consume(match.id, now).catch(() => true))) return { kind: 'wrong' };
+ 
+   await deps.accounts.ensure(email, now);
+   const sessionToken = newSessionToken(deps.random);

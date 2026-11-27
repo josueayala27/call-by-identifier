@@ -1,0 +1,35 @@
+diff --git a/src/adapters/d1/index.ts b/src/adapters/d1/index.ts
+index de3b2f4..a591499 100644
+--- a/src/adapters/d1/index.ts
++++ b/src/adapters/d1/index.ts
+@@ -21,7 +21,7 @@ export function createD1Stores(db: D1Database): {
+           .bind(c.email, c.codeHash, c.requester, c.createdAt, c.expiresAt),
+         db
+           .prepare(
+-            'UPDATE codes SET superseded = 1 WHERE email = ?1 AND requester = ?2 AND superseded = 0 AND id < (SELECT max(id) FROM codes WHERE email = ?1 AND requester = ?2)',
++            'UPDATE codes SET superseded = 1 WHERE email = ?1 AND superseded = 0 AND id < (SELECT max(id) FROM codes WHERE email = ?1 AND requester = ?2)',
+           )
+           .bind(c.email, c.requester),
+       ]);
+diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
+index 4e80a44..f966a85 100644
+--- a/src/core/identity/signin.ts
++++ b/src/core/identity/signin.ts
+@@ -34,6 +34,8 @@ export async function requestCode(deps: IdentityDeps, input: { email: string; cl
+   const code = newCode(deps.random);
+   const codeHash = await keys.codeHash(email, code);
+   const requester = await keys.addressHash(SENDER_PURPOSE, networkAddress(input.clientAddress));
++  const now = deps.clock.now();
++  await deps.codes.addSent({ email, codeHash, requester, createdAt: now, expiresAt: now + CODE_LIFETIME_MS });
+   try {
+     await deps.mailer.send({
+       to: email,
+@@ -43,8 +45,6 @@ export async function requestCode(deps: IdentityDeps, input: { email: string; cl
+   } catch {
+     return { kind: 'not-sent', email };
+   }
+-  const now = deps.clock.now();
+-  await deps.codes.addSent({ email, codeHash, requester, createdAt: now, expiresAt: now + CODE_LIFETIME_MS });
+   return { kind: 'sent', email };
+ }
+ 
