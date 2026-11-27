@@ -11,3 +11,10 @@
 2026-11-27T15:47:57Z run: red run (T2) at 5e7ed8a, ask red-5, --select the 38 rows less deploy-owed DIF-001 SEAM-001, --line rows:, folder runs/20261127T154754Z-22884
 2026-11-27T15:49:21Z run: pushed vid-results/red-5-1, leftovers none, 3 passed 9 failed 64 errored 2 skipped; red: ROW-204 ROW-096 RULE-013 ROW-212 ROW-207 ROW-180 ROW-179 ROW-114; no-red-5.txt written (30 rows, setup: errors)
 2026-11-27T15:49:38Z builder: agent builder-15 started, job note jobs/5-builder-1.txt (account door held for Q1), clone clones/builder-5-1, on 5e7ed8a
+2026-11-27T15:59:00Z builder: builder-15 handed back, commit 9ccaa33 (Role: BU), own run 75 passed 3 errored (ROW-146, one ROW-117 case: held account door); 3 questions; taken
+2026-11-27T15:59:00Z settled (technical): wrangler.jsonc's placeholder D1 database_id (all zeros) stays for the tests (local D1); the real id is the deployer's to set at the first hosted deploy | why: the ledger runs on local D1; the id is the host's
+2026-11-27T15:59:00Z noted: builder built nothing outside its rows (REQ-023 resend rule, RULE-008 headers, D-026 cleanup cron, sign-out, ROW-204's call-box half): later steps' work, no question
+2026-11-27T15:59:00Z check: untouched.sh at 9ccaa33: 18 of 18 files untouched, exit 0
+2026-11-27T15:59:01Z questions: builder's lifecycle question posted on #5, by BU, no label (comments/5-q10.md)
+2026-11-27T15:59:10Z run: head run (T3) at 9ccaa33, ask pr-6-9ccaa333279d, --select 38 rows less DIF-001 SEAM-001 plus ROW-093, 6 new stand-in: lines (record lines 6..11) as --line, folder runs/20261127T155906Z-55097
+2026-11-27T15:59:21Z decisions: PR #6 body's Decisions section rewritten for head 9ccaa33 (8 builder lines + 1 settled; jobs/pr-5-body.md)
