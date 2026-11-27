@@ -1,0 +1,20 @@
+ticket: 5
+
+Your clone: /Users/josueayala/call-by-identifier-devagent/clones/test-author-5-1, on the ticket's branch ticket-5.
+
+Your job: the ticket's asks T1 and T2's first half, quoted from it: "T1 (TA): write at least one test per row, per transition for a journey, its name matching the row's id." and "T2 (TA, then TM): TA commits those tests alone, before any product code; TM runs them in the primary engine. This is the red proof." Every row of the ticket's header `rows:` line, the deploy-owed rows DIF-001 and SEAM-001 too ("Deploy-owed rows take part in T1 and T5 only: DIF-001 SEAM-001.").
+
+The commits you work at: the branch ticket-5's head, 5974e97 (an empty commit), on the ticket's base 663a11e6f7ccdb68bc22392e397f920d5be45505. Your one commit goes on top of it, pushed to ticket-5.
+
+The dev setup record, read only, your harness contract: /Users/josueayala/call-by-identifier-devagent/dev-setup.txt
+
+The rows' file, the plain ticket (the published ticket whole, its body and part comments joined): /Users/josueayala/call-by-identifier-devagent/tickets/5-plain.md
+
+The export: the spec repository https://github.com/josueayala27/call-by-identifier-spec at f2c578aa0fa62b0dda999c62d92d54e6085c8d4e, read only; the ticket's Further reading is its index.
+
+The export's route table: the export holds none; its files at that commit are ARCHITECTURE.md, BASELINE.md, DECISIONS.md, GRADING-CHECKLIST.md, PRD.md and TEST-DIFFERENCES.md. The one row with a route in its column, quoted from the ticket:
+
+> ROW-096 | reachability | / | anonymous | n/a | the sign-in screen is the entry point; after a code is requested the code-entry step is reachable from it and leads back to the email step | REQ-001 | owed: spec-only — first stage | origin: REQ-001
+> - ROW-096 marks: reachability
+
+The requests file your hand-back names: /Users/josueayala/call-by-identifier-devagent/requests-5.txt

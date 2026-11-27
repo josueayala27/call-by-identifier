@@ -1,3 +1,4 @@
 2026-11-27T15:09:02Z read: plain ticket tickets/5-plain.md (part 1 of 1, writing 87fa717be9f9), 40 rows, regression ROW-093, deploy-owed DIF-001 SEAM-001
 2026-11-27T15:09:02Z claimed: vid: claimed, by: DM on #5
 2026-11-27T15:09:15Z branch: ticket-5 from 663a11e6f7cc, empty commit 5974e97 (Role: DM), pushed; draft pull request #6 opened (jobs/pr-5-body.md)
+2026-11-27T15:09:47Z test author: agent test-author-13 started, job note jobs/5-test-author-1.txt, clone clones/test-author-5-1
