@@ -8,3 +8,5 @@
 2026-11-27T15:00:04Z grade: grader-8 handed back grades/3/grade-1.txt (1 row: 1 kept; 2 findings); grader-9 handed back grades/3/grade-2.txt (1 row: 1 kept; 4 findings); both taken
 2026-11-27T15:00:15Z grade: run.sh grade joined grade-1 and grade-2, pushed vid-results/grade-pr-2-e13b2680e85a-1; no line breached or unclear, no weak-test line: no sort
 2026-11-27T15:00:18Z asked e13b2680e85ae019347d5ce92ea7dbe0c2e4be22
+2026-11-27T15:02:21Z merged: PR #2 at head e13b2680e85ae019347d5ce92ea7dbe0c2e4be22 on vid: decision ticket: accepted (ROW-093 accepted); no sort, no test it lines, no known limit; merge commit body Role: MR
+2026-11-27T15:02:28Z cleaned: blind/copy.6btYAG and blind/copy.ZDlSIY removed; the ticket had no clone of its own left
