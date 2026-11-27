@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="call-by-identifier ledger">
+<testsuite name="test-row-093-signed-out-shell.spec.ts" timestamp="2026-11-27T14:53:49.707Z" hostname="chromium" tests="2" failures="1" skipped="0" time="0.315" errors="0">
+<testcase name="ROW-093 control the signed-out page at / is the sign-in screen with an email box and a send-code button" classname="test-row-093-signed-out-shell.spec.ts" time="0.177">
+</testcase>
+<testcase name="ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area" classname="test-row-093-signed-out-shell.spec.ts" time="0.138">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../playwright-output/test-row-093-signed-out-sh-11edb-l-and-no-incoming-call-area-chromium/error-context.md]]
+]]>
+</system-out>
+<failure message="Error: ROW-093: the signed-out page shows 2 text fields, not the one email box — a call box or other field is shown: [&quot;textbox:Email&quot;,&quot;textbox:Call&quot;]" type="expect.toBe">
+<![CDATA[  [chromium] › test-row-093-signed-out-shell.spec.ts:83:1 › ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area 
+
+    Error: ROW-093: the signed-out page shows 2 text fields, not the one email box — a call box or other field is shown: ["textbox:Email","textbox:Call"]
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 2
+
+      92 |   for (const r of OTHER_ROLES) others.push(...(await names(page, r)));
+      93 |
+    > 94 |   expect(fields.length, `ROW-093: the signed-out page shows ${fields.length} text fields, not the one email box — a call box or other field is shown: ${JSON.stringify(fields)}`).toBe(1);
+         |                                                                                                                                                                                   ^
+      95 |   expect(buttons.length, `ROW-093: the signed-out page shows ${buttons.length} buttons, not the one send-code button: ${JSON.stringify(buttons)}`).toBe(1);
+      96 |   await expect(page.getByRole('button').first(), 'ROW-093: the signed-out page\'s one button is not the send-code button').toHaveAccessibleName(SEND_CODE_NAME);
+      97 |   expect(others, `ROW-093: the signed-out page shows controls beyond the sign-in form: ${JSON.stringify(others)}`).toEqual([]);
+        at /app/tests/invariants/test-row-093-signed-out-shell.spec.ts:94:179
+
+    Error Context: ../../../tmp/playwright-output/test-row-093-signed-out-sh-11edb-l-and-no-incoming-call-area-chromium/error-context.md
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>
