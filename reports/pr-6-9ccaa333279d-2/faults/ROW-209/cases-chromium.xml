@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="call-by-identifier ledger">
+<testsuite name="tests/invariants/test-dif-001-seam-001-email-service.test.ts" timestamp="2026-11-27T16:14:45.731Z" hostname="79c3f7b44951" tests="2" failures="0" errors="0" skipped="2" time="0">
+        <testcase classname="tests/invariants/test-dif-001-seam-001-email-service.test.ts" name="SEAM-001 the Email Service sends a code email on staging" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-dif-001-seam-001-email-service.test.ts" name="DIF-001 one real code email reaches the test inbox with SPF, DKIM and DMARC passing" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-002-working-code-under-limit.test.ts" timestamp="2026-11-27T16:14:45.733Z" hostname="79c3f7b44951" tests="2" failures="0" errors="0" skipped="2" time="0">
+        <testcase classname="tests/invariants/test-row-002-working-code-under-limit.test.ts" name="ROW-002 control a working code entered in time signs in from a fresh address" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-002-working-code-under-limit.test.ts" name="ROW-002 a working code entered in time signs in after 9 wrong tries from the address" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" timestamp="2026-11-27T16:14:45.734Z" hostname="79c3f7b44951" tests="6" failures="0" errors="0" skipped="6" time="0">
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="ROW-004 control a code entered 599 seconds after it was sent signs in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="ROW-004 a code entered 601 seconds after it was sent does not sign in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="HOS-004 the code entered 10 minutes and 1 second after sending gives no session" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="ROW-005 control the first entry of the code signs in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="ROW-005 a code that signed in once does not sign in a second time" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="HOS-005 a correct code submitted a second time gives no second session" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" timestamp="2026-11-27T16:14:45.738Z" hostname="79c3f7b44951" tests="9" failures="0" errors="0" skipped="9" time="0">
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-006 control after 4 wrong tries the right code still signs in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-006 after 5 wrong tries from the requesting address the right code does not sign in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-006 after 5 wrong tries from the requesting address the right code from elsewhere does not sign in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-162 control a code surrounded by spaces signs in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-162 seven inputs that are not 6 digits use none of the 5 tries" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-158 control a live code survives a restart of the product" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-158 the wrong-try count survives a restart of the product" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="HOS-006 5 wrong codes then the right one give no session" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="HOS-006 50 wrong guesses in parallel leave the code dead" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" timestamp="2026-11-27T16:14:45.740Z" hostname="79c3f7b44951" tests="9" failures="0" errors="0" skipped="9" time="0">
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-007 control the newer code signs in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-007 a newer code sent at the same address stops the earlier code" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-007 a newer code sent from the same IPv6 /64 stops the earlier code" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="HOS-007 the first code after a second sent request from one address gives no session" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-196 control the other address&apos;s own code also arrived" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-196 a request from another address does not stop an earlier working code" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-196 a request from another IPv6 /64 does not stop an earlier working code" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-196 a request whose email failed to send does not stop an earlier working code" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="HOS-029 another address&apos;s request and a failed send leave the victim&apos;s earlier code working" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" timestamp="2026-11-27T16:14:45.743Z" hostname="79c3f7b44951" tests="5" failures="0" errors="0" skipped="5" time="0">
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="ROW-008 control the 6 digits read from the email are the code that signs in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="ROW-008 every emailed code is exactly 6 digits" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="HOS-008 every code recorded over many requests is exactly 6 digits" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="ROW-124 codes span the whole range with leading zeros kept" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="ROW-124 session values carry at least 128 random bits" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-114-179-212-207-email-box.test.ts" timestamp="2026-11-27T16:14:45.744Z" hostname="79c3f7b44951" tests="7" failures="0" errors="0" skipped="7" time="0">
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-179 a plain valid email receives exactly one code email" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-207 a plain ASCII email with dots, plus and apostrophe is accepted" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-114 commas, line breaks, display names, several @, semicolons, spaces and angle brackets are refused" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-114 an address over 254 characters is refused" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-114 the code email has one recipient, the lowercase address, and apostrophes are accepted" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-212 emails holding a non-ASCII or invisible character are refused at the code request" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-212 control the same addresses without the added character are accepted" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-117-parallel-sign-in.test.ts" timestamp="2026-11-27T16:14:45.746Z" hostname="79c3f7b44951" tests="5" failures="0" errors="0" skipped="5" time="0">
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 control one code entered once signs in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 parallel wrong guesses against one code evaluate at most 5" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 one code entered twice at once yields one session" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 parallel first sign-ins make one account" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 parallel code requests from one network address leave one working code" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-126-146-storage.test.ts" timestamp="2026-11-27T16:14:45.748Z" hostname="79c3f7b44951" tests="5" failures="0" errors="0" skipped="5" time="0">
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-126 control with the storage error cleared the same code signs in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-126 a storage error while checking a code signs nobody in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-126 a storage error while counting a code signs nobody in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-146 control entering the code creates the account" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-146 asking for a code or entering a wrong one creates no account" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-142-deployed-no-bypass.test.ts" timestamp="2026-11-27T16:14:45.749Z" hostname="79c3f7b44951" tests="2" failures="0" errors="0" skipped="2" time="0">
+        <testcase classname="tests/invariants/test-row-142-deployed-no-bypass.test.ts" name="ROW-142 control the switch-off product serves the sign-in screen" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-142-deployed-no-bypass.test.ts" name="ROW-142 no test door and no fixed code is reachable with the test switch off" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" timestamp="2026-11-27T16:14:45.750Z" hostname="79c3f7b44951" tests="9" failures="0" errors="0" skipped="9" time="0">
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-180 control asking for a code shows the code-entry step" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-180 a single correct code entered once signs the person in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-001 asking for a code alone does not sign the person in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-001 no code, an empty code or a wrong code does not sign the person in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-001 control the emailed code entered after the refused tries signs the person in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-118 a code issued to one email does not sign in as another email" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-118 control the other email&apos;s own code signs it in" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="HOS-001 no code, an empty code and another email&apos;s code give no session" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="HOS-002 the correct code entered within 10 minutes gives a session" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" timestamp="2026-11-27T16:14:45.753Z" hostname="79c3f7b44951" tests="10" failures="3" errors="0" skipped="7" time="1.130034959">
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-208 control the wrong tries from the other address are refused" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-208 wrong tries from another address leave the code working" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-208 wrong tries from another IPv6 /64 leave the code working" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="HOS-030 5 wrong codes from another address leave the victim&apos;s code working" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-200 tries past the 10th from one address are not checked against a code" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-200 tries past the 10th from one IPv6 /64 are not checked against a code" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-209 control the code refused at the limited address signs in from another address" time="0.382564541">
+            <failure message="AssertionError: ROW-209: the working code does not sign in from a fresh address: expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: ROW-209: the working code does not sign in from a fresh address: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:137:125
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-209 after 10 wrong tries from one address a working code from it does not sign in" time="0.252110292">
+            <failure message="AssertionError: ROW-209: after 10 wrong tries from one address, a working code from that address signed in: expected true to be false // Object.is equality" type="AssertionError">
+AssertionError: ROW-209: after 10 wrong tries from one address, a working code from that address signed in: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:144:133
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-209 after 10 wrong tries from one IPv6 /64 a working code from it does not sign in" time="0.494012417">
+            <failure message="AssertionError: ROW-209: after 10 wrong tries from hosts of one IPv6 /64, a working code from another host of it signed in: expected true to be false // Object.is equality" type="AssertionError">
+AssertionError: ROW-209: after 10 wrong tries from hosts of one IPv6 /64, a working code from another host of it signed in: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:151:165
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-201 the wrong-try refusal is the same for emails with and without an account" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-rule-013-hos-028-secrets.test.ts" timestamp="2026-11-27T16:14:45.759Z" hostname="79c3f7b44951" tests="3" failures="0" errors="0" skipped="3" time="0">
+        <testcase classname="tests/invariants/test-rule-013-hos-028-secrets.test.ts" name="RULE-013 control the same sign-in steps sign in on the product with its secrets" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-rule-013-hos-028-secrets.test.ts" name="RULE-013 every secret read refuses to run when the secret is missing or short" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-rule-013-hos-028-secrets.test.ts" name="HOS-028 with the code-hashing secret unset sign-in is refused" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="test-row-093-signed-out-shell.spec.ts" timestamp="2026-11-27T16:14:46.661Z" hostname="chromium" tests="2" failures="0" skipped="0" time="0.698" errors="0">
+<testcase name="ROW-093 control the signed-out page at / is the sign-in screen with an email box and a send-code button" classname="test-row-093-signed-out-shell.spec.ts" time="0.438">
+</testcase>
+<testcase name="ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area" classname="test-row-093-signed-out-shell.spec.ts" time="0.26">
+</testcase>
+</testsuite>
+</testsuites>

@@ -22,3 +22,5 @@
 2026-11-27T16:00:34Z breaks: grader grader-16 started for 29 rows' faults (no-red-5.txt and the faulted rows, less ROW-117 and ROW-146, not passing at T3), job note jobs/5-grader-1.txt, blind/copy.keZlBD
 2026-11-27T16:03:23Z breaks: grader-16 handed back 29 patches in faults/5/ (notes: ROW-200/ROW-209 overlap, ROW-005/ROW-180 also break a ROW-117 case, HOS-028 falls back to a dummy secret); taken
 2026-11-27T16:03:27Z fault run: T4 at 9ccaa33, list faults/5/list-9ccaa33.txt (29 faults, control ROW-093 each; rows' own control cases run with their tests), folder runs/20261127T160324Z-80301
+2026-11-27T16:15:03Z fault run: pushed vid-results/pr-6-9ccaa333279d-2, leftovers none, 79 passed 35 failed 0 errored
+2026-11-27T16:15:44Z grade (T5): graders grader-17 and grader-18 started together, job notes jobs/5-grader-2.txt and jobs/5-grader-3.txt, blind/copy.i1XxDu and blind/copy.KOcRRP, report folder reports/pr-6-9ccaa333279d-2, 40 rows

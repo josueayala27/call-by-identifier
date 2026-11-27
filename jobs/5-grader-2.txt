@@ -1,0 +1,125 @@
+ticket: 5
+
+Your job: the grade, the ticket's ask T5, quoted from it: "T5 (GR, SR): at the ticket's first head alone, two fresh GRs, each in its own blind copy, grade each row against its fail-if, the grading checklist and the test differences, a screen row also against the design, and their lines are combined. SR sorts what the grade leaves, once. No later head has a grade or a sort."
+
+The blind copy: /Users/josueayala/call-by-identifier-devagent/blind/copy.i1XxDu
+
+The head's full commit id: 9ccaa333279d5651af12347d8f2ace442cea47d3
+
+The plain ticket, joined (its body and parts, each decision's why: dropped): /Users/josueayala/call-by-identifier-devagent/tickets/5-plain-grader.md
+
+The export: the spec repository https://github.com/josueayala27/call-by-identifier-spec at f2c578aa0fa62b0dda999c62d92d54e6085c8d4e, read only.
+
+This head's report folder: /Users/josueayala/call-by-identifier-devagent/reports/pr-6-9ccaa333279d-2
+
+The record's stand-in: lines:
+
+stand-in: the code email sender (DIF-001) — a fake mailer under the test switch (VID_TEST=1) that records the one recipient and the body in memory, read back by the tests through a route that exists only under the switch — the Cloudflare Email Service binding sending from no-reply@call-by-identifier.josueayala.me — no set-up door: a measuring tool DIF-001 authorises, paid at staging
+stand-in: the connection-helping server (DIF-002) — none: both Chromium browsers run in one tests container and connect over host candidates; the test network has no route out — stun.cloudflare.com
+stand-in: the edge in front of the Worker (DIF-003) — local workerd (wrangler dev) over plain HTTP at http://product:8787, the test sets CF-Connecting-IP itself, and Chromium treats that one origin as secure — Cloudflare's edge, HTTPS and the edge-reported client address
+stand-in: the cleanup schedule (D-026) — does not fire on its own under wrangler dev; a test fires it through wrangler's --test-scheduled route /__scheduled — Cloudflare's cron every 15 minutes — no set-up door of the product's; the schedule's consumption is deploy-owed
+stand-in: the server secrets (code-hashing key, OPERATOR_EMAIL) — throwaway test values handed to the entry in the environment (VID_TEST_SECRET), never a real secret — the owner's wrangler secret and variable
+stand-in: a code email that fails to send (ROW-196, HOS-029) — a set-up door under the test switch (VID_TEST=1) alone, absent (404) with it off: POST /__test/mail/fail?to=<email> makes the fake mailer's next send to that address throw, nothing recorded — the Email Service failing on its own — door authorised by the dev side, ticket 5; replaced by: no step of the plan, never on in production
+stand-in: time passing (ROW-004, HOS-004, ROW-007, ROW-196, ROW-117, ROW-201, HOS-007, HOS-029) — a set-up door under the test switch (VID_TEST=1) alone, absent (404) with it off: POST /__test/clock?advance=<seconds> makes the Clock port read that many seconds later for every later read — real time — door authorised by the dev side, ticket 5; replaced by: no step of the plan, never on in production
+stand-in: a code store that fails (ROW-126) — a set-up door under the test switch (VID_TEST=1) alone, absent (404) with it off: POST /__test/fault?at=codes|codes-write|none makes every code-store operation, or every code-store write, fail until at=none — D1 failing on its own — door authorised by the dev side, ticket 5; replaced by: no step of the plan, never on in production
+stand-in: the deployed shape (ROW-142) — product-off, the same product image started through the same entry with the test switch off (VID_TEST=0), on the run's network at http://product-off:8787 (PRODUCT_OFF_URL); on a staging run, the staging address itself — the Worker deployed on Cloudflare — no set-up door: a second instance of the product, not a door in it
+stand-in: a restart, eviction or second server instance (ROW-158) — a restart of the product's processes inside its container: POST http://product:8788/restart (PRODUCT_RESTART_URL), answered by the harness's supervisor, never the product, stops the entry's whole process group and starts it again, the local D1 under /app/.wrangler kept, the Durable Object and every isolate's memory lost; it answers 200 once GET / answers below 500 — Cloudflare restarting, evicting or adding a Worker isolate or Durable Object instance — no set-up door of the product's; a harness hook on a port the product does not serve, absent on staging
+stand-in: a server secret missing or short (RULE-013, HOS-028) — one product per secret the entry declares and per state, variant-<n>: started with that secret unset (VID_SECRET_MISSING=<NAME>) or given 8 characters (VID_SECRET_SHORT=<NAME>), the test switch on, listed in PRODUCT_SECRET_VARIANTS; "short" is the test author's test value, 8 characters, no spec number — a secret missing or short in the owner's wrangler secret — no set-up door: separate product instances
+
+The rows you grade, each quoted as the ticket has it. Each row's fail-if is its own line's "this never happens:" or "this must always hold:" clause, or for a row with neither (ROW-096, RULE-013, DIF-001, SEAM-001, the hostility rows) its line as it stands; the requirements each cites carry theirs, with the answers they cite, in the ticket's Requirements section. DIF-001 and SEAM-001 are deploy-owed: they have run nowhere yet.
+
+> ROW-001 | behavior | REQ-001 | anonymous | n/a | this never happens: a person is signed in without entering the code sent to their email | REQ-001 | owed: spec-only — first stage | origin: REQ-001
+> - ROW-001 marks: none
+> ROW-002 | behavior | REQ-001 | anonymous | n/a | this never happens: a working code entered in time does not sign the person in, while their network address is under its hourly wrong-try limit | REQ-001 | owed: spec-only — first stage | origin: REQ-001
+> - ROW-002 marks: none
+> ROW-004 | behavior | REQ-002 | anonymous | n/a | this never happens: a code signs someone in more than 10 minutes after it was sent | REQ-002 | owed: spec-only — first stage | origin: REQ-002
+> - ROW-004 marks: none
+> ROW-005 | behavior | REQ-002 | anonymous | n/a | this never happens: a code signs someone in a second time | REQ-002 | owed: spec-only — first stage | origin: REQ-002
+> - ROW-005 marks: none
+> ROW-006 | behavior | REQ-002 | anonymous | n/a | this never happens: a code still signs someone in after 5 wrong tries against it from the network address that requested it | REQ-002 | owed: spec-only — first stage | origin: REQ-002
+> - ROW-006 marks: none
+> ROW-007 | behavior | REQ-002 | anonymous | n/a | this never happens: an earlier code still signs someone in after a newer one was sent for the same email at the request of the same network address — network address means the edge-reported client address, IPv6 counted per /64 | REQ-002 | owed: spec-only — first stage | origin: REQ-002
+> - ROW-007 marks: none
+> ROW-008 | behavior | REQ-002 | anonymous | n/a | this never happens: a code is not 6 digits | REQ-002 | owed: spec-only — first stage | origin: REQ-002
+> - ROW-008 marks: none
+> ROW-096 | reachability | / | anonymous | n/a | the sign-in screen is the entry point; after a code is requested the code-entry step is reachable from it and leads back to the email step | REQ-001 | owed: spec-only — first stage | origin: REQ-001
+> - ROW-096 marks: reachability
+> ROW-114 | behavior | REQ-001 | anonymous | n/a | this must always hold: the email box refuses commas, line breaks, display names, several @ and more than 254 characters; the code email has exactly one recipient, equal to the normalised address; and this must always hold: only one bare address is accepted: semicolons, spaces and angle brackets are refused, apostrophes accepted | REQ-001 | owed: spec-only — first stage | origin: domain
+> - ROW-114 marks: none
+> ROW-117 | behavior | REQ-002 | anonymous | n/a | this must always hold: parallel wrong guesses against one code evaluate at most 5; one code entered twice at once yields one session; parallel first sign-ins make one account; parallel code requests from one network address leave one working code | REQ-002 | owed: spec-only — first stage | origin: domain
+> - ROW-117 marks: none
+> ROW-118 | behavior | REQ-001 | anonymous | n/a | this must always hold: a code issued to one email never signs in as another email | REQ-001 | owed: spec-only — first stage | origin: domain
+> - ROW-118 marks: none
+> ROW-124 | behavior | REQ-002 | anonymous | n/a | this must always hold: codes are drawn from a cryptographic random source, every code from 000000 to 999999 can occur and keeps its leading zeros, and session values carry at least 128 random bits; and this must always hold: the composition root binds randomness to the cryptographic source; no Math.random in src | REQ-002 | owed: spec-only — first stage | origin: domain
+> - ROW-124 marks: none
+> ROW-126 | behavior | REQ-002 | anonymous | n/a | this must always hold: a storage error while checking or counting a code signs nobody in | REQ-002 | owed: spec-only — first stage | origin: domain
+> - ROW-126 marks: none
+> ROW-142 | behavior | REQ-001 | anonymous | n/a | this must always hold: no fixed code, last-code reader, fake mailer or test bypass is reachable in the deployed product | REQ-001 | owed: spec-only — first stage | origin: domain
+> - ROW-142 marks: none
+> ROW-146 | behavior | REQ-001 | anonymous | n/a | this must always hold: asking for a code creates no account; only entering the code does | REQ-001 | owed: spec-only — first stage | origin: domain
+> - ROW-146 marks: none
+> ROW-158 | behavior | REQ-002 | anonymous | n/a | this must always hold: a code's wrong-try count survives a restart, eviction or second server instance | REQ-002 | owed: spec-only — first stage | origin: domain
+> - ROW-158 marks: none
+> ROW-162 | behavior | REQ-002 | anonymous | n/a | this must always hold: the code box trims surrounding spaces, and input that is not 6 digits is refused without using one of the 5 tries | REQ-002 | owed: spec-only — first stage | origin: domain
+> - ROW-162 marks: none
+> ROW-179 | behavior | REQ-001 | anonymous | n/a | control of ROW-114: a plain valid email receives exactly one code email | REQ-001 | owed: spec-only — first stage | origin: domain
+> - ROW-179 marks: none
+> ROW-180 | behavior | REQ-002 | anonymous | n/a | control of ROW-117: a single correct code entered once signs the person in | REQ-002 | owed: spec-only — first stage | origin: domain
+> - ROW-180 marks: none
+> ROW-196 | behavior | REQ-002 | anonymous | n/a | this never happens: a request from another network address, or a request whose email failed to send, makes an earlier working code stop working — network address means the edge-reported client address, IPv6 counted per /64 | REQ-002 | owed: spec-only — first stage | origin: REQ-002
+> - ROW-196 marks: none
+> ROW-200 | behavior | REQ-037 | anonymous | n/a | this never happens: an 11th wrong try within an hour from one network address is checked against a code — network address means the edge-reported client address, IPv6 counted per /64 | REQ-037 | owed: spec-only — first stage | origin: REQ-037
+> - ROW-200 marks: none
+> ROW-201 | behavior | REQ-037 | anonymous | n/a | this never happens: the wrong-try refusal differs between emails with and without an account | REQ-037 | owed: spec-only — first stage | origin: REQ-037
+> - ROW-201 marks: none
+> ROW-204 | behavior | sign-in screen | anonymous | n/a | this never happens: an email holding any non-ASCII or invisible character is accepted at sign-in or in the call box | REQ-039 | owed: spec-only — first stage | origin: REQ-039
+> - ROW-204 marks: none
+> ROW-207 | behavior | REQ-039 | anonymous | n/a | control of ROW-204: a plain ASCII email with dots, plus and apostrophe is accepted | REQ-039 | owed: spec-only — first stage | origin: REQ-039
+> - ROW-207 marks: none
+> ROW-208 | behavior | REQ-002 | anonymous | n/a | this never happens: wrong tries from one network address make a code requested from another network address stop working — network address means the edge-reported client address, IPv6 counted per /64 | REQ-002 | owed: spec-only — first stage | origin: REQ-002
+> - ROW-208 marks: none
+> ROW-209 | behavior | REQ-037 | anonymous | n/a | this never happens: after 10 wrong tries within an hour from one network address, a further try from that address signs someone in, even with a working code | REQ-037 | owed: spec-only — first stage | origin: REQ-037
+> - ROW-209 marks: none
+> ROW-212 | behavior | code request response | anonymous | n/a | at the code request response: this never happens: an email holding any non-ASCII or invisible character is accepted — network address means the edge-reported client address, IPv6 counted per /64 | REQ-039 | owed: spec-only — first stage | origin: REQ-039
+> - ROW-212 marks: none
+> rule | RULE-013 | every secret read refuses to run when the secret is missing or short | 0 | owed: census-armed — no site exists before the code skeleton; armed when its first site and test land | origin: REQ-024
+> - RULE-013 marks: rule
+> difference | DIF-001 | the code email sender | a fake mailer that records the one recipient and the body in memory | Cloudflare Email Service binding sending from no-reply@call-by-identifier.josueayala.me | the fake records exactly what the adapter hands to the binding, so the product's choice of recipient and body is still tested | paying-step: staging — one real code email to a test inbox through the binding, SPF, DKIM and DMARC passing
+> - DIF-001 marks: owed-staging
+> seam | SEAM-001 | Cloudflare Email Service | sends the sign-in code email | chosen: D-008 | credentials: not-yet | probe: unreachable-risk(credentials not-yet) | evidence: owed | quirks: none yet
+> - SEAM-001 marks: seam
+> hostility | HOS-001 | on the code-entry screen, submit no code, an empty code and a code of another email, expect no session cookie and no signed-in screen | protects: REQ-001 | disable: remove the code check in verifyCode | owed: guard-first — the protection of REQ-001 does not exist yet; paid in the slice that builds it
+> - HOS-001 marks: protection
+> hostility | HOS-002 | on the code-entry screen, submit the correct code within 10 minutes, expect a session; with the check bypassed the session is refused | protects: REQ-001 | disable: remove the session creation after a valid code | owed: guard-first — the protection of REQ-001 does not exist yet; paid in the slice that builds it
+> - HOS-002 marks: protection
+> hostility | HOS-004 | on the code-entry screen, submit the code 10 minutes and 1 second after it was sent, expect no session | protects: REQ-002 | disable: remove the expiry comparison | owed: guard-first — the protection of REQ-002 does not exist yet; paid in the slice that builds it
+> - HOS-004 marks: protection
+> hostility | HOS-005 | submit a correct code a second time after it signed in once, expect no second session | protects: REQ-002 | disable: remove single-use consumption | owed: guard-first — the protection of REQ-002 does not exist yet; paid in the slice that builds it
+> - HOS-005 marks: protection
+> hostility | HOS-006 | submit 5 wrong codes then the right one, expect no session; repeat with 50 wrong guesses in parallel, expect at most 5 evaluated | protects: REQ-002 | disable: remove the wrong-try counter and its atomic update | owed: guard-first — the protection of REQ-002 does not exist yet; paid in the slice that builds it
+> - HOS-006 marks: protection
+> hostility | HOS-007 | from one network address request a code, request a second that is sent, submit the first, expect no session | protects: REQ-002 | disable: remove the kill of earlier codes on a new request | owed: guard-first — the protection of REQ-002 does not exist yet; paid in the slice that builds it
+> - HOS-007 marks: protection
+> hostility | HOS-008 | read every code the fake mailer recorded over many requests, expect each is exactly 6 digits | protects: REQ-002 | disable: remove the 6-digit code generator | owed: guard-first — the protection of REQ-002 does not exist yet; paid in the slice that builds it
+> - HOS-008 marks: protection
+> hostility | HOS-028 | start the Worker with the code-hashing secret unset, request and enter a code, expect sign-in refused | protects: RULE-013 | disable: remove the secret presence check | owed: guard-first — the protection of RULE-013 does not exist yet; paid in the slice that builds it
+> - HOS-028 marks: protection
+> hostility | HOS-029 | from a second network address request a code for the victim's email, then submit the victim's earlier code, expect it still signs in; and with the mailer failing, request again from the victim's address and expect the earlier code still works | protects: REQ-002 | disable: remove the same-address and sent-only condition on cancelling codes | owed: guard-first — the protection of REQ-002 does not exist yet; paid in the slice that builds it
+> - HOS-029 marks: protection
+> hostility | HOS-030 | from address B submit 5 wrong codes for an email whose live code was requested from address A, then submit A's code from A, expect it signs in | protects: REQ-002 | disable: remove the per-address scoping of wrong-try counts | owed: guard-first — the protection of REQ-002 does not exist yet; paid in the slice that builds it
+> - HOS-030 marks: protection
+
+This pull request's Decisions section, each line up to " | why:":
+
+Decisions:
+- One server secret, SIGNIN_SECRET (at least 32 characters), keys every stored hash; the code key and the address key are derived from it by HMAC-SHA-256 (RFC 2104) with a label each
+- Codes are stored as HMAC-SHA-256 of "<email>\n<code>", drawn by rejection sampling over a uint32 from crypto.getRandomValues, compared in constant time; session tokens are 32 random bytes (hex), stored as SHA-256
+- New stored data: migration 0001 adds tables accounts, codes, sessions, request_counters (times in ms; email CHECK lowercase); rolled back by dropping the four tables, which nothing else reads
+- A new code is stored only after its email is sent, and in the same D1 batch supersedes every lower-id live code of that email from the same requesting address
+- A wrong try takes a slot of the address's hourly counter before any code is looked at, and a right code gives its slot back
+- The email box is a text box (inputmode=email), not type=email
+- The sign-in steps both post to / and are told apart by a hidden step field; the code-entry step carries the email in a hidden field and links back to /
+- The test switch's stand-ins (fake mailer record, clock offset, armed code-store fault) live in one module-scope object in src/worker, built only when VID_TEST=1
+- wrangler.jsonc keeps a placeholder D1 database_id (all zeros); the real id is set by the deployer at the first hosted deploy
+
+Where your grade file goes: /Users/josueayala/call-by-identifier-devagent/grades/5/grade-1.txt
