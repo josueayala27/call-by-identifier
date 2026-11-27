@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="call-by-identifier ledger">
+<testsuite name="tests/invariants/test-dif-001-seam-001-email-service.test.ts" timestamp="2026-11-27T15:48:53.743Z" hostname="0454a9d8aca3" tests="2" failures="0" errors="0" skipped="2" time="0">
+        <testcase classname="tests/invariants/test-dif-001-seam-001-email-service.test.ts" name="SEAM-001 the Email Service sends a code email on staging" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="tests/invariants/test-dif-001-seam-001-email-service.test.ts" name="DIF-001 one real code email reaches the test inbox with SPF, DKIM and DMARC passing" time="0">
+            <skipped/>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-002-working-code-under-limit.test.ts" timestamp="2026-11-27T15:48:53.744Z" hostname="0454a9d8aca3" tests="2" failures="2" errors="0" skipped="0" time="0.072753042">
+        <testcase classname="tests/invariants/test-row-002-working-code-under-limit.test.ts" name="ROW-002 control a working code entered in time signs in from a fresh address" time="0.054800417">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-002-working-code-under-limit.test.ts:19:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-002-working-code-under-limit.test.ts" name="ROW-002 a working code entered in time signs in after 9 wrong tries from the address" time="0.016946667">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-002-working-code-under-limit.test.ts:26:18
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" timestamp="2026-11-27T15:48:53.747Z" hostname="0454a9d8aca3" tests="6" failures="6" errors="0" skipped="0" time="0.054794708">
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="ROW-004 control a code entered 599 seconds after it was sent signs in" time="0.035672625">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts:52:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="ROW-004 a code entered 601 seconds after it was sent does not sign in" time="0.00726175">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts:59:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="HOS-004 the code entered 10 minutes and 1 second after sending gives no session" time="0.0029825">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts:66:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="ROW-005 control the first entry of the code signs in" time="0.002937666">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts:73:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="ROW-005 a code that signed in once does not sign in a second time" time="0.002581417">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts:79:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts" name="HOS-005 a correct code submitted a second time gives no second session" time="0.002278375">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-004-005-hos-004-005-expiry-and-single-use.test.ts:91:16
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" timestamp="2026-11-27T15:48:53.751Z" hostname="0454a9d8aca3" tests="9" failures="9" errors="0" skipped="0" time="0.073609583">
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-006 control after 4 wrong tries the right code still signs in" time="0.036510875">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts:63:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-006 after 5 wrong tries from the requesting address the right code does not sign in" time="0.006768542">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts:70:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-006 after 5 wrong tries from the requesting address the right code from elsewhere does not sign in" time="0.008753333">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts:77:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-162 control a code surrounded by spaces signs in" time="0.004002417">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts:85:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-162 seven inputs that are not 6 digits use none of the 5 tries" time="0.003598959">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts:91:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-158 control a live code survives a restart of the product" time="0.003223958">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts:102:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="ROW-158 the wrong-try count survives a restart of the product" time="0.002861417">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts:111:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="HOS-006 5 wrong codes then the right one give no session" time="0.003129125">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts:121:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts" name="HOS-006 50 wrong guesses in parallel leave the code dead" time="0.003649417">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-006-162-158-hos-006-wrong-tries.test.ts:128:16
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" timestamp="2026-11-27T15:48:53.756Z" hostname="0454a9d8aca3" tests="9" failures="9" errors="0" skipped="0" time="0.1047685">
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-007 control the newer code signs in" time="0.056574916">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ twoCodes tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:61:17
+ ❯ tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:69:22
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-007 a newer code sent at the same address stops the earlier code" time="0.018281416">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ twoCodes tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:61:17
+ ❯ tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:76:21
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-007 a newer code sent from the same IPv6 /64 stops the earlier code" time="0.004727875">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ twoCodes tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:61:17
+ ❯ tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:83:21
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="HOS-007 the first code after a second sent request from one address gives no session" time="0.004687541">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ twoCodes tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:61:17
+ ❯ tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:90:21
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-196 control the other address&apos;s own code also arrived" time="0.004106167">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ twoCodes tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:61:17
+ ❯ tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:96:29
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-196 a request from another address does not stop an earlier working code" time="0.005181416">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ twoCodes tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:61:17
+ ❯ tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:103:21
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-196 a request from another IPv6 /64 does not stop an earlier working code" time="0.003214292">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ twoCodes tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:61:17
+ ❯ tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:109:21
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="ROW-196 a request whose email failed to send does not stop an earlier working code" time="0.002522">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ failedResend tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:118:17
+ ❯ tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:128:17
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts" name="HOS-029 another address&apos;s request and a failed send leave the victim&apos;s earlier code working" time="0.004101959">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ twoCodes tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:61:17
+ ❯ tests/invariants/test-row-007-196-hos-007-029-newer-code.test.ts:134:18
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" timestamp="2026-11-27T15:48:53.766Z" hostname="0454a9d8aca3" tests="5" failures="5" errors="0" skipped="0" time="0.157743292">
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="ROW-008 control the 6 digits read from the email are the code that signs in" time="0.054222625">
+            <failure message="setup: the code-entry step did not appear after a code request for row008-9b2eeae81553@example.test (status 404): the request step is not there yet" type="SetupError">
+SetupError: setup: the code-entry step did not appear after a code request for row008-9b2eeae81553@example.test (status 404): the request step is not there yet
+ ❯ needCodeForm tests/invariants/signin.ts:266:11
+ ❯ tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:50:9
+ ❯ sample tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:46:19
+ ❯ tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:62:15
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="ROW-008 every emailed code is exactly 6 digits" time="0.027438292">
+            <failure message="setup: the code-entry step did not appear after a code request for row008-ca57164e06fa@example.test (status 404): the request step is not there yet" type="SetupError">
+SetupError: setup: the code-entry step did not appear after a code request for row008-ca57164e06fa@example.test (status 404): the request step is not there yet
+ ❯ needCodeForm tests/invariants/signin.ts:266:11
+ ❯ tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:50:9
+ ❯ sample tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:46:19
+ ❯ tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:69:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="HOS-008 every code recorded over many requests is exactly 6 digits" time="0.026566792">
+            <failure message="setup: the code-entry step did not appear after a code request for hos008-5837d4de1acc@example.test (status 404): the request step is not there yet" type="SetupError">
+SetupError: setup: the code-entry step did not appear after a code request for hos008-5837d4de1acc@example.test (status 404): the request step is not there yet
+ ❯ needCodeForm tests/invariants/signin.ts:266:11
+ ❯ tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:50:9
+ ❯ sample tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:46:19
+ ❯ tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:76:19
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="ROW-124 codes span the whole range with leading zeros kept" time="0.040341208">
+            <failure message="setup: the code-entry step did not appear after a code request for row124-47e46c0932f2@example.test (status 404): the request step is not there yet" type="SetupError">
+SetupError: setup: the code-entry step did not appear after a code request for row124-47e46c0932f2@example.test (status 404): the request step is not there yet
+ ❯ needCodeForm tests/invariants/signin.ts:266:11
+ ❯ tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:50:9
+ ❯ sample tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:46:19
+ ❯ tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:83:15
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-008-124-hos-008-code-shape.test.ts" name="ROW-124 session values carry at least 128 random bits" time="0.008067625">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-008-124-hos-008-code-shape.test.ts:106:18
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-114-179-212-207-email-box.test.ts" timestamp="2026-11-27T15:48:53.769Z" hostname="0454a9d8aca3" tests="7" failures="7" errors="0" skipped="0" time="0.124037875">
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-179 a plain valid email receives exactly one code email" time="0.057893292">
+            <failure message="AssertionError: ROW-179: the code request for &quot;row179-cf0698def387@example.test&quot; shows no code-entry step: expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: ROW-179: the code request for &quot;row179-cf0698def387@example.test&quot; shows no code-entry step: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ oneEmailTo tests/invariants/test-row-114-179-212-207-email-box.test.ts:67:105
+ ❯ tests/invariants/test-row-114-179-212-207-email-box.test.ts:76:3
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-207 a plain ASCII email with dots, plus and apostrophe is accepted" time="0.012165917">
+            <failure message="AssertionError: ROW-207: the code request for &quot;first.o'brien+tag-fbd2f2d1d83c@example.test&quot; shows no code-entry step: expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: ROW-207: the code request for &quot;first.o&apos;brien+tag-fbd2f2d1d83c@example.test&quot; shows no code-entry step: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ oneEmailTo tests/invariants/test-row-114-179-212-207-email-box.test.ts:67:105
+ ❯ tests/invariants/test-row-114-179-212-207-email-box.test.ts:81:3
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-114 commas, line breaks, display names, several @, semicolons, spaces and angle brackets are refused" time="0.015312875">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ refused tests/invariants/test-row-114-179-212-207-email-box.test.ts:59:15
+ ❯ tests/invariants/test-row-114-179-212-207-email-box.test.ts:98:17
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-114 an address over 254 characters is refused" time="0.012560042">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ refused tests/invariants/test-row-114-179-212-207-email-box.test.ts:59:15
+ ❯ tests/invariants/test-row-114-179-212-207-email-box.test.ts:108:15
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-114 the code email has one recipient, the lowercase address, and apostrophes are accepted" time="0.008116916">
+            <failure message="AssertionError: ROW-114: the code request for &quot;Mixed.Case+Tag-df605ebd46eb@Example.Test&quot; shows no code-entry step: expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: ROW-114: the code request for &quot;Mixed.Case+Tag-df605ebd46eb@Example.Test&quot; shows no code-entry step: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ oneEmailTo tests/invariants/test-row-114-179-212-207-email-box.test.ts:67:105
+ ❯ tests/invariants/test-row-114-179-212-207-email-box.test.ts:114:3
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-212 emails holding a non-ASCII or invisible character are refused at the code request" time="0.009939917">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ refused tests/invariants/test-row-114-179-212-207-email-box.test.ts:59:15
+ ❯ tests/invariants/test-row-114-179-212-207-email-box.test.ts:137:17
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-114-179-212-207-email-box.test.ts" name="ROW-212 control the same addresses without the added character are accepted" time="0.006948209">
+            <failure message="AssertionError: ROW-212: the plain address row212-07ce85276199@example.test is not accepted at the code request: expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: ROW-212: the plain address row212-07ce85276199@example.test is not accepted at the code request: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/invariants/test-row-114-179-212-207-email-box.test.ts:146:96
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-117-parallel-sign-in.test.ts" timestamp="2026-11-27T15:48:53.772Z" hostname="0454a9d8aca3" tests="5" failures="5" errors="0" skipped="0" time="0.073300584">
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 control one code entered once signs in" time="0.034198958">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-117-parallel-sign-in.test.ts:33:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 parallel wrong guesses against one code evaluate at most 5" time="0.007428125">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-117-parallel-sign-in.test.ts:39:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 one code entered twice at once yields one session" time="0.003143667">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-117-parallel-sign-in.test.ts:49:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 parallel first sign-ins make one account" time="0.003275875">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-117-parallel-sign-in.test.ts:59:15
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-117-parallel-sign-in.test.ts" name="ROW-117 parallel code requests from one network address leave one working code" time="0.024340666">
+            <failure message="setup: none of the 5 parallel code requests showed the code-entry step" type="SetupError">
+SetupError: setup: none of the 5 parallel code requests showed the code-entry step
+ ❯ tests/invariants/test-row-117-parallel-sign-in.test.ts:73:24
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-126-146-storage.test.ts" timestamp="2026-11-27T15:48:53.775Z" hostname="0454a9d8aca3" tests="5" failures="5" errors="0" skipped="0" time="0.052747667">
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-126 control with the storage error cleared the same code signs in" time="0.032069458">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-126-146-storage.test.ts:42:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-126 a storage error while checking a code signs nobody in" time="0.007593958">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-126-146-storage.test.ts:53:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-126 a storage error while counting a code signs nobody in" time="0.00408475">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-126-146-storage.test.ts:62:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-146 control entering the code creates the account" time="0.003554">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-126-146-storage.test.ts:71:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-126-146-storage.test.ts" name="ROW-146 asking for a code or entering a wrong one creates no account" time="0.004325792">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-126-146-storage.test.ts:77:16
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-142-deployed-no-bypass.test.ts" timestamp="2026-11-27T15:48:53.777Z" hostname="0454a9d8aca3" tests="2" failures="1" errors="0" skipped="0" time="0.080738166">
+        <testcase classname="tests/invariants/test-row-142-deployed-no-bypass.test.ts" name="ROW-142 control the switch-off product serves the sign-in screen" time="0.039673">
+        </testcase>
+        <testcase classname="tests/invariants/test-row-142-deployed-no-bypass.test.ts" name="ROW-142 no test door and no fixed code is reachable with the test switch off" time="0.040096875">
+            <failure message="setup: the switch-off product shows no code-entry step after a code request (status 404)" type="SetupError">
+SetupError: setup: the switch-off product shows no code-entry step after a code request (status 404)
+ ❯ tests/invariants/test-row-142-deployed-no-bypass.test.ts:57:25
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" timestamp="2026-11-27T15:48:53.778Z" hostname="0454a9d8aca3" tests="9" failures="9" errors="0" skipped="0" time="0.116399584">
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-180 control asking for a code shows the code-entry step" time="0.05742825">
+            <failure message="AssertionError: ROW-180: the code request does not answer below 400: expected 404 to be less than 400" type="AssertionError">
+AssertionError: ROW-180: the code request does not answer below 400: expected 404 to be less than 400
+ ❯ tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts:71:83
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-180 a single correct code entered once signs the person in" time="0.015241083">
+            <failure message="AssertionError: ROW-180: asking for a code shows no code-entry step (no code box): expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: ROW-180: asking for a code shows no code-entry step (no code box): expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts:78:92
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-001 asking for a code alone does not sign the person in" time="0.020043334">
+            <failure message="setup: the code-entry step did not appear after a code request for row001-faf999104722@example.test (status 404): the request step is not there yet" type="SetupError">
+SetupError: setup: the code-entry step did not appear after a code request for row001-faf999104722@example.test (status 404): the request step is not there yet
+ ❯ needCodeForm tests/invariants/signin.ts:266:11
+ ❯ tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts:87:3
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-001 no code, an empty code or a wrong code does not sign the person in" time="0.003630667">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts:92:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-001 control the emailed code entered after the refused tries signs the person in" time="0.005302292">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts:102:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-118 a code issued to one email does not sign in as another email" time="0.003407125">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts:110:13
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="ROW-118 control the other email&apos;s own code signs it in" time="0.003256208">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts:121:13
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="HOS-001 no code, an empty code and another email&apos;s code give no session" time="0.003601167">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts:130:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts" name="HOS-002 the correct code entered within 10 minutes gives a session" time="0.003179709">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-180-001-118-hos-001-002-sign-in-with-code.test.ts:146:16
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" timestamp="2026-11-27T15:48:53.782Z" hostname="0454a9d8aca3" tests="10" failures="10" errors="0" skipped="0" time="0.155930084">
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-208 control the wrong tries from the other address are refused" time="0.038082583">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:86:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-208 wrong tries from another address leave the code working" time="0.007500667">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:92:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-208 wrong tries from another IPv6 /64 leave the code working" time="0.00600325">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:100:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="HOS-030 5 wrong codes from another address leave the victim&apos;s code working" time="0.005888958">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:108:16
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-200 tries past the 10th from one address are not checked against a code" time="0.035129333">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ wrongTriesElsewhere tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:75:17
+ ❯ row200 tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:116:3
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:124:10
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-200 tries past the 10th from one IPv6 /64 are not checked against a code" time="0.015311">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ wrongTriesElsewhere tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:75:17
+ ❯ row200 tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:116:3
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:129:10
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-209 control the code refused at the limited address signs in from another address" time="0.016804">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ wrongTriesElsewhere tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:75:17
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:134:3
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-209 after 10 wrong tries from one address a working code from it does not sign in" time="0.015236125">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ wrongTriesElsewhere tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:75:17
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:142:3
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-209 after 10 wrong tries from one IPv6 /64 a working code from it does not sign in" time="0.010291042">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ wrongTriesElsewhere tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:75:17
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:149:3
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts" name="ROW-201 the wrong-try refusal is the same for emails with and without an account" time="0.004471834">
+            <failure message="setup: no test-switch door GET /__test/mail (answered 404)" type="SetupError">
+SetupError: setup: no test-switch door GET /__test/mail (answered 404)
+ ❯ door tests/invariants/signin.ts:309:55
+ ❯ mailFor tests/invariants/signin.ts:318:15
+ ❯ codeFlow tests/invariants/signin.ts:350:19
+ ❯ tests/invariants/test-row-208-200-209-201-hos-030-address-limits.test.ts:166:17
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="tests/invariants/test-rule-013-hos-028-secrets.test.ts" timestamp="2026-11-27T15:48:53.787Z" hostname="0454a9d8aca3" tests="3" failures="3" errors="0" skipped="0" time="0.0659775">
+        <testcase classname="tests/invariants/test-rule-013-hos-028-secrets.test.ts" name="RULE-013 control the same sign-in steps sign in on the product with its secrets" time="0.064252">
+            <failure message="AssertionError: RULE-013: the sign-in steps do not sign in on the product with its secrets: expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: RULE-013: the sign-in steps do not sign in on the product with its secrets: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/invariants/test-rule-013-hos-028-secrets.test.ts:60:117
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-rule-013-hos-028-secrets.test.ts" name="RULE-013 every secret read refuses to run when the secret is missing or short" time="0.000647041">
+            <failure message="setup: no product started with a secret missing or short in this run (PRODUCT_SECRET_VARIANTS unset)" type="SetupError">
+SetupError: setup: no product started with a secret missing or short in this run (PRODUCT_SECRET_VARIANTS unset)
+ ❯ variants tests/invariants/test-rule-013-hos-028-secrets.test.ts:34:19
+ ❯ tests/invariants/test-rule-013-hos-028-secrets.test.ts:64:14
+            </failure>
+        </testcase>
+        <testcase classname="tests/invariants/test-rule-013-hos-028-secrets.test.ts" name="HOS-028 with the code-hashing secret unset sign-in is refused" time="0.00024875">
+            <failure message="setup: no product started with a secret missing or short in this run (PRODUCT_SECRET_VARIANTS unset)" type="SetupError">
+SetupError: setup: no product started with a secret missing or short in this run (PRODUCT_SECRET_VARIANTS unset)
+ ❯ variants tests/invariants/test-rule-013-hos-028-secrets.test.ts:34:19
+ ❯ tests/invariants/test-rule-013-hos-028-secrets.test.ts:79:13
+            </failure>
+        </testcase>
+    </testsuite>
+<testsuite name="test-row-096-code-entry-reachability.spec.ts" timestamp="2026-11-27T15:48:54.366Z" hostname="chromium" tests="2" failures="1" skipped="0" time="5.375" errors="0">
+<testcase name="ROW-096 control the sign-in screen at / is the entry point" classname="test-row-096-code-entry-reachability.spec.ts" time="0.178">
+</testcase>
+<testcase name="ROW-096 after a code is requested the code-entry step shows and leads back to the email step" classname="test-row-096-code-entry-reachability.spec.ts" time="5.197">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../playwright-output/test-row-096-code-entry-re-1e40a-eads-back-to-the-email-step-chromium/error-context.md]]
+]]>
+</system-out>
+<failure message="Error: ROW-096: pressing the send-code button does not show the code-entry step (no code box)" type="expect.toBeVisible">
+<![CDATA[  [chromium] › test-row-096-code-entry-reachability.spec.ts:48:1 › ROW-096 after a code is requested the code-entry step shows and leads back to the email step 
+
+    Error: ROW-096: pressing the send-code button does not show the code-entry step (no code box)
+
+    expect(locator).toBeVisible() failed
+
+    Locator: locator('input[name*="code" i], input[name*="otp" i], input[autocomplete="one-time-code"]').first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - ROW-096: pressing the send-code button does not show the code-entry step (no code box) locator('input[name*="code" i], input[name*="otp" i], input[autocomplete="one-time-code"]').first() with timeout 5000ms
+      - waiting for locator('input[name*="code" i], input[name*="otp" i], input[autocomplete="one-time-code"]').first()
+
+
+      48 | test('ROW-096 after a code is requested the code-entry step shows and leads back to the email step', async ({ page }) => {
+      49 |   await toCodeStep(page);
+    > 50 |   await expect(page.locator(CODE_BOX).first(), 'ROW-096: pressing the send-code button does not show the code-entry step (no code box)').toBeVisible();
+         |                                                                                                                                          ^
+      51 |
+      52 |   // Every link and button on the code-entry step except the one that submits the code.
+      53 |   const candidates = async () => {
+        at /app/tests/invariants/test-row-096-code-entry-reachability.spec.ts:50:138
+
+    Error Context: ../../../tmp/playwright-output/test-row-096-code-entry-re-1e40a-eads-back-to-the-email-step-chromium/error-context.md
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="test-row-204-sign-in-screen-ascii.spec.ts" timestamp="2026-11-27T15:48:54.366Z" hostname="chromium" tests="2" failures="1" skipped="0" time="0.891" errors="0">
+<testcase name="ROW-204 control a plain ASCII email typed on the sign-in screen reaches the code-entry step" classname="test-row-204-sign-in-screen-ascii.spec.ts" time="0.208">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../playwright-output/test-row-204-sign-in-scree-d0613-reaches-the-code-entry-step-chromium/error-context.md]]
+]]>
+</system-out>
+<failure message="Error: ROW-204: a plain ASCII email typed on the sign-in screen does not reach the code-entry step" type="expect.toBe">
+<![CDATA[  [chromium] › test-row-204-sign-in-screen-ascii.spec.ts:39:1 › ROW-204 control a plain ASCII email typed on the sign-in screen reaches the code-entry step 
+
+    Error: ROW-204: a plain ASCII email typed on the sign-in screen does not reach the code-entry step
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      38 |
+      39 | test('ROW-204 control a plain ASCII email typed on the sign-in screen reaches the code-entry step', async ({ page }) => {
+    > 40 |   expect(await typeAndSend(page, `first.o'brien+tag-${fresh()}@example.test`), 'ROW-204: a plain ASCII email typed on the sign-in screen does not reach the code-entry step').toBe(true);
+         |                                                                                                                                                                               ^
+      41 | });
+      42 |
+      43 | test('ROW-204 an email holding a non-ASCII or invisible character typed on the sign-in screen is not accepted', async ({ page }) => {
+        at /app/tests/invariants/test-row-204-sign-in-screen-ascii.spec.ts:40:175
+
+    Error Context: ../../../tmp/playwright-output/test-row-204-sign-in-scree-d0613-reaches-the-code-entry-step-chromium/error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="ROW-204 an email holding a non-ASCII or invisible character typed on the sign-in screen is not accepted" classname="test-row-204-sign-in-screen-ascii.spec.ts" time="0.683">
+</testcase>
+</testsuite>
+</testsuites>
