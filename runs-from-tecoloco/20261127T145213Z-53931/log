@@ -1,0 +1,24 @@
+== chromium, pass 1, selection ROW-093, at 2026-11-27T14:52:15Z
+ Container cbi-run53979-tests-run-c2bed9631e69 Creating 
+ Container cbi-run53979-tests-run-c2bed9631e69 Created 
+== vitest, engine-free cases, in the chromium pass
+
+ RUN  v5.1.2 /app
+
+No test files found, exiting with code 0
+
+include: tests/invariants/**/*.test.ts
+exclude:  **/node_modules/**, **/.git/**
+
+JUNIT report written to /tmp/tmp.lmor9n1BMM/vitest.xml
+== playwright, engine chromium
+
+Running 2 tests using 1 worker
+
+(node:59) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › tests/invariants/test-row-093-signed-out-shell.spec.ts:63:1 › ROW-093 control the signed-out page at / is the sign-in screen with an email box and a send-code button (208ms)
+  ✓  2 [chromium] › tests/invariants/test-row-093-signed-out-shell.spec.ts:83:1 › ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area (144ms)
+
+  2 passed (1.0s)
+stop: cbi-run53979 down

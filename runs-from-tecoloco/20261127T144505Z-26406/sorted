@@ -1,0 +1,3 @@
+cases: 0 passed, 0 failed, 2 errored, 0 skipped
+broken: 2 setup: no product in this run
+broken cases: ROW-093 control the signed-out page at / is the sign-in screen with an email box and a send-code button, ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area — setup: no product in this run

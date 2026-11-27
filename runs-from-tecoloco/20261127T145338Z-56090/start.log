@@ -1,0 +1,61 @@
+== chromium, pass 1, selection ROW-093, at 2026-11-27T14:53:40Z
+ Image cbi-run56146-product Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 637B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from product.Dockerfile
+#2 transferring dockerfile: 889B done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:572cebbc2b15e6f84c077742952674889cb63cd5e9b80abdffcbe587b6f19183
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.3s
+
+#6 [stage-0 1/6] FROM docker.io/library/node:22-bookworm-slim@sha256:be979e5523c76fa4d5ca4ebd3099078f220aa47ec39c48ad5b5df9314debd6eb
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 4.62MB 0.1s
+#7 transferring context: 9.79MB 0.2s done
+#7 DONE 0.2s
+
+#8 [stage-0 2/6] WORKDIR /app
+#8 CACHED
+
+#9 [stage-0 3/6] RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/* && corepack enable
+#9 CACHED
+
+#10 [stage-0 4/6] COPY package.json pnpm-lock.yaml ./
+#10 CACHED
+
+#11 [stage-0 5/6] RUN --mount=type=cache,id=cbi-pnpm-store,target=/pnpm-store     corepack install && pnpm install --frozen-lockfile --store-dir /pnpm-store --package-import-method copy
+#11 CACHED
+
+#12 [stage-0 6/6] COPY . .
+#12 DONE 0.2s
+
+#13 exporting to image
+#13 exporting layers 0.1s done
+#13 writing image sha256:86923e0535afb42468eb463871b24abb9a56899348b955630f4bd1e1a318a5a8
+#13 writing image sha256:86923e0535afb42468eb463871b24abb9a56899348b955630f4bd1e1a318a5a8 done
+#13 naming to docker.io/library/cbi-run56146-product done
+#13 DONE 0.1s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ Image cbi-run56146-product Built 
+ Network cbi-run56146_ledger Creating 
+ Network cbi-run56146_ledger Created 
+ Container cbi-run56146-product-1 Creating 
+ Container cbi-run56146-product-1 Created 
+ Container cbi-run56146-product-1 Starting 
+ Container cbi-run56146-product-1 Started 
+ Container cbi-run56146-product-1 Waiting 
+ Container cbi-run56146-product-1 Healthy 
+start: cbi-run56146 ready, the product healthy at http://product:8787

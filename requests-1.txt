@@ -1,0 +1,25 @@
+TA: requests from the test author, ticket 1, commit c60e89f on ticket-1
+
+## test manager
+
+- None needed for ROW-093: its cases use only the harness contract as recorded (PRODUCT_URL, Playwright chromium,
+  CF-Connecting-IP set by the test). The shared door is tests/invariants/harness.ts (productUrl, openPage, fresh,
+  freshEmail, freshClientAddress); it throws "setup: no product in this run" when PRODUCT_URL is empty — seen in a
+  NO_PRODUCT=1 run: both cases errored with that message, report written.
+- Step 3 (measure) can now run: the ledger has two browser cases.
+
+## builder
+
+- ROW-093 is checked at / with a fresh, cookie-less browser: the page's visible controls must be exactly one text field
+  (the email box) and one button whose accessible name contains "code", in the same <form>; no other field, button,
+  checkbox/radio/etc., no dialog, no link or text reading sign out / log out, and no visible text with the words
+  incoming, accept, decline, hang up or "is calling". / must answer 200.
+
+## questions
+
+- Question: ROW-093 — what does the send-code button say? No wording is in the spec. Default the test builds on: its
+  accessible name contains "code" (e.g. "Send code").
+- Question: ROW-093 — may the signed-out sign-in screen show any other control (a brand link to /, a footer link)?
+  Default: links are allowed unless they read or point to sign out / log out; any other field or button fails.
+- Question: ROW-093 — may the signed-out screen show the words "accept", "decline", "incoming", "hang up" or "is
+  calling" for any other purpose? Default: no; any of them visible counts as an incoming-call area.

@@ -2,3 +2,26 @@
 2026-11-27T14:29:08Z claimed: vid: claimed, by: DM on #1
 2026-11-27T14:29:17Z branch: ticket-1 from d637b7bf19e9, empty commit 532796f (Role: DM), pushed; draft pull request #2 opened
 2026-11-27T14:29:59Z setup: agent setup-2 started, job note jobs/1-setup-1.txt, clone clones/setup-1-1
+2026-11-27T14:40:47Z setup: setup-2 handed back, record dev-setup.txt (chromium, environments 1, entry pnpm run entry), 4 questions with defaults; taken
+2026-11-27T14:41:04Z questions: setup's 4 questions posted on #1 as Question: comments, by TM, no label, defaults taken by the work (comments/1-q1..q4.md)
+2026-11-27T14:41:35Z test author: agent test-author-3 started, job note jobs/1-test-author-1.txt, clone clones/test-author-1-1
+2026-11-27T14:44:47Z test author: test-author-3 handed back, commit c60e89f (Role: TA), ROW-093 cases control + target in tests/invariants/test-row-093-signed-out-shell.spec.ts, requests-1.txt; taken
+2026-11-27T14:44:59Z questions: TA's 3 product questions with test defaults posted on #1, no label (comments/1-q5..q7.md)
+2026-11-27T14:45:09Z run: no-product head run at c60e89f, ask pr-2-c60e89f03f53, --select ROW-093, the 5 stand-in: lines of dev-setup.txt as --line (first head report), folder runs/20261127T144505Z-26406
+2026-11-27T14:45:22Z run: pushed vid-results/pr-2-c60e89f03f53-1, leftovers none, 2 errored setup: no product in this run (expected before the product)
+2026-11-27T14:45:35Z setup: agent setup-4 started for step 3 (measure), job note jobs/1-setup-2.txt, clone clones/setup-1-1
+2026-11-27T14:47:10Z setup: setup-4 handed back: measured: 2 359 2026-11-27T14:46:48Z, environments: 3 proved (overlapping), no questions; taken
+2026-11-27T14:47:25Z builder: agent builder-5 started, job note jobs/1-builder-1.txt, clone clones/builder-1-1, on c60e89f
+2026-11-27T14:50:13Z builder: builder-5 handed back, commit e13b268 (Role: BU), ROW-093 passing in its own run; taken
+2026-11-27T14:50:13Z settled (technical): the Worker exports no SwitchboardObject and declares no D1 or Durable Object binding yet | why: those adapters are outside this ticket's modules (src/worker, src/http); the step that brings them in adds the bindings and the export
+2026-11-27T14:50:13Z settled (technical): the sign-in form has no post handler in this ticket | why: no route opens before the step with a row behind it; the code-request step adds it
+2026-11-27T14:50:16Z check: untouched.sh at e13b268: 2 of 2 files untouched, exit 0
+2026-11-27T14:50:29Z setup: agent setup-6 started for step 3 at the product's first start (e13b268), job note jobs/1-setup-3.txt
+2026-11-27T14:52:05Z setup: setup-6 handed back: measured: 2 804 2026-11-27T14:51:38Z, environments 3 proved, case-limit 180 -> 60, 2 questions with defaults; taken
+2026-11-27T14:52:08Z questions: setup-6's 2 questions posted on #1, by TM, no label (comments/1-q8..q9.md)
+2026-11-27T14:52:13Z run: head run (T3) at e13b268, ask pr-2-e13b2680e85a, --select ROW-093, no --line (every stand-in: line carried by pr-2-c60e89f03f53-1), folder /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/runs/20261127T145213Z-53931
+2026-11-27T14:52:35Z run: pushed vid-results/pr-2-e13b2680e85a-1, 2 passed, leftovers none
+2026-11-27T14:52:44Z decisions: PR #2 body's Decisions section rewritten for head e13b268 (jobs/pr-1-body.md)
+2026-11-27T14:53:11Z breaks: grader grader-7 started for ROW-093's fault, job note jobs/1-grader-1.txt, blind/copy.wusz3l
+2026-11-27T14:53:37Z breaks: grader-7 handed back faults/1/ROW-093.patch (1 file, +5); taken
+2026-11-27T14:53:38Z fault run: T4 at e13b268, list faults/1/list-e13b268.txt (ROW-093, no control), folder /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/runs/20261127T145338Z-56090

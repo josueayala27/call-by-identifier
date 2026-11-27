@@ -1,0 +1,16 @@
+repo: https://github.com/josueayala27/call-by-identifier
+engines: chromium
+environments: 1
+case-limit: 180
+start: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/start.sh
+stop: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/stop.sh
+run: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/run-tests.sh
+select-form: <words>
+entry: pnpm run entry
+services: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/services.sh
+leftovers: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/leftovers.sh
+logs: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/logs.sh
+silent-seconds: 1200
+startup-seconds: 3600
+run-seconds: 86400
+service-seconds: 15

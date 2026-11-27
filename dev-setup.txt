@@ -1,7 +1,7 @@
 repo: https://github.com/josueayala27/call-by-identifier
 engines: chromium
-environments: 1
-case-limit: 180
+environments: 3
+case-limit: 60
 start: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/start.sh
 stop: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/stop.sh
 run: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/run-tests.sh
@@ -10,7 +10,147 @@ entry: pnpm run entry
 services: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/services.sh
 leftovers: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/leftovers.sh
 logs: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/logs.sh
+free-memory: sh /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/free-memory.sh
+measured: 2 804 2026-11-27T14:51:38Z
 silent-seconds: 1200
 startup-seconds: 3600
 run-seconds: 86400
 service-seconds: 15
+stand-in: the code email sender (DIF-001) — a fake mailer under the test switch (VID_TEST=1) that records the one recipient and the body in memory, read back by the tests through a route that exists only under the switch — the Cloudflare Email Service binding sending from no-reply@call-by-identifier.josueayala.me — no set-up door: a measuring tool DIF-001 authorises, paid at staging
+stand-in: the connection-helping server (DIF-002) — none: both Chromium browsers run in one tests container and connect over host candidates; the test network has no route out — stun.cloudflare.com
+stand-in: the edge in front of the Worker (DIF-003) — local workerd (wrangler dev) over plain HTTP at http://product:8787, the test sets CF-Connecting-IP itself, and Chromium treats that one origin as secure — Cloudflare's edge, HTTPS and the edge-reported client address
+stand-in: the cleanup schedule (D-026) — does not fire on its own under wrangler dev; a test fires it through wrangler's --test-scheduled route /__scheduled — Cloudflare's cron every 15 minutes — no set-up door of the product's; the schedule's consumption is deploy-owed
+stand-in: the server secrets (code-hashing key, OPERATOR_EMAIL) — throwaway test values handed to the entry in the environment (VID_TEST_SECRET), never a real secret — the owner's wrangler secret and variable
+
+Written 2026-11-27T14:40:27Z by the setup pass (setup-2), ticket 1, steps 1, 2, 4, 5, 6, 7 and 9. Step 3 waited for the test author's tests; it is below, amended by setup-4, and again by setup-6 at the product's first start.
+Step 8 is named below for the builder.
+
+What was found (step 1, by looking)
+- macOS 27.2 on arm64 (8 cores, 16 GB). Docker Desktop 29.4.0, linux/arm64, 11.9 GiB to the engine, 8 CPUs, Compose v5.1.1;
+  no container was running. Host: Node 24.22.1, pnpm 10.34.5, no wrangler. The image mcr.microsoft.com/playwright:v1.65.1-noble
+  was already pulled (Node 26, Chromium 1255).
+- The stack: a Hono Worker with D1 and one Durable Object (Switchboard), a cron trigger (D-026), the Email Service binding;
+  Vitest and Playwright Chromium with fake microphones; pnpm, Wrangler, Node 22 for tooling.
+- Outside services the rows name: the Email Service (faked, DIF-001), stun.cloudflare.com (not used, DIF-002), the edge
+  (DIF-003). The TURN relay is later (D-007). Nothing else needs a fake.
+- The spec names one browser, Chromium; so one engine.
+
+The choice (step 2): containers, one Compose project per run
+- Why: the product is workerd under wrangler dev, the way it is previewed locally; containers give a fresh local D1, a fresh
+  Durable Object and a fresh process per run, a network of its own with no route out (no host port, so no clash between
+  environments), and nothing to install on the host.
+- Everything lives in /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/ (work folder, never the product): compose.yml, product.Dockerfile (+ .dockerignore),
+  tests.Dockerfile (+ .dockerignore), toolchain/ (the runners' pinned package.json and package-lock.json), runtests.sh,
+  merge-junit.mjs, vitest.config.mjs, playwright.config.mjs, and the scripts the head names.
+- The Compose project is cbi-<RUN_ID>. Its network "ledger" is internal: the product and the tests reach each other by
+  name, and nothing reaches the host or the internet. No service has a restart policy ("no").
+
+How it starts and stops
+- start: builds the tests image cbi-tests:<hash of its Dockerfile and lockfile> if it is missing (once, shared by every run).
+  Then it builds the product image from the checkout (product.Dockerfile: node:22-bookworm-slim, ca-certificates, corepack's
+  pnpm, pnpm install --frozen-lockfile with a BuildKit cache, then the source) and brings the product up with
+  "compose up --wait". The product is ready by its healthcheck (GET / answers below 500, every 2 s, up to 5 min), never a
+  fixed sleep. Dependencies are fetched only when a lockfile changes, in the image build, never by a run. A product that
+  dies at start makes start: exit 1.
+- With NO_PRODUCT=1, start: builds nothing of the product and starts nothing; only the tests image is made ready.
+- stop: compose down with volumes, orphans and the run's product image, then the leftovers check; exit 1 if anything of
+  cbi-<RUN_ID> remains. A stop with nothing up exits 0.
+- services: prints "product died, state exited, exit <code>" for a product that ended other than with 0.
+- logs: the Compose logs with times, then each service's end state.
+
+How the tests reach the product (the harness contract for the test author)
+- run: a one-off tests container (docker compose run --rm) on the run's network, the checkout mounted read-only at /app, the
+  harness at /harness. Vitest 5.1.2 and @playwright/test 1.65.1 are installed at / in the image; tests import 'vitest' and
+  '@playwright/test' and resolve them there. The harness's configs are used, never the repository's.
+- The product's address is PRODUCT_URL (http://product:8787). Inside the tests it is never BASE_URL: Vite overwrites
+  BASE_URL. Playwright's baseURL is PRODUCT_URL. A staging run (run.sh --against) sets BASE_URL and SIGNIN outside:
+  run-tests.sh hands them in as PRODUCT_URL and SIGNIN, in the same image, on a network with a route out.
+- Files: tests/invariants/**/*.test.ts run in Vitest (Node, one file after another): HTTP and WebSocket cases.
+  tests/invariants/**/*.spec.ts run in Playwright, project "chromium" (the full Chromium build, channel 'chromium', with a
+  fake microphone and its permission, one worker). Vitest's cases run in the chromium pass.
+- Every case's name carries its row id (ROW-093 …): the selection and the report key on it. select-form: <words> takes
+  row ids alone, space-separated; they become one pattern on case names (-t / --grep). A token with / is a file filter.
+- Each case is stopped at CASE_LIMIT seconds (Vitest --testTimeout and --hookTimeout, Playwright --timeout), reported failed
+  by its name, and the run goes on. 180 s is a choice until step 3 measures the case times.
+- The report: both runners' JUnit joined into one <testsuites> at RESULTS. Each failure's message is its assertion's own
+  line, with its traceback in the text. Output is plain (NO_COLOR): a case prints its own "covers: <row> <n>" with
+  console.log, and it reaches the log at the start of a line.
+- Before the product exists (NO_PRODUCT=1, PRODUCT_URL empty): the shared helper that gives a test the product's address
+  throws an Error whose message begins "setup: " (for example "setup: no product in this run"); the run still writes its
+  report. Proved with a probe: the cases that reached for the product read "setup: no product in this run".
+- Reading the fakes: the client address is a header the test sends (CF-Connecting-IP); wrangler dev passes it to the Worker
+  unchanged (proved: 203.0.113.7 sent, 203.0.113.7 seen). The fake mailer is read through the product's test-switch route
+  (question 2). Calls: two Chromium browsers (two launches or two contexts) in the one tests container; proved: an audio
+  RTCPeerConnection reached "connected" over host candidates on the closed network.
+- Fixtures that must not change: none shared. Each run has a fresh product container, so a fresh local D1 and Durable
+  Object. Within a run, cases share one product: each case makes its own emails and its own client address, so no rate
+  limit or presence carries from one case to the next.
+
+The product's processes (step 6) and its entry (step 8)
+- entry: pnpm run entry, the package.json script "entry", the builder's to write and keep. The product image's command
+  runs it, so start: brings the product up through it, and stop: takes it down by stopping its container (SIGTERM through
+  init). What it must do: apply the D1 migrations locally (wrangler d1 migrations apply <binding> --local), then, in the
+  foreground, exec wrangler dev --local --ip 0.0.0.0 --port $PORT --test-scheduled, with the test switch as a Worker
+  variable (--var VID_TEST:$VID_TEST) and every secret and variable the Worker reads given a throwaway value from
+  VID_TEST_SECRET (--var …), never a real one. It must need no network (no remote bindings), and GET / must answer below
+  500 once it is ready. A new process goes into the entry; start: and stop: stay unchanged.
+- The declared processes (the Worker's fetch handler, the Switchboard Durable Object and the scheduled cleanup) all run in
+  that one workerd. The schedule does not fire on its own there (the stand-in line above).
+
+Measure, pick and prove (step 3): done 2026-11-27T14:46:48Z by setup-4, ticket 1, at c60e89f (the test author's tests, no product yet)
+- Measure: the heaviest selection there is, the whole suite (2 cases, both ROW-093, Playwright Chromium; no Vitest file yet),
+  in one environment, NO_PRODUCT=1, from the clean clone at c60e89f. Peak memory, read from the tests container's own cgroup
+  (memory.peak, Chromium launched for the page fixture): 359 MiB, 358 and 357 on two repeats. The engine's total: 11,948 MiB.
+  Other work using it at the time: none (free-memory: 11,948). Median case seconds: 0.12 (0.114 and 0.123; each case ends
+  at "setup: no product in this run").
+- Pick: (11,948 - 2,048 kept free) / 359 is about 27, so the cap of 3 holds: environments: 3. max-environments: is not
+  set here (3 by default); this pass never sets it.
+- Prove: the same selection twice at once, RUN_IDs pa and pb, one Compose project each (cbi-pa, cbi-pb). They overlapped:
+  run phases 1795790797.67..800.37 and ..800.49 (epoch s), Playwright suites from 14:46:38.834Z (0.338 s) and 14:46:38.852Z
+  (0.328 s). Both wrote reports; both equal the measured run's case results (same case names and outcomes, digest equal),
+  and stop: left nothing of either (no cbi- container or network after). No fixed port, shared file or shared fixture found:
+  no host port, a network per project, the results file per run.
+- What this does not cover: the product. With no product image yet, the measure is the tests container alone; workerd
+  (wrangler dev) and the two-browser call cases will add to it. The setup's step 3 runs again at the product's first start,
+  and measured: is replaced then. Until then 3 rests on a 359 MiB peak; even at several times that, 3 fit with 2 GB free.
+- case-limit: stays 180 s. Today's cases end in 0.12 s at a setup error, which says nothing of real case times; it is set
+  from the cases' own times at the product's first start.
+
+Proved by this pass with a throwaway probe product (a minimal wrangler Worker with a cron) and probe cases, through run.sh
+--here and by hand, then deleted: start and readiness; selection by row id; the case limit (a case past 20 s failed by name
+and the run went on); the covers: lines in run.sh's covers; the joined report as run.sh reads it (cases, broken lines);
+NO_PRODUCT with setup: messages; a product dying at start (start: exit 1, services: "product died … exit 3"); stop: leaving
+nothing (leftovers: none); no route out of the test network.
+
+Questions (step 4), each with the default this setup goes on with
+1. D-015 names @cloudflare/vitest-pool-workers, which serves the Worker inside the tests' own process; the harness rule
+   forbids that. Default: ledger cases reach the product over HTTP from Vitest in Node; the ledger does not use the pool.
+2. How the tests read DIF-001's fake mailer. Default: under VID_TEST=1 alone, the mail adapter hands its message to an
+   in-memory recorder instead of the binding, and GET /__test/mail?to=<email> (absent when the switch is off) returns what
+   was recorded for that address; the builder writes it, the test author reads it.
+3. The cleanup schedule (D-026). Default: tests fire it through wrangler's /__scheduled route; rows about its consumption
+   on the platform stay deploy-owed.
+4. Node: the tests image runs Node 26 (Playwright's image); the product image Node 22, as the stack says. Default: kept.
+
+Measure, pick and prove again (step 3), at the product's first start: done 2026-11-27T14:51:38Z by setup-6, ticket 1, at e13b268
+(the builder's first commit on ticket-1, e13b2680e85ae019347d5ce92ea7dbe0c2e4be22), the product brought up through its entry
+(pnpm run entry, node src/worker/entry.mjs) by start:. This replaces setup-4's measured: line above.
+- Start: start: built the product image from the clean clone and returned on the healthcheck in 7.2 s (wrangler dev healthy).
+- Measure: the heaviest selection there is, the whole suite (2 cases, both ROW-093, Playwright Chromium; no Vitest file yet),
+  in one environment (RUN_ID m1). Both cases passed. Peaks, each from its own container's cgroup memory.peak: the tests
+  container 381 MiB (381 on a repeat), the product (workerd under wrangler dev) 423 MiB (423 after the repeat); together
+  804 MiB, the sum of the two peaks, an upper bound. The engine's total: 11,948 MiB; other work using it: none
+  (free-memory: 11,948 before and after). Case seconds: 0.184, 0.132; 0.200, 0.148 on the repeat; median 0.17.
+- Pick: (11,948 - 2,048 kept free) / 804 is about 12, so the cap of 3 holds: environments: 3. max-environments: not set
+  here (3 by default); this pass never sets it.
+- Prove: the measured selection twice at once, start, run and stop each, RUN_IDs pa and pb (cbi-pa, cbi-pb), each with its
+  own product. They overlapped: run phases 1795791089.712..092.338 and 1795791089.712..092.362 (epoch s); Playwright suites
+  from 14:51:30.759Z (0.608 s) and 14:51:30.752Z (0.621 s). Both wrote reports, both exit 0; both equal the measured run's
+  case results (same case names and outcomes, digest 8b18e3b87da0 for all three). stop: left nothing of either (no cbi-
+  container or network after). No fixed port, shared file or shared fixture found.
+- case-limit: 60 s, set from the cases' own times now that the product answers: today's cases take 0.13 to 0.35 s; 60 s
+  leaves room for the later two-browser call cases (two Chromium launches, ICE over host candidates) while stopping a hung
+  case three times sooner than 180. A case that needs longer is a reason for a setup pass to raise it, named then.
+- What this does not cover: the call cases. Two browsers in one tests container and a busier Switchboard will add to the
+  tests' peak; even at three times 804 MiB, 3 environments fit with 2 GB free. Not a reason to measure again by itself
+  (cases grew); a run killed for memory is.

@@ -1,0 +1,22 @@
+ticket: 1
+
+Your clone: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/clones/builder-1-1
+
+The ticket's branch: ticket-1, on https://github.com/josueayala27/call-by-identifier
+
+The tests-first commit: c60e89f03f538656b5852d68b488f15e80e4d3a1, the head of ticket-1.
+
+The dev setup record, read only, your harness contract: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/dev-setup.txt
+
+The published ticket, its body and part comments joined: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/tickets/1-plain.md
+
+The ticket's regression rows: none.
+
+From the test author's requests, requests-1.txt, its builder heading, whole and word for word:
+
+> ## builder
+>
+> - ROW-093 is checked at / with a fresh, cookie-less browser: the page's visible controls must be exactly one text field
+>   (the email box) and one button whose accessible name contains "code", in the same <form>; no other field, button,
+>   checkbox/radio/etc., no dialog, no link or text reading sign out / log out, and no visible text with the words
+>   incoming, accept, decline, hang up or "is calling". / must answer 200.

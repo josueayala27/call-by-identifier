@@ -1,0 +1,20 @@
+ticket: 1
+
+Your clone: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/clones/test-author-1-1, on the ticket's branch ticket-1.
+
+Your job: the ticket's ask T1, quoted from it: "T1 (TA): write at least one test per row, per transition for a journey, its name matching the row's id." This is the skeleton ticket: no product code exists yet, so a case that reaches for the product errors with a message beginning `setup:`.
+
+The commits you work at: the branch ticket-1's head, 532796f (an empty commit), on the ticket's base d637b7bf19e9171a48582fa8745ca3a454faa999. Your one commit goes on top of it, pushed to ticket-1.
+
+The dev setup record, read only, your harness contract: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/dev-setup.txt
+
+The rows' file, the plain ticket (the published ticket whole, its body and part comments joined): /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/tickets/1-plain.md
+
+The export: the spec repository https://github.com/josueayala27/call-by-identifier-spec at 58f607cec86a644120dfd82bef80d1401cf7f2b7, read only; the ticket's Further reading is its index.
+
+The export's route table: the export holds none; its files at that commit are ARCHITECTURE.md, BASELINE.md, DECISIONS.md, GRADING-CHECKLIST.md, PRD.md and TEST-DIFFERENCES.md. The row's own route is its column, quoted from the ticket:
+
+> ROW-093 | shell | / | anonymous | n/a | a signed-out visitor sees only the sign-in screen (email box and a send-code button): no call box, no sign-out control, no incoming-call area | REQ-001, REQ-005 | owed: spec-only — first stage | origin: REQ-001
+> - ROW-093 marks: shell
+
+The requests file your hand-back names: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/requests-1.txt

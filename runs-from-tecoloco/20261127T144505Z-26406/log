@@ -1,0 +1,72 @@
+== chromium, pass 1, selection ROW-093, at 2026-11-27T14:45:08Z
+ Network cbi-run26455_ledger Creating 
+ Network cbi-run26455_ledger Created 
+ Container cbi-run26455-tests-run-f22960a04be6 Creating 
+ Container cbi-run26455-tests-run-f22960a04be6 Created 
+== vitest, engine-free cases, in the chromium pass
+
+ RUN  v5.1.2 /app
+
+No test files found, exiting with code 0
+
+include: tests/invariants/**/*.test.ts
+exclude:  **/node_modules/**, **/.git/**
+
+JUNIT report written to /tmp/tmp.rNq2A4JZWL/vitest.xml
+== playwright, engine chromium
+
+Running 2 tests using 1 worker
+
+(node:59) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › tests/invariants/test-row-093-signed-out-shell.spec.ts:63:1 › ROW-093 control the signed-out page at / is the sign-in screen with an email box and a send-code button (130ms)
+(node:202) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [chromium] › tests/invariants/test-row-093-signed-out-shell.spec.ts:83:1 › ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area (108ms)
+
+
+  1) [chromium] › tests/invariants/test-row-093-signed-out-shell.spec.ts:63:1 › ROW-093 control the signed-out page at / is the sign-in screen with an email box and a send-code button 
+
+    SetupError: setup: no product in this run
+
+       at harness.ts:19
+
+      17 | export function productUrl(): string {
+      18 |   const url = (process.env.PRODUCT_URL || '').trim();
+    > 19 |   if (!url) throw new SetupError('no product in this run');
+         |                   ^
+      20 |   return url.replace(/\/+$/, '');
+      21 | }
+      22 |
+        at productUrl (/app/tests/invariants/harness.ts:19:19)
+        at openPage (/app/tests/invariants/harness.ts:51:15)
+        at loadSignedOut (/app/tests/invariants/test-row-093-signed-out-shell.spec.ts:44:10)
+        at /app/tests/invariants/test-row-093-signed-out-shell.spec.ts:64:15
+
+    Error Context: ../tmp/playwright-output/test-row-093-signed-out-sh-6cc5e--box-and-a-send-code-button-chromium/error-context.md
+
+  2) [chromium] › tests/invariants/test-row-093-signed-out-shell.spec.ts:83:1 › ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area 
+
+    SetupError: setup: no product in this run
+
+       at harness.ts:19
+
+      17 | export function productUrl(): string {
+      18 |   const url = (process.env.PRODUCT_URL || '').trim();
+    > 19 |   if (!url) throw new SetupError('no product in this run');
+         |                   ^
+      20 |   return url.replace(/\/+$/, '');
+      21 | }
+      22 |
+        at productUrl (/app/tests/invariants/harness.ts:19:19)
+        at openPage (/app/tests/invariants/harness.ts:51:15)
+        at loadSignedOut (/app/tests/invariants/test-row-093-signed-out-shell.spec.ts:44:10)
+        at /app/tests/invariants/test-row-093-signed-out-shell.spec.ts:84:15
+
+    Error Context: ../tmp/playwright-output/test-row-093-signed-out-sh-11edb-l-and-no-incoming-call-area-chromium/error-context.md
+
+  2 failed
+    [chromium] › tests/invariants/test-row-093-signed-out-shell.spec.ts:63:1 › ROW-093 control the signed-out page at / is the sign-in screen with an email box and a send-code button 
+    [chromium] › tests/invariants/test-row-093-signed-out-shell.spec.ts:83:1 › ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area 
+
+stop: cbi-run26455 down

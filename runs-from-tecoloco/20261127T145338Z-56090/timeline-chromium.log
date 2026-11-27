@@ -1,0 +1,27 @@
+== pass 1
+product-1  | 2026-11-27T14:53:43.895965969Z 
+product-1  | 2026-11-27T14:53:43.895998511Z  ⛅️ wrangler 4.169.0
+product-1  | 2026-11-27T14:53:43.896001094Z ────────────────────
+product-1  | 2026-11-27T14:53:43.924660427Z Your Worker has access to the following bindings:
+product-1  | 2026-11-27T14:53:43.924712844Z Binding                        Resource                  Mode
+product-1  | 2026-11-27T14:53:43.924795969Z env.VID_TEST ("(hidden)")      Environment Variable      local
+product-1  | 2026-11-27T14:53:43.924973469Z 
+product-1  | 2026-11-27T14:53:43.958159552Z [wrangler:warn] Unable to fetch the `Request.cf` object! Falling back to a default placeholder...
+product-1  | 2026-11-27T14:53:43.958166594Z Error: getaddrinfo EAI_AGAIN workers.cloudflare.com
+product-1  | 2026-11-27T14:53:43.958167927Z     at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)
+product-1  | 2026-11-27T14:53:43.958169302Z     at GetAddrInfoReqWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+product-1  | 2026-11-27T14:53:44.033398011Z ⎔ Starting local server...
+product-1  | 2026-11-27T14:53:44.037177094Z [wrangler:warn] Unable to fetch the `Request.cf` object! Falling back to a default placeholder...
+product-1  | 2026-11-27T14:53:44.037191219Z Error: getaddrinfo EAI_AGAIN workers.cloudflare.com
+product-1  | 2026-11-27T14:53:44.037193177Z     at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)
+product-1  | 2026-11-27T14:53:44.037194177Z     at GetAddrInfoReqWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+product-1  | 2026-11-27T14:53:44.288823052Z [wrangler:info] Ready on http://0.0.0.0:8787
+product-1  | 2026-11-27T14:53:44.288840677Z [wrangler:info] - http://127.0.0.1:8787
+product-1  | 2026-11-27T14:53:44.288841969Z [wrangler:info] - http://172.20.0.2:8787
+product-1  | 2026-11-27T14:53:48.006629012Z [wrangler:info] GET / 200 OK (24ms)
+product-1  | 2026-11-27T14:53:50.098449888Z [wrangler:info] GET / 200 OK (3ms)
+product-1  | 2026-11-27T14:53:50.233311180Z [wrangler:info] GET / 200 OK (3ms)
+product-1  | 2026-11-27T14:53:50.251059680Z [wrangler:info] GET /favicon.ico 404 Not Found (3ms)
+product-1  | 2026-11-27T14:53:50.374791764Z [wrangler:info] GET / 200 OK (2ms)
+== end states
+product running exit=0 Up 8 seconds (healthy)

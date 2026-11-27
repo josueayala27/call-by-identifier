@@ -1,0 +1,18 @@
+ticket: 1
+
+Your job: the setup's step 3, measure, pick and prove, now that the test author's tests exist to measure with (commit c60e89f03f538656b5852d68b488f15e80e4d3a1 on the ticket's branch ticket-1). No product code exists yet: the product's first start, which calls for step 3 again, comes later. Amend the record at the work folder's dev-setup.txt and return as your role file says.
+
+The dev side's work folder: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent
+
+Your clone, of the code repository, on the ticket's branch ticket-1 at c60e89f: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/clones/setup-1-1
+
+The code repository's clone address: https://github.com/josueayala27/call-by-identifier
+
+The ticket, #1 on josueayala27/call-by-identifier, its rows and marks, quoted from it:
+
+> ## Rows
+>
+> > ROW-093 | shell | / | anonymous | n/a | a signed-out visitor sees only the sign-in screen (email box and a send-code button): no call box, no sign-out control, no incoming-call area | REQ-001, REQ-005 | owed: spec-only — first stage | origin: REQ-001
+> - ROW-093 marks: shell
+
+Its stack and hosting, and its test differences, are as quoted in the setup's first job note, /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/jobs/1-setup-1.txt.

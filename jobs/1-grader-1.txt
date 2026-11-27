@@ -1,0 +1,20 @@
+ticket: 1
+
+Your job: the breaks, the ticket's ask T4's first half, quoted from it: "T4 (GR, then TM): at the same head, the skeleton's fault: GR writes the change that makes its rows' fail-if true, and nothing else; TM plants it and runs the rows' tests in the primary engine, with no control."
+
+The blind copy: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/blind/copy.wusz3l
+
+The head's full commit id: e13b2680e85ae019347d5ce92ea7dbe0c2e4be22
+
+The plain ticket, joined (its body and parts, each decision's why: dropped): /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/tickets/1-plain-grader.md
+
+The export: the spec repository https://github.com/josueayala27/call-by-identifier-spec at 58f607cec86a644120dfd82bef80d1401cf7f2b7, read only.
+
+The rows to break, each quoted as the ticket has it:
+
+> ROW-093 | shell | / | anonymous | n/a | a signed-out visitor sees only the sign-in screen (email box and a send-code button): no call box, no sign-out control, no incoming-call area | REQ-001, REQ-005 | owed: spec-only — first stage | origin: REQ-001
+> - ROW-093 marks: shell
+
+Its fail-if: the row's own line holds no fail-if clause, and the export holds no inventory with one; the requirements it cites, REQ-001 and REQ-005, carry theirs in the ticket's Requirements section.
+
+Where the patch goes: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/faults/1/ROW-093.patch

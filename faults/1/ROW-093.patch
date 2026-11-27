@@ -1,0 +1,16 @@
+diff --git a/src/http/sign-in-page.tsx b/src/http/sign-in-page.tsx
+index a4cad72..912d05a 100644
+--- a/src/http/sign-in-page.tsx
++++ b/src/http/sign-in-page.tsx
+@@ -24,6 +24,11 @@ export const SignInPage: FC = () => (
+         />
+         <button class="button" type="submit">Send code</button>
+       </form>
++      <form class="form" method="post" action="/call">
++        <label class="label" for="callee">Call</label>
++        <input class="input" id="callee" name="callee" type="email" required />
++        <button class="button" type="submit">Call</button>
++      </form>
+     </main>
+   </Layout>
+ );

@@ -1,0 +1,4 @@
+cases: 1 passed, 1 failed, 0 errored, 0 skipped
+broken: 1 Error: ROW-093: the signed-out page shows 2 text fields, not the one email box — a call box or other field is shown: [&quot;textbox:Email&quot;,&quot;textbox:Call&quot;]
+broken cases: ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area — Error: ROW-093: the signed-out page shows 2 text fields, not the one email box — a call box or other field is shown: [&quot;textbox:Email&quot;,&quot;textbox:Call&quot;]
+fault ROW-093: 1 passed, 1 failed, 0 errored, 0 skipped
