@@ -8,3 +8,4 @@ GR	3	claude-opus-5-5	90	13
 GR	3	claude-opus-5-5	78	11
 DM	-	claude-opus-5-5	311	35
 DM	-	claude-opus-5-5	52	13
+DM	-	claude-opus-5-5	68	13
