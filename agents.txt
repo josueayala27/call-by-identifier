@@ -21,3 +21,4 @@ DM	-	claude-opus-5-5	1426	114
 TA	5	claude-opus-5-5	953	44
 TM	5	claude-opus-5-5	498	46
 BU	5	claude-opus-5-5	313	32
+GR	5	claude-opus-5-5	128	14

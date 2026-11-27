@@ -1,0 +1,13 @@
+diff --git a/src/core/identity/email.ts b/src/core/identity/email.ts
+index e4dac42..cd2e5c4 100644
+--- a/src/core/identity/email.ts
++++ b/src/core/identity/email.ts
+@@ -9,7 +9,7 @@ const MAX_LENGTH = 254;
+ const MAX_LOCAL = 64;
+ const MAX_LABEL = 63;
+ // RFC 5322 atext, the characters a dot-atom local part may hold.
+-const LOCAL_ATOM = /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+$/;
++const LOCAL_ATOM = /^[A-Za-z0-9!#$%&',*+/=?^_`{|}~-]+$/;
+ const DOMAIN_LABEL = /^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/;
+ 
+ export function normaliseEmail(input: string): string | null {

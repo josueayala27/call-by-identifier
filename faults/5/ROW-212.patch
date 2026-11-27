@@ -1,0 +1,13 @@
+diff --git a/src/core/identity/email.ts b/src/core/identity/email.ts
+index e4dac42..f80a2e6 100644
+--- a/src/core/identity/email.ts
++++ b/src/core/identity/email.ts
+@@ -14,7 +14,7 @@ const DOMAIN_LABEL = /^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/;
+ 
+ export function normaliseEmail(input: string): string | null {
+   // Only ASCII spaces and tabs around the address are dropped, as a browser's email box does; anything else is kept and judged.
+-  const value = input.replace(/^[ \t]+|[ \t]+$/g, '');
++  const value = input.normalize('NFKD').replace(/[^\x00-\x7f]/g, '').replace(/^[ \t]+|[ \t]+$/g, '');
+   if (value.length === 0 || value.length > MAX_LENGTH) return null;
+   if (!/^[\x21-\x7e]+$/.test(value)) return null; // printable ASCII only: no space, control, non-ASCII or invisible character
+   const parts = value.split('@');

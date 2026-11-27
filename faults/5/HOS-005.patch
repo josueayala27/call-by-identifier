@@ -1,11 +1,11 @@
 diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
-index 4e80a44..08e48a5 100644
+index 5baa259..a8179f7 100644
 --- a/src/core/identity/signin.ts
 +++ b/src/core/identity/signin.ts
-@@ -88,7 +88,6 @@ export async function verifyCode(
+@@ -90,7 +90,6 @@ export async function verifyCode(
    }
    // A right code is no wrong try: its slot is given back.
-   await deps.throttle.giveBack(tryKey, now);
+   await deps.throttle.giveBack(tryKey, slot);
 -  if (!(await deps.codes.consume(match.id, now))) return { kind: 'wrong' };
  
    await deps.accounts.ensure(email, now);

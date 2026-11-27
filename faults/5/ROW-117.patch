@@ -1,0 +1,13 @@
+diff --git a/src/adapters/d1/index.ts b/src/adapters/d1/index.ts
+index 3e6775d..5b6090d 100644
+--- a/src/adapters/d1/index.ts
++++ b/src/adapters/d1/index.ts
+@@ -37,7 +37,7 @@ export function createD1Stores(db: D1Database): {
+     },
+     async consume(id, now) {
+       const r = await db.prepare(`UPDATE codes SET used_at = ? WHERE id = ? AND ${LIVE} RETURNING id`).bind(now, id, now).all();
+-      return r.results.length === 1;
++      return r.results.length <= 1;
+     },
+     async countWrongTry(email, requester, now) {
+       // Atomic increment in the database: parallel wrong tries are never lost (HOS-006, ROW-117).
