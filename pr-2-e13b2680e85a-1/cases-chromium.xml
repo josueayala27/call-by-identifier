@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="call-by-identifier ledger">
+<testsuite name="test-row-093-signed-out-shell.spec.ts" timestamp="2026-11-27T14:52:24.731Z" hostname="chromium" tests="2" failures="0" skipped="0" time="0.352" errors="0">
+<testcase name="ROW-093 control the signed-out page at / is the sign-in screen with an email box and a send-code button" classname="test-row-093-signed-out-shell.spec.ts" time="0.208">
+</testcase>
+<testcase name="ROW-093 a signed-out visitor sees no call box, no sign-out control and no incoming-call area" classname="test-row-093-signed-out-shell.spec.ts" time="0.144">
+</testcase>
+</testsuite>
+</testsuites>
