@@ -19,3 +19,4 @@
 2026-11-27T15:59:10Z run: head run (T3) at 9ccaa33, ask pr-6-9ccaa333279d, --select 38 rows less DIF-001 SEAM-001 plus ROW-093, 6 new stand-in: lines (record lines 6..11) as --line, folder runs/20261127T155906Z-55097
 2026-11-27T15:59:21Z decisions: PR #6 body's Decisions section rewritten for head 9ccaa33 (8 builder lines + 1 settled; jobs/pr-5-body.md)
 2026-11-27T16:00:10Z run: pushed vid-results/pr-6-9ccaa333279d-1, leftovers none, 75 passed 0 failed 3 errored (ROW-117 one case, ROW-146 both: setup: held account door) 2 skipped; no builder return (the door is held, not the builder's)
+2026-11-27T16:00:34Z breaks: grader grader-16 started for 29 rows' faults (no-red-5.txt and the faulted rows, less ROW-117 and ROW-146, not passing at T3), job note jobs/5-grader-1.txt, blind/copy.keZlBD
