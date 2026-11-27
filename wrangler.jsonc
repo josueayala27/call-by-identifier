@@ -1,0 +1,11 @@
+// Purpose: the Worker's platform configuration: entry module, compatibility, and the variables it reads.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "call-by-identifier",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  "observability": { "enabled": true },
+  "vars": {
+    "VID_TEST": "0"
+  }
+}

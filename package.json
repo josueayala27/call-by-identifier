@@ -1,0 +1,29 @@
+{
+  "name": "call-by-identifier",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.5",
+  "imports": {
+    "#http": "./src/http/index.tsx",
+    "#worker": "./src/worker/index.ts"
+  },
+  "scripts": {
+    "entry": "node src/worker/entry.mjs",
+    "dev": "wrangler dev",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "hono": "4.13.23"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20261127.1",
+    "typescript": "7.0.2",
+    "wrangler": "4.169.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
+  }
+}
