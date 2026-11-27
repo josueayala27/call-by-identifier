@@ -28,3 +28,6 @@
 2026-11-27T16:23:26Z grade: joined and pushed vid-results/grade-pr-6-9ccaa333279d-1 (grades/5/joined.txt): weak-test lines ROW-124, ROW-142, ROW-146; breached product ROW-117, ROW-200, ROW-209, HOS-006
 2026-11-27T16:23:26Z breaks: weak-test lines to grader grader-19, job note jobs/5-grader-4.txt, blind/copy.07Bhvx (patches faults/5/ROW-124, ROW-142 replaced, ROW-146)
 2026-11-27T16:23:26Z sort: grades/5/to-sort.txt (4 lines) to second reviewer second-reviewer-20, job note jobs/5-second-reviewer-1.txt, blind/copy.UY69W0
+2026-11-27T16:24:54Z breaks: grader-19 handed back faults/5/ROW-124.patch (Math.random), ROW-142.patch (fixed code 424242), ROW-146.patch (account made on request); taken
+2026-11-27T16:24:54Z sort: second-reviewer-20 handed back grades/5/sorted.txt: ROW-200 test it, ROW-209 test it, ROW-117 note it, HOS-006 note it; taken; pushed vid-results/sort-pr-6-9ccaa333279d-1; the test it lines wait for the decision's test author pass
+2026-11-27T16:24:54Z fault run: weak-test lines' faults at 9ccaa33, list faults/5/list-9ccaa33-weak.txt (ROW-124, ROW-142, ROW-146, control ROW-093), folder runs/20261127T162449Z-54522
