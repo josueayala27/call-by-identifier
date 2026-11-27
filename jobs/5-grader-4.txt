@@ -1,0 +1,41 @@
+ticket: 5
+
+Your job: the breaks for three rows, the ticket's ask T4's first half, quoted from it: "T4 (GR, then TM): at the same head, GR writes each needed fault's change: make this row's fail-if true, and nothing else; a later head may plant a row's earlier patch again. TM plants it and runs the faulted row's test and the control's, in the primary engine; TM picks each control, a row or another case of the faulted row that passed at this head's T3." For each row below, the change to the product that makes what must come true, quoted under the row, come true, and nothing else.
+
+The blind copy: /Users/josueayala/call-by-identifier-devagent/blind/copy.07Bhvx
+
+The head's full commit id: 9ccaa333279d5651af12347d8f2ace442cea47d3
+
+The plain ticket, joined (its body and parts, each decision's why: dropped): /Users/josueayala/call-by-identifier-devagent/tickets/5-plain-grader.md
+
+The export: the spec repository https://github.com/josueayala27/call-by-identifier-spec at f2c578aa0fa62b0dda999c62d92d54e6085c8d4e, read only.
+
+The rows to break, each quoted as the ticket has it, then what must come true, quoted:
+
+> ROW-124 | behavior | REQ-002 | anonymous | n/a | this must always hold: codes are drawn from a cryptographic random source, every code from 000000 to 999999 can occur and keeps its leading zeros, and session values carry at least 128 random bits; and this must always hold: the composition root binds randomness to the cryptographic source; no Math.random in src | REQ-002 | owed: spec-only — first stage | origin: domain
+> - ROW-124 marks: none
+
+What must come true:
+
+> the clauses "codes are drawn from a cryptographic random source", "the composition root binds randomness to the cryptographic source" and "no Math.random in src" are reached by no test: the test says so itself ("Not observed here: the random source's kind and no Math.random in src", test-row-008-124-hos-008-code-shape.test.ts:27-28) and its 150-code sample (lines 76-89) passes for a Math.random generator. The product holds them: Random is bound to crypto.getRandomValues at the composition root (src/worker/index.ts:37, 51), and src holds no Math.random. Range, leading zeros and the 256-bit session value are observed (lines 76-107)
+
+Where its patch goes: /Users/josueayala/call-by-identifier-devagent/faults/5/ROW-124.patch, replacing any patch there.
+
+> ROW-142 | behavior | REQ-001 | anonymous | n/a | this must always hold: no fixed code, last-code reader, fake mailer or test bypass is reachable in the deployed product | REQ-001 | owed: spec-only — first stage | origin: domain
+> - ROW-142 marks: none
+
+What must come true:
+
+> the product holds: the doors are mounted only when env.VID_TEST === '1' and the rig is built only then (src/http/index.tsx:91, src/worker/index.ts:44-46), wrangler.jsonc sets VID_TEST "0", the deployed mailer is the binding (src/worker/index.ts:54), and verifyCode has no fixed code. But the test sees only a guess list: six door paths this ledger knows and seven fixed codes (test-row-142-deployed-no-bypass.test.ts:36-63); a bypass under any other path, header, value or code passes it — and this head's planted ROW-142 break passed both ROW-142 cases (faults/ROW-142)
+
+Where its patch goes: /Users/josueayala/call-by-identifier-devagent/faults/5/ROW-142.patch, replacing any patch there.
+
+> ROW-146 | behavior | REQ-001 | anonymous | n/a | this must always hold: asking for a code creates no account; only entering the code does | REQ-001 | owed: spec-only — first stage | origin: domain
+> - ROW-146 marks: none
+
+What must come true:
+
+> harness failure: both ROW-146 cases errored "setup: no test-switch door GET /__test/account (answered 404)" (test-row-126-146-storage.test.ts:70-81, signin.ts:380-385); the door is in no stand-in line and the product has none, so the row's promise was not observed at all. The product holds it: requestCode touches no account store (signin.ts:30-49), and accounts.ensure runs only after a consumed right code (signin.ts:91-93)
+
+Where its patch goes: /Users/josueayala/call-by-identifier-devagent/faults/5/ROW-146.patch, replacing any patch there.
+
