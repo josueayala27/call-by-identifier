@@ -1,0 +1,4 @@
+*.md text eol=lf
+*.sh text eol=lf
+checks/** text eol=lf
+docker-compose.test.yml text eol=lf
