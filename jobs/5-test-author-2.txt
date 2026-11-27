@@ -1,0 +1,70 @@
+ticket: 5
+
+Your clone: /Users/josueayala/call-by-identifier-devagent/clones/test-author-5-2, on the ticket's branch ticket-5.
+
+Your job: one pass, one tests-only commit ending `Role: TA`, on the head, pushed to ticket-5: every `failing, a weak test` line and every open `test it` line below, with the siblings the lines name, and the owner's answers below that change a test (a correction after the red run). Your hand-back names each row whose test now checks something different.
+
+The commits you work at: the head of ticket-5, 9ccaa333279d5651af12347d8f2ace442cea47d3 (the builder's commit, on your tests-first commit 5e7ed8ac061212742d15ad85db9bd399a089bcad). Your one commit goes on top of it.
+
+The dev setup record, read only, your harness contract: /Users/josueayala/call-by-identifier-devagent/dev-setup.txt
+
+The rows' file, the plain ticket (the published ticket whole, its body and part comments joined): /Users/josueayala/call-by-identifier-devagent/tickets/5-plain.md
+
+The export: the spec repository https://github.com/josueayala27/call-by-identifier-spec at f2c578aa0fa62b0dda999c62d92d54e6085c8d4e, read only; the ticket's Further reading is its index.
+
+The export's route table: the export holds none; its files at that commit are ARCHITECTURE.md, BASELINE.md, DECISIONS.md, GRADING-CHECKLIST.md, PRD.md and TEST-DIFFERENCES.md. The one row with a route in its column, quoted from the ticket:
+
+> ROW-096 | reachability | / | anonymous | n/a | the sign-in screen is the entry point; after a code is requested the code-entry step is reachable from it and leads back to the email step | REQ-001 | owed: spec-only — first stage | origin: REQ-001
+> - ROW-096 marks: reachability
+
+The requests file your hand-back names: /Users/josueayala/call-by-identifier-devagent/requests-5.txt (add your requests under its three headings, below what is there)
+
+## The `failing, a weak test` lines, quoted from ViD's decision on head 9ccaa333279d5651af12347d8f2ace442cea47d3
+
+> ROW-124 failing, a weak test — its fault not proven, pr-6-9ccaa333279d-3 — siblings: ROW-004, ROW-005, ROW-006, ROW-007, ROW-008, ROW-117, ROW-126, ROW-158, ROW-162, ROW-165, ROW-180, ROW-196, ROW-208, and any other test with the same data pattern
+
+ROW-124's line from the grade, whole:
+
+> ROW-124 breached test — the clauses "codes are drawn from a cryptographic random source", "the composition root binds randomness to the cryptographic source" and "no Math.random in src" are reached by no test: the test says so itself ("Not observed here: the random source's kind and no Math.random in src", test-row-008-124-hos-008-code-shape.test.ts:27-28) and its 150-code sample (lines 76-89) passes for a Math.random generator. The product holds them: Random is bound to crypto.getRandomValues at the composition root (src/worker/index.ts:37, 51), and src holds no Math.random. Range, leading zeros and the 256-bit session value are observed (lines 76-107) — also: breached test — the product holds every clause (crypto.getRandomValues bound at the composition root, src/worker/index.ts:37; rejection sampling with leading zeros kept, crypto.ts:11-18; 256-bit session tokens, crypto.ts:21-25; no Math.random anywhere under src/), but the clauses "drawn from a cryptographic random source" and "the composition root binds randomness to the cryptographic source; no Math.random in src" are reached by no test — the file says so itself (test-row-008-124-…:35-37); a product seeding a fast non-cryptographic generator with full-range output passes all 150-sample checks
+
+> ROW-142 failing, a weak test — its fault not proven, pr-6-9ccaa333279d-3 — siblings: ROW-001, ROW-002, ROW-003, ROW-093, ROW-096, ROW-100, ROW-114, ROW-118, ROW-146, ROW-179, ROW-191, ROW-193, and any other test with the same data pattern
+
+ROW-142's line from the grade, whole:
+
+> ROW-142 breached test — the product holds: the doors are mounted only when env.VID_TEST === '1' and the rig is built only then (src/http/index.tsx:91, src/worker/index.ts:44-46), wrangler.jsonc sets VID_TEST "0", the deployed mailer is the binding (src/worker/index.ts:54), and verifyCode has no fixed code. But the test sees only a guess list: six door paths this ledger knows and seven fixed codes (test-row-142-deployed-no-bypass.test.ts:36-63); a bypass under any other path, header, value or code passes it — and this head's planted ROW-142 break passed both ROW-142 cases (faults/ROW-142) — also: breached test — the product holds: the doors are mounted and the fake mailer wired only when VID_TEST is exactly "1" (src/http/index.tsx:91, src/worker/index.ts:44-55), wrangler.jsonc sets "0", and no fixed code exists; but the test can see only the five door paths it knows and seven fixed codes (test-row-142-…:36-63) — it cannot see the clause "fake mailer": a switch-off product that wired the fake mailer, or a door under any other path, or any other fixed code, passes it, and the planted break was missed (faults/ROW-142: both cases passed)
+
+> ROW-200 failing, a weak test — its fault not proven, pr-6-9ccaa333279d-3 — siblings: ROW-201, ROW-209, and any other test with the same data pattern
+
+ROW-200's line from the grade, whole:
+
+> ROW-200 breached product — the wrong-try window is fixed, not rolling: a window opens at its first use and resets whole one hour later (d1/index.ts:76-82), so an address can have 10 tries checked just before the reset and 10 more just after. Reproduce with the clock door: from X, one wrong try; advance 3590 s; 9 wrong tries; advance 11 s (window reset); 10 more wrong tries — 19 tries checked within about 15 seconds. The test cannot see this (it never crosses a window, address-limits.test.ts:115-130), and it reads "checked" only as "counted against the code", so a product that compares the 11th try and then refuses without counting passes it — this head's planted ROW-200 break passed both ROW-200 cases (faults/ROW-200) — also: breached product — the hourly limit is a fixed window that starts at the address's first try and resets whole 60 minutes later (request_counters upsert, d1/index.ts:73-87; "a window ends <windowMs> after its first use", ports.ts:59-61), so within one hour an address gets up to 19 wrong tries checked: 1 wrong try at t=0, 9 at t=59:00, then from t=60:00 another 10 wrong tries are all taken and checked against codes; the test makes all its tries within seconds and never moves the clock, and it sees "checked" only through a count against the code (test-row-208-…:115-130), so a product that compares a refused try and then discards the result passes — the planted break was missed (faults/ROW-200: both cases passed)
+
+## The open `test it` lines, word for word, from the sort report (vid-results/sort-pr-6-9ccaa333279d-1)
+
+> ROW-200 test it — belongs to ROW-200 ("within an hour"), an address trying near its window's reset really gets past 10, and the existing clock door can show 19 tries checked inside one hour — ROW-200 breached product — the wrong-try window is fixed, not rolling: a window opens at its first use and resets whole one hour later (d1/index.ts:76-82), so an address can have 10 tries checked just before the reset and 10 more just after. Reproduce with the clock door: from X, one wrong try; advance 3590 s; 9 wrong tries; advance 11 s (window reset); 10 more wrong tries — 19 tries checked within about 15 seconds. The test cannot see this (it never crosses a window, address-limits.test.ts:115-130), and it reads "checked" only as "counted against the code", so a product that compares the 11th try and then refuses without counting passes it — this head's planted ROW-200 break passed both ROW-200 cases (faults/ROW-200) — also: breached product — the hourly limit is a fixed window that starts at the address's first try and resets whole 60 minutes later (request_counters upsert, d1/index.ts:73-87; "a window ends <windowMs> after its first use", ports.ts:59-61), so within one hour an address gets up to 19 wrong tries checked: 1 wrong try at t=0, 9 at t=59:00, then from t=60:00 another 10 wrong tries are all taken and checked against codes; the test makes all its tries within seconds and never moves the clock, and it sees "checked" only through a count against the code (test-row-208-…:115-130), so a product that compares a refused try and then discards the result passes — the planted break was missed (faults/ROW-200: both cases passed)
+
+> ROW-209 test it — belongs to ROW-209, a working code entered just after a fixed-window reset really signs in after 10+ wrong tries in the hour, and the existing clock door can show it — ROW-209 breached product — the same fixed window as ROW-200 (d1/index.ts:76-82): the window can be opened by a right code, whose slot is given back but whose window_start stays (signin.ts:80, 90; d1/index.ts:88-90). Reproduce: X signs in with its own code (window opens, count back to 0); advance 3540 s; 10 wrong tries from X on other emails (limit reached); advance 61 s (window reset); X enters a victim's working code and signs in — a further try from X signs someone in about one minute after 10 wrong tries from X. The test never crosses a window (address-limits.test.ts:132-152) — also: breached product — the same fixed window (d1/index.ts:73-87) lets a working code sign in from an address with more than 10 wrong tries in the past hour: 1 wrong try at t=0 starts the window, 9 at t=59:00, 2 more at t=60:00 (the window has reset, both taken) — 11 wrong tries within the last hour — and the right code at t=60:01 is taken and signs in; the test never moves the clock (test-row-208-…:140-152)
+
+## The owner's answers on #5 that bear on your tests, each quoted word for word with its question's first line
+
+> RM: Question: ROW-146, ROW-117 — may the ledger read the account count through a test-switch door (GET /__test/account)?
+>
+> Yes, under the test switch alone and never in production, like the other test doors. Name it in the pull request's Decisions section so it is recorded.
+
+(The test manager has authorised it: the record's `stand-in:` line for the account count. The builder builds it after your commit.)
+
+> RM: Question: RULE-013, HOS-028 — how short is "short" for a secret?
+>
+> Not 8: the code secret keys HMAC-SHA-256 (D-009, D-025; RFC 2104), so a secret under 32 bytes is short, and the Worker refuses to sign anyone in (RULE-013, HOS-028).
+
+> RM: Question: ROW-204, ROW-212 — is a no-break space or other invisible character at the very start or end of a typed email trimmed away (accepted), or refused?
+>
+> Refused, never trimmed: REQ-039 accepts no email holding any non-ASCII or invisible character, and a no-break space is non-ASCII at the edges as anywhere else. The tests may place such characters at the edges too, expecting refusal.
+
+> RM: Question: ROW-124 — the clause "the composition root binds randomness to the cryptographic source; no Math.random in src" is not observable through a public surface.
+>
+> Agreed: BASELINE forbids Math.random for secrets, and that clause of ROW-124 is a census and grader matter with no ledger case; the rest of ROW-124 (every code 000000 to 999999 possible, leading zeros kept, sessions of at least 128 random bits) is tested here.
+
+> RM: Question: RULE-013, HOS-028 — a product started with a secret missing or short that refuses to start answers nothing at its address; may the test read that as the refusal, or must it stay a setup error?
+>
+> Yes, read it as the refusal: the project law says refused is equally green when the attempt never reached the guard. The probe still proves itself: with the secret check removed (HOS-028's toggle) the product starts and signs in, so the case goes red, and with a 32-byte secret the same product starts and signs in.
