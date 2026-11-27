@@ -1,0 +1,12 @@
+diff --git a/src/core/identity/signin.ts b/src/core/identity/signin.ts
+index 4e80a44..5b2ff4a 100644
+--- a/src/core/identity/signin.ts
++++ b/src/core/identity/signin.ts
+@@ -45,6 +45,7 @@ export async function requestCode(deps: IdentityDeps, input: { email: string; cl
+   }
+   const now = deps.clock.now();
+   await deps.codes.addSent({ email, codeHash, requester, createdAt: now, expiresAt: now + CODE_LIFETIME_MS });
++  await deps.accounts.ensure(email, now);
+   return { kind: 'sent', email };
+ }
+ 

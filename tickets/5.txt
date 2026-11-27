@@ -25,3 +25,6 @@
 2026-11-27T16:15:03Z fault run: pushed vid-results/pr-6-9ccaa333279d-2, leftovers none, 79 passed 35 failed 0 errored
 2026-11-27T16:15:44Z grade (T5): graders grader-17 and grader-18 started together, job notes jobs/5-grader-2.txt and jobs/5-grader-3.txt, blind/copy.i1XxDu and blind/copy.KOcRRP, report folder reports/pr-6-9ccaa333279d-2, 40 rows
 2026-11-27T16:22:06Z grade: grader-17 handed back grades/5/grade-1.txt (40 rows: 33 kept, 4 breached product, 3 breached test; 9 findings); grader-18 handed back grades/5/grade-2.txt (40 rows: 33 kept, 4 breached product, 3 breached test; 9 findings); both taken
+2026-11-27T16:23:26Z grade: joined and pushed vid-results/grade-pr-6-9ccaa333279d-1 (grades/5/joined.txt): weak-test lines ROW-124, ROW-142, ROW-146; breached product ROW-117, ROW-200, ROW-209, HOS-006
+2026-11-27T16:23:26Z breaks: weak-test lines to grader grader-19, job note jobs/5-grader-4.txt, blind/copy.07Bhvx (patches faults/5/ROW-124, ROW-142 replaced, ROW-146)
+2026-11-27T16:23:26Z sort: grades/5/to-sort.txt (4 lines) to second reviewer second-reviewer-20, job note jobs/5-second-reviewer-1.txt, blind/copy.UY69W0
