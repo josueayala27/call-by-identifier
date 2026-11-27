@@ -6,3 +6,6 @@
 2026-11-27T15:32:18Z questions: TA's Q1..Q7 posted on #5 as Question: comments, by TA, no label, defaults stated (comments/5-q1..q7.md); Q1's door (GET /__test/account) held from the builder until answered
 2026-11-27T15:32:35Z doors: set-up doors /__test/mail/fail, /__test/clock, /__test/fault authorised (3 stand-in: lines added to dev-setup.txt); read door /__test/mail first use said on #5 (comments/5-tm-door.md); /__test/account held for Q1
 2026-11-27T15:33:04Z setup: agent setup-14 started (harness additions and running order from requests-5.txt, then step 3), job note jobs/5-setup-1.txt, clone clones/setup-5-1
+2026-11-27T15:47:47Z setup: setup-14 handed back: harness moved to this work folder's harness/, product-off, restart hook, secret variants, staging vars; environments 3 -> 2, measured: 80 3334 2026-11-27T15:45:31Z; 3 stand-in: lines added (ROW-142, ROW-158, RULE-013/HOS-028); 3 questions with defaults (one is Q1 again); taken
+2026-11-27T15:47:50Z questions: setup-14's 2 questions posted on #5, by TM, no label (comments/5-q8..q9.md); its third is Q1 again
+2026-11-27T15:47:57Z run: red run (T2) at 5e7ed8a, ask red-5, --select the 38 rows less deploy-owed DIF-001 SEAM-001, --line rows:, folder runs/20261127T154754Z-22884
