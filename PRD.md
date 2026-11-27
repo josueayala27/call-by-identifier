@@ -445,3 +445,11 @@ REQ-029 AMENDED | data_entity | T1 | Storage holds only each account's email and
 ```
 
 review: final, round 3, 0 findings, see 2026-11-26 — final review
+
+### 2026-11-27 (stage cut)
+
+```vid-prd-answers
+A-062 | human | 2026-11-26 | Q: How should the product be delivered — in which stages? | A: One stage: sign in, call by email, and answer and talk are built together and released once. | settles: contract
+```
+
+review: delta, round 1, 0 findings
