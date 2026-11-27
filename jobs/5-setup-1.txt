@@ -1,0 +1,30 @@
+ticket: 5
+
+Your job: a setup pass for a change to the test environment that this ticket's tests ask for: steps 2, 4, 5, 6 and 9 of your role file, applied to the test author's requests below; then step 3 (measure, pick and prove) again, as the record's environments may change with more products per run. The product does not yet have the routes these tests reach: at the tests-first commit most cases error "setup:"; that is expected. Amend the record at the work folder's dev-setup.txt, and return as your role file says.
+
+Note on where the harness lives: the record's commands today run scripts in /Users/josueayala/Code/tecoloco/call-by-identifier-devagent/harness/, another DevAgent work folder this one took over (a copy of that harness is in this work folder's harness/). Where the harness belongs is your choice; the record must name it.
+
+The dev side's work folder: /Users/josueayala/call-by-identifier-devagent
+
+Your clone, of the code repository, on the ticket's branch ticket-5 at the test author's tests-first commit 5e7ed8a: /Users/josueayala/call-by-identifier-devagent/clones/setup-5-1
+
+The code repository's clone address: https://github.com/josueayala27/call-by-identifier
+
+The ticket, #5 on josueayala27/call-by-identifier: its rows and marks, and its test differences (rows DIF-001, SEAM-001), are in the published ticket, its body and part comments joined: /Users/josueayala/call-by-identifier-devagent/tickets/5-plain.md. Its stack and hosting are as quoted in the setup's first job note, /Users/josueayala/call-by-identifier-devagent/jobs/1-setup-1.txt.
+
+The test author's requests to the test manager, from /Users/josueayala/call-by-identifier-devagent/requests-5.txt, quoted:
+
+> 2. Harness additions (class=harness):
+>    - PRODUCT_OFF_URL: a second product from the same image with VID_TEST=0 (ROW-142); on a staging run, the staging address.
+>    - PRODUCT_RESTART_URL: an address the tests container can POST to that restarts the product container (its local
+>      D1 kept) and answers once it is up (ROW-158).
+>    - PRODUCT_SECRET_VARIANTS: JSON list [{"secret":"<NAME>","state":"missing"|"short","role":"code-hashing"|…,"url":"…"}]:
+>      one product per secret the Worker reads, started once with it unset and once with an 8-character value, test switch
+>      on (RULE-013, HOS-028). The role "code-hashing" marks D-009's secret.
+>    - For the deploy-owed DIF-001 and SEAM-001 on staging: STAGING_INBOX (a test inbox address taking +tags),
+>      STAGING_INBOX_URL (GET ?to=<address> → {"messages":[{"raw":"<RFC 5322 message>"}]}) and CAPTURES_DIR (the work
+>      folder's captures/, mounted writable; never committed).
+> 3. Running order: the tests move one product-wide clock and arm product-wide faults, so test files must run one after
+>    another (the record says Vitest does), and the Playwright pass must not overlap the Vitest pass on one product.
+
+The test doors under the test switch (GET /__test/mail, POST /__test/mail/fail, POST /__test/clock, POST /__test/fault) are the product's, for the builder to write; they are already in the record's stand-in: lines. The deploy-owed rows' staging variables are for staging runs alone; what this machine cannot settle for them goes in your return.

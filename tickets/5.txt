@@ -5,3 +5,4 @@
 2026-11-27T15:31:29Z test author: test-author-13 handed back, commit 5e7ed8a (Role: TA), 74 cases in 16 files + tests/invariants/signin.ts, requests-5.txt (Q1..Q7); taken
 2026-11-27T15:32:18Z questions: TA's Q1..Q7 posted on #5 as Question: comments, by TA, no label, defaults stated (comments/5-q1..q7.md); Q1's door (GET /__test/account) held from the builder until answered
 2026-11-27T15:32:35Z doors: set-up doors /__test/mail/fail, /__test/clock, /__test/fault authorised (3 stand-in: lines added to dev-setup.txt); read door /__test/mail first use said on #5 (comments/5-tm-door.md); /__test/account held for Q1
+2026-11-27T15:33:04Z setup: agent setup-14 started (harness additions and running order from requests-5.txt, then step 3), job note jobs/5-setup-1.txt, clone clones/setup-5-1
