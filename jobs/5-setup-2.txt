@@ -1,0 +1,41 @@
+ticket: 5
+
+Your job: a setup pass for a change to the test environment that this ticket's corrected tests ask for: steps 2, 4, 5, 6 and 9 of your role file, applied to the test author's requests below; then step 3 (measure, pick and prove) again, as the products per run grow by one state per secret. Amend the record at the work folder's dev-setup.txt, its `stand-in:` lines for the secret variants and the switch-off product's mail among them, and return as your role file says. The record's harness is the work folder's harness/.
+
+The dev side's work folder: /Users/josueayala/call-by-identifier-devagent
+
+Your clone, of the code repository, on the ticket's branch ticket-5 at the test author's correction e55d52c (on the builder's 9ccaa33): /Users/josueayala/call-by-identifier-devagent/clones/setup-5-2
+
+The code repository's clone address: https://github.com/josueayala27/call-by-identifier
+
+The ticket, #5 on josueayala27/call-by-identifier: its rows and marks, and its test differences (rows DIF-001, SEAM-001), are in the published ticket, its body and part comments joined: /Users/josueayala/call-by-identifier-devagent/tickets/5-plain.md. Its stack and hosting are as quoted in the setup's first job note, /Users/josueayala/call-by-identifier-devagent/jobs/1-setup-1.txt.
+
+The owner's answer on #5 that the secret request rests on, quoted:
+
+> RM: Question: RULE-013, HOS-028 — how short is "short" for a secret?
+>
+> Not 8: the code secret keys HMAC-SHA-256 (D-009, D-025; RFC 2104), so a secret under 32 bytes is short, and the Worker refuses to sign anyone in (RULE-013, HOS-028).
+
+The test author's requests to the test manager, from /Users/josueayala/call-by-identifier-devagent/requests-5.txt, quoted:
+
+> 5. PRODUCT_OFF_MAIL_URL (ROW-142, class=harness): a reader, outside the product, of what the switch-off product
+>    (product-off) hands its mail binding: GET <url>?to=<email> → {"messages":[{"to":["…"],"from":"…","subject":"…",
+>    "text":"…"}]}, oldest first, recipients exactly as handed to the binding. Under wrangler dev --local the Email
+>    binding does not send; it writes or logs the message inside the product-off container, so the harness can serve
+>    it (a supervisor-like hook on a port the product does not serve). The two ROW-142 cases that read it ("…sends the
+>    code through its mail binding, not the fake mailer" and "no answer … carries the code just sent") error "setup:"
+>    until it is there. On a staging run it is the staging inbox reader, or unset.
+> 6. PRODUCT_SECRET_VARIANTS (RULE-013, HOS-028), by the owner's answer "a secret under 32 bytes is short": please give
+>    the short variant 31 characters (the longest short value; 8 convicts only checks under 9), add a third state per
+>    secret, "exact", given exactly 32 characters (the owner's control: "with a 32-byte secret the same product starts
+>    and signs in"), and carry "length": <characters given> on short and exact entries. The cases now read a variant
+>    that answers nothing as refused (owner's answer); the new control "RULE-013 control with each secret exactly 32
+>    bytes the product starts and signs in" errors "setup:" until the exact variants exist.
+> 7. The clock: the new ROW-200, ROW-209 and ROW-002 cases move the product's clock by up to 3660 s per case (3601 s
+>    for ROW-200 and each ROW-209 case). Files still run one after another, so nothing else is needed; a case later in
+>    any file sees that later clock.
+> 8. Cleanup: my check run (RUN_ID=ta52check, at 9ccaa33) was cut off when Docker Desktop quit at 16:45Z; I restarted
+>    Docker Desktop. If cbi-ta52check is left anywhere, stop.sh with RUN_ID=ta52check removes it (I ran it once Docker
+>    answered — see my hand-back).
+
+The test doors under the test switch, the account count's GET /__test/account among them, are the product's, for the builder to write; they are in the record's stand-in: lines. The switch-off product handing its code email to the mail binding is the builder's too (its requests); what your reader needs from the product goes in your return.
