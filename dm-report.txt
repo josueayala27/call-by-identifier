@@ -1,1 +1,28 @@
 2026-11-27T14:37:31Z the notes came back from vid-dev/notes
+
+## 2026-11-27T14:38:34Z — dev-manager-1 (plugin 0.26.11.2.1), DM_WORK=/Users/josueayala/call-by-identifier-devagent
+
+Known limits ruled: none.
+
+Moved: nothing. Stopped before any claim, comment, branch, clone or agent, because another DevAgent is live on the same repository:
+- /Users/josueayala/Code/tecoloco/call-by-identifier-devagent (plugin 0.26.11.1.13): loop pid 71626, dev manager pid 71933,
+  setup agent setup-2 pid 73370 (role TM, job note jobs/1-setup-1.txt, clone clones/setup-1-1), all alive at 14:38Z.
+- This folder is a copy of that one's state ("the notes came back from vid-dev/notes"); its dev-setup.txt and this
+  job note's `work:` line both point at the other folder, and its harness paths are the other folder's.
+- Ticket #1: claimed by that DM at 14:29:08Z; its setup agent is running there. Starting a second setup here would be
+  the same agent started twice.
+- Ticket #3: a second "Skeleton ticket S1" (same step, rows ROW-093, same base and export), opened 14:36:49Z, no
+  comments. Claiming it here would put two dev managers building the same skeleton in parallel.
+Not stopped: the other folder's processes (not started by this dm.sh or run.sh).
+
+Each `next` line, word for word:
+work 1
+claim 3
+
+Questions (for the owner, not on GitHub): which DevAgent is meant to run — the one in
+/Users/josueayala/Code/tecoloco/call-by-identifier-devagent or this one? And is #3 meant to replace #1?
+
+Stopped agents: none.
+used: loop: 62 s of 86400 s; agents: 56 s, 0 turns; 0 ended, 1 running (this dev manager).
+Free memory: 11229 MB; measured: none.
+list: loop: alive, pid 331; dev manager: dev-manager-1, alive; agents: none.
