@@ -37,7 +37,7 @@ services:
       SELECTION: ${SELECTION:-}
       CASE_LIMIT: ${CASE_LIMIT:-180}
       NO_PRODUCT: ${NO_PRODUCT:-}
-      BASE_URL: ${BASE_URL:-}
+      PRODUCT_URL: ${PRODUCT_URL:-}          # where the product answers; empty with NO_PRODUCT=1 (BASE_URL is not used: Vite overwrites it)
       RESULTS_NAME: ${RESULTS_NAME:-results.xml}
     command: ["sh", "/harness/runtests.sh"]
 networks:

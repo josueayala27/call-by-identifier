@@ -1,5 +1,7 @@
-// Purpose: Playwright's config for the ledger's browser cases: tests/invariants/**/*.spec.ts, Chromium with fake microphones, against BASE_URL
+// Purpose: Playwright's config for the ledger's browser cases: tests/invariants/**/*.spec.ts, Chromium with fake microphones, against PRODUCT_URL
 import { defineConfig, devices } from '@playwright/test';
+const url = process.env.PRODUCT_URL || '';
+// the product is served over plain HTTP by name (DIF-003): Chromium treats that one origin as secure, so the microphone API exists
 export default defineConfig({
   testDir: '/app/tests/invariants',
   testMatch: '**/*.spec.ts',
@@ -8,14 +10,14 @@ export default defineConfig({
   workers: 1,
   retries: 0,
   reporter: [['list'], ['junit']],
-  use: { baseURL: process.env.BASE_URL || undefined, trace: 'off' },
+  use: { baseURL: url || undefined, trace: 'off' },
   projects: [
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
         permissions: ['microphone'],
-        launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'] },
+        launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream', ...(url.startsWith('http://') ? [`--unsafely-treat-insecure-origin-as-secure=${new URL(url).origin}`] : [])] },
       },
     },
   ],

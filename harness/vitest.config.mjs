@@ -1,4 +1,4 @@
-// Purpose: Vitest's config for the ledger's engine-free cases: tests/invariants/**/*.test.ts, in Node, against BASE_URL; no in-process server
+// Purpose: Vitest's config for the ledger's engine-free cases: tests/invariants/**/*.test.ts, in Node, against PRODUCT_URL; no in-process server
 import { defineConfig } from 'vitest/config';
 export default defineConfig({
   cacheDir: '/tmp/vite',
@@ -8,5 +8,6 @@ export default defineConfig({
     environment: 'node',
     fileParallelism: false,
     retry: 0,
+    fsModuleCache: false,
   },
 });

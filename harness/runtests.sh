@@ -1,6 +1,6 @@
 #!/bin/sh
 # Purpose: inside the tests container: Vitest (HTTP and WebSocket cases, *.test.ts) and Playwright (browser cases, *.spec.ts) over
-# tests/invariants/, against BASE_URL; each case stopped at CASE_LIMIT; one JUnit report at /vid-results/$RESULTS_NAME
+# tests/invariants/, against PRODUCT_URL; each case stopped at CASE_LIMIT; one JUnit report at /vid-results/$RESULTS_NAME
 set -u
 PRIMARY=chromium
 OUT=$(mktemp -d); MS=$(( ${CASE_LIMIT:-180} * 1000 ))
