@@ -1,0 +1,9 @@
+by: TM
+commit: c60e89f03f538656b5852d68b488f15e80e4d3a1
+engines: chromium
+environments: 1
+stand-in: the code email sender (DIF-001) — a fake mailer under the test switch (VID_TEST=1) that records the one recipient and the body in memory, read back by the tests through a route that exists only under the switch — the Cloudflare Email Service binding sending from no-reply@call-by-identifier.josueayala.me — no set-up door: a measuring tool DIF-001 authorises, paid at staging
+stand-in: the connection-helping server (DIF-002) — none: both Chromium browsers run in one tests container and connect over host candidates; the test network has no route out — stun.cloudflare.com
+stand-in: the edge in front of the Worker (DIF-003) — local workerd (wrangler dev) over plain HTTP at http://product:8787, the test sets CF-Connecting-IP itself, and Chromium treats that one origin as secure — Cloudflare's edge, HTTPS and the edge-reported client address
+stand-in: the cleanup schedule (D-026) — does not fire on its own under wrangler dev; a test fires it through wrangler's --test-scheduled route /__scheduled — Cloudflare's cron every 15 minutes — no set-up door of the product's; the schedule's consumption is deploy-owed
+stand-in: the server secrets (code-hashing key, OPERATOR_EMAIL) — throwaway test values handed to the entry in the environment (VID_TEST_SECRET), never a real secret — the owner's wrangler secret and variable
