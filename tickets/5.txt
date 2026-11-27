@@ -47,3 +47,5 @@
 2026-11-27T17:00:06Z questions: setup-23's mail-reader question posted on #5, by TM, no label (comments/5-q13.md)
 2026-11-27T17:00:39Z builder: agent builder-24 started (account door now authorised; builder heading items 1-7; entry VID_SECRET_LENGTH), job note jobs/5-builder-2.txt, clone clones/builder-5-2, on e55d52c
 2026-11-27T17:06:03Z builder: builder-24 handed back, commit b0b7b16 (Role: BU), own run 94 passed 2 errored (deploy-owed DIF-001, SEAM-001); rolling-hour counter (request_counters reshaped inside migrations/0001, its own Decisions line), GET /__test/account, entry VID_SECRET_LENGTH; no questions; taken
+2026-11-27T17:06:29Z check: untouched.sh at b0b7b16: 18 of 18 files untouched, exit 0
+2026-11-27T17:06:29Z run: head run (T3 whole) at b0b7b16, ask pr-6-b0b7b16c82d8, --select 38 rows less DIF-001 SEAM-001 plus ROW-093, --line 4 stand-in: lines no earlier head report carries (deployed shape amended, switch-off mail, secret variants amended, account count), --line retested: ROW-001 ROW-002 ROW-118 ROW-124 ROW-142 ROW-200 ROW-201 ROW-204 ROW-209 ROW-212 RULE-013 HOS-028, folder runs/20261127T170624Z-86955
