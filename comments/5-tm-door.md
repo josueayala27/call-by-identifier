@@ -1,0 +1,4 @@
+TM: read doors first used by this ticket's tests, for the owner to read; no answer is needed.
+- GET /__test/mail?to=<email>, under the test switch (VID_TEST=1) alone, absent with it off: the fake code-email sender's record of what it was handed for that address (recipients, sender, subject, text). It is the measuring tool of the test difference DIF-001: in the tests no real email is sent.
+- Set-up doors the dev side authorised for this ticket, under the test switch alone, never on in production: POST /__test/mail/fail (the next code email to an address fails to send), POST /__test/clock (time moves forward for the product), POST /__test/fault (the code store fails).
+- GET /__test/account (how many accounts an email has) is not authorised: it waits for the answer to the question on ROW-146 and ROW-117.

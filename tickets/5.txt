@@ -3,3 +3,5 @@
 2026-11-27T15:09:15Z branch: ticket-5 from 663a11e6f7cc, empty commit 5974e97 (Role: DM), pushed; draft pull request #6 opened (jobs/pr-5-body.md)
 2026-11-27T15:09:47Z test author: agent test-author-13 started, job note jobs/5-test-author-1.txt, clone clones/test-author-5-1
 2026-11-27T15:31:29Z test author: test-author-13 handed back, commit 5e7ed8a (Role: TA), 74 cases in 16 files + tests/invariants/signin.ts, requests-5.txt (Q1..Q7); taken
+2026-11-27T15:32:18Z questions: TA's Q1..Q7 posted on #5 as Question: comments, by TA, no label, defaults stated (comments/5-q1..q7.md); Q1's door (GET /__test/account) held from the builder until answered
+2026-11-27T15:32:35Z doors: set-up doors /__test/mail/fail, /__test/clock, /__test/fault authorised (3 stand-in: lines added to dev-setup.txt); read door /__test/mail first use said on #5 (comments/5-tm-door.md); /__test/account held for Q1
