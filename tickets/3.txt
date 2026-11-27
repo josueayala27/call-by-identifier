@@ -4,3 +4,4 @@
 2026-11-27T14:57:12Z branch: ticket-1 (pull request #2) carried as #3's branch, per ViD's comment on PR #2; no new branch
 2026-11-27T14:57:12Z carried from #1's record: test author c60e89f (Role: TA), red/no-product head report pr-2-c60e89f03f53-1 (5 stand-in: lines), measured 2 804, builder e13b268 (Role: BU), untouched.sh exit 0, head run T3 pr-2-e13b2680e85a-1 (2 passed), Decisions section rewritten for e13b268, ROW-093 fault by grader-7 faults/1/ROW-093.patch, fault run T4 pushed pr-2-e13b2680e85a-2 (fault ROW-093: 1 passed, 1 failed)
 2026-11-27T14:57:26Z pull request #2: body's ticket line changed to ticket: #3 (jobs/pr-2-body.md), Decisions section unchanged for head e13b268
+2026-11-27T14:58:32Z grade (T5): graders grader-8 and grader-9 started together, job notes jobs/3-grader-1.txt and jobs/3-grader-2.txt, blind/copy.6btYAG and blind/copy.ZDlSIY, report folder reports/pr-2-e13b2680e85a-2

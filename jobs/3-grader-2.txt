@@ -1,0 +1,37 @@
+ticket: 3
+
+Your job: the grade, the ticket's ask T5, quoted from it: "T5 (GR, SR): at the ticket's first head alone, two fresh GRs, each in its own blind copy, grade each row against its fail-if, the grading checklist and the test differences, a screen row also against the design, and their lines are combined. SR sorts what the grade leaves, once. No later head has a grade or a sort."
+
+The blind copy: /Users/josueayala/call-by-identifier-devagent/blind/copy.ZDlSIY
+
+The head's full commit id: e13b2680e85ae019347d5ce92ea7dbe0c2e4be22
+
+The plain ticket, joined (its body and parts, each decision's why: dropped): /Users/josueayala/call-by-identifier-devagent/tickets/3-plain-grader.md
+
+The export: the spec repository https://github.com/josueayala27/call-by-identifier-spec at 58f607cec86a644120dfd82bef80d1401cf7f2b7, read only.
+
+This head's report folder: /Users/josueayala/call-by-identifier-devagent/reports/pr-2-e13b2680e85a-2
+
+The record's stand-in: lines:
+
+stand-in: the code email sender (DIF-001) — a fake mailer under the test switch (VID_TEST=1) that records the one recipient and the body in memory, read back by the tests through a route that exists only under the switch — the Cloudflare Email Service binding sending from no-reply@call-by-identifier.josueayala.me — no set-up door: a measuring tool DIF-001 authorises, paid at staging
+stand-in: the connection-helping server (DIF-002) — none: both Chromium browsers run in one tests container and connect over host candidates; the test network has no route out — stun.cloudflare.com
+stand-in: the edge in front of the Worker (DIF-003) — local workerd (wrangler dev) over plain HTTP at http://product:8787, the test sets CF-Connecting-IP itself, and Chromium treats that one origin as secure — Cloudflare's edge, HTTPS and the edge-reported client address
+stand-in: the cleanup schedule (D-026) — does not fire on its own under wrangler dev; a test fires it through wrangler's --test-scheduled route /__scheduled — Cloudflare's cron every 15 minutes — no set-up door of the product's; the schedule's consumption is deploy-owed
+stand-in: the server secrets (code-hashing key, OPERATOR_EMAIL) — throwaway test values handed to the entry in the environment (VID_TEST_SECRET), never a real secret — the owner's wrangler secret and variable
+
+The rows you grade, each quoted as the ticket has it:
+
+> ROW-093 | shell | / | anonymous | n/a | a signed-out visitor sees only the sign-in screen (email box and a send-code button): no call box, no sign-out control, no incoming-call area | REQ-001, REQ-005 | owed: spec-only — first stage | origin: REQ-001
+- ROW-093 marks: shell
+
+Its fail-if: the row's own line holds no fail-if clause, and the export holds no inventory with one; the requirements it cites, REQ-001 and REQ-005, carry theirs in the ticket's Requirements section, with the answers they cite.
+
+This pull request's Decisions section, each line up to " | why:":
+
+Decisions:
+- the entry is a Node script in src/worker (entry.mjs) that skips the migrations step until migrations/ holds a .sql file, binding name DB; the sign-in form posts to / with no handler yet, so no door opens before its row; pnpm allows build scripts for esbuild and workerd only
+- the Worker exports no SwitchboardObject and declares no D1 or Durable Object binding yet
+- the sign-in form has no post handler in this ticket
+
+Where your grade file goes: /Users/josueayala/call-by-identifier-devagent/grades/3/grade-2.txt
