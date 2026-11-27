@@ -8,7 +8,7 @@ mkdir -p "$RESULTS_DIR"
 if [ -n "${BASE_URL:-}" ]; then
   docker image inspect "$TESTS_IMAGE" > /dev/null 2>&1 || docker build -q -t "$TESTS_IMAGE" -f "$H/tests.Dockerfile" "$H" > /dev/null
   exec docker run --rm --init -w /app -v "$CHECKOUT:/app:ro" -v "$H:/harness:ro" -v "$RESULTS_DIR:/vid-results" \
-    -e CI=1 -e ENGINE="${ENGINE:-chromium}" -e SELECTION="${SELECTION:-}" -e CASE_LIMIT="${CASE_LIMIT:-180}" -e NO_PRODUCT= \
+    -e CI=1 -e NO_COLOR=1 -e FORCE_COLOR=0 -e ENGINE="${ENGINE:-chromium}" -e SELECTION="${SELECTION:-}" -e CASE_LIMIT="${CASE_LIMIT:-180}" -e NO_PRODUCT= \
     -e PRODUCT_URL="$BASE_URL" -e SIGNIN="${SIGNIN:-}" -e RESULTS_NAME="$RESULTS_NAME" "$TESTS_IMAGE" sh /harness/runtests.sh
 fi
 if [ "${NO_PRODUCT:-}" = 1 ]; then PRODUCT_URL=''; else PRODUCT_URL=http://product:8787; fi; export PRODUCT_URL

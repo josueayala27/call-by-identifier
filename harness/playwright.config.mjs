@@ -16,6 +16,7 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        channel: 'chromium',               // the full Chromium build: the headless shell ignores the secure-origin flag
         permissions: ['microphone'],
         launchOptions: { args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream', ...(url.startsWith('http://') ? [`--unsafely-treat-insecure-origin-as-secure=${new URL(url).origin}`] : [])] },
       },

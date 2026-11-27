@@ -33,6 +33,8 @@ services:
       - ${RESULTS_DIR:-/tmp}:/vid-results
     environment:
       CI: "1"
+      NO_COLOR: "1"                         # plain output, so a case's own covers: lines start their line
+      FORCE_COLOR: "0"
       ENGINE: ${ENGINE:-chromium}
       SELECTION: ${SELECTION:-}
       CASE_LIMIT: ${CASE_LIMIT:-180}
