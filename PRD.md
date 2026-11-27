@@ -283,5 +283,6 @@ review: whole, round 3, 24 findings
 
 - 2026-11-27 — thesis+contract — 4b2a9b5
 - 2026-11-27 — gap answers — 6f41bac
+- 2026-11-27 — final — b54b55b
 
 ## Appends
