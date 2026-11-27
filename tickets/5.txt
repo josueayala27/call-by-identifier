@@ -9,3 +9,5 @@
 2026-11-27T15:47:47Z setup: setup-14 handed back: harness moved to this work folder's harness/, product-off, restart hook, secret variants, staging vars; environments 3 -> 2, measured: 80 3334 2026-11-27T15:45:31Z; 3 stand-in: lines added (ROW-142, ROW-158, RULE-013/HOS-028); 3 questions with defaults (one is Q1 again); taken
 2026-11-27T15:47:50Z questions: setup-14's 2 questions posted on #5, by TM, no label (comments/5-q8..q9.md); its third is Q1 again
 2026-11-27T15:47:57Z run: red run (T2) at 5e7ed8a, ask red-5, --select the 38 rows less deploy-owed DIF-001 SEAM-001, --line rows:, folder runs/20261127T154754Z-22884
+2026-11-27T15:49:21Z run: pushed vid-results/red-5-1, leftovers none, 3 passed 9 failed 64 errored 2 skipped; red: ROW-204 ROW-096 RULE-013 ROW-212 ROW-207 ROW-180 ROW-179 ROW-114; no-red-5.txt written (30 rows, setup: errors)
+2026-11-27T15:49:38Z builder: agent builder-15 started, job note jobs/5-builder-1.txt (account door held for Q1), clone clones/builder-5-1, on 5e7ed8a
