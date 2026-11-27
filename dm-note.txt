@@ -1,6 +1,6 @@
 repo: josueayala27/call-by-identifier
 labels-prefix:
-work: /Users/josueayala/Code/tecoloco/call-by-identifier-devagent
+work: /Users/josueayala/call-by-identifier-devagent
 time-limit: 86400
 agent-time-limit: 10800
 agent-turn-limit: 500
