@@ -1,0 +1,60 @@
+TA: requests from the test author, ticket 5 (step S2), tests-first commit on ticket-5.
+
+test manager
+1. Doors the S2 tests read, under the test switch (VID_TEST=1) alone and absent (404) with it off. Please authorise
+   each as a set-up door with a stand-in: line, or say which is refused; a case reaching a missing door errors "setup:".
+   - GET  /__test/mail?to=<email>  → {"messages":[{"to":["…"],"cc":[],"bcc":[],"from":"…","subject":"…","text":"…"}]},
+     the messages whose recipient equals <email> ignoring letter case, oldest first; "to" is exactly the recipient list
+     the adapter handed to the binding (setup-2 question 2's default, with its JSON shape fixed). Measuring tool, DIF-001.
+   - POST /__test/mail/fail?to=<email>  → the fake mailer's next send to <email> throws; nothing is recorded (ROW-196, HOS-029).
+   - POST /__test/clock?advance=<seconds>  → the Clock port reads <seconds> later from then on, for every later read
+     (ROW-004, HOS-004; and the 61 s step past REQ-023's 60-second rule before any second request for one email:
+     ROW-007, ROW-196, ROW-117, ROW-201, HOS-007, HOS-029). It has no replacing step: time cannot be moved publicly.
+   - POST /__test/fault?at=codes|codes-write|none  → every code-store operation (codes) or every code-store write
+     (codes-write) fails until at=none (ROW-126).
+   - GET  /__test/account?email=<email>  → {"accounts": <number of stored accounts with that email>} (ROW-146, ROW-117).
+     A measuring tool; no spec decision names one yet — see questions.
+2. Harness additions (class=harness):
+   - PRODUCT_OFF_URL: a second product from the same image with VID_TEST=0 (ROW-142); on a staging run, the staging address.
+   - PRODUCT_RESTART_URL: an address the tests container can POST to that restarts the product container (its local
+     D1 kept) and answers once it is up (ROW-158).
+   - PRODUCT_SECRET_VARIANTS: JSON list [{"secret":"<NAME>","state":"missing"|"short","role":"code-hashing"|…,"url":"…"}]:
+     one product per secret the Worker reads, started once with it unset and once with an 8-character value, test switch
+     on (RULE-013, HOS-028). The role "code-hashing" marks D-009's secret.
+   - For the deploy-owed DIF-001 and SEAM-001 on staging: STAGING_INBOX (a test inbox address taking +tags),
+     STAGING_INBOX_URL (GET ?to=<address> → {"messages":[{"raw":"<RFC 5322 message>"}]}) and CAPTURES_DIR (the work
+     folder's captures/, mounted writable; never committed).
+3. Running order: the tests move one product-wide clock and arm product-wide faults, so test files must run one after
+   another (the record says Vitest does), and the Playwright pass must not overlap the Vitest pass on one product.
+4. The red run: with the base product most cases error "setup:" (no request route yet, so no code-entry step or mail
+   door). Observed on the base locally: real reds only in ROW-180, ROW-179, ROW-207, ROW-114 (recipient case), ROW-096,
+   the controls of ROW-212, ROW-204 and RULE-013. Every other row needs its fault proven at the head.
+
+builder
+1. The test switch doors above (mail recorder read, mail failure, clock, storage fault, account count), under
+   VID_TEST=1 alone — once the test manager authorises them.
+2. The tests drive the product's own forms over HTTP and in Chromium: the email step at / is a form with the email box
+   and a submit labelled with "code" (as now); the code-entry step is a form with a field named with "code" or "otp" (or
+   autocomplete="one-time-code"); a form post sends the browser's Origin. "Signed in" is read as: / answers 200 and shows
+   neither step. The code email body carries the code as its only run of 3 or more digits.
+3. The code-entry step needs a control (link or button) other than its submit that leads back to the email step (ROW-096).
+4. ROW-204: Chromium turns an IDN domain typed into an <input type="email"> (e.g. user@exämple.test) into punycode
+   before sending, so a server-side ASCII check alone cannot refuse it; the screen itself has to refuse it.
+
+questions
+Q1 (ROW-146, ROW-117): may the ledger read the account count through a test-switch door (GET /__test/account)?
+   Whether an account exists shows on no page — REQ-007 makes "no account" look like "offline" — so only a measuring
+   tool can see it, and the door table wants a spec decision to authorise one. Default I build on: yes, under the test
+   switch alone.
+Q2 (ROW-180 and all sign-in rows): what tells "signed in" apart before the call page exists? Default (a test value): /
+   answers 200 showing neither the email step nor the code-entry step, while a browser with no cookie sees the email step.
+Q3 (RULE-013, HOS-028): how short is "short" for a secret? No spec number. Default (a test value): 8 characters; D-009's
+   HMAC-SHA-256 key would reasonably need 32 bytes.
+Q4 (ROW-204, ROW-212): is a no-break space or other invisible character at the very start or end of a typed email
+   trimmed away (accepted), or refused? Default: the tests place such characters strictly inside the address only.
+Q5 (ROW-124): the clause "the composition root binds randomness to the cryptographic source; no Math.random in src" is
+   not observable through a public surface. Default: no ledger case for it here; it is a census or grader matter.
+Q6 (ROW-204): the call-box half of the row waits for the call box, a later step. Default: no case for it in this
+   ticket; it is written with the call step.
+Q7 (ROW-158): eviction and a second server instance cannot be caused in this harness. Default: a restart of the
+   product stands for all three.
