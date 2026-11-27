@@ -1,0 +1,66 @@
+#!/bin/sh
+# Purpose: ViD post-commit hook — the amendment record (v0.9.3 spec 3.7, R10).
+# A verdict judges the row as it read: under an inventory block whose first
+# fence line is `grammar: 0.9.3`, after every commit this appends
+# `amended row=ID sha=<HEAD>` to .vid/metrics-events for (a) every ROW line
+# whose obligation column changed between HEAD~1 and HEAD in INVENTORY.md,
+# and (b) every ROW derived from a REQ whose EFFECTIVE fail-if text differs
+# between the two trees (checks/prd.sh --failifs: the vid-prd effective set,
+# or a legacy PRD's `### REQ-NNN` block's Fail-if line). checks/metrics.sh
+# reads the event as a wipe: the row is unverdicted, its attempt history
+# restarts, and a verdict quoted before this commit is ineligible. Post-
+# commit, because the sha does not exist at pre-commit time and a commit
+# refused by pre-commit's later steps or by commit-msg must record nothing.
+# A consolidation commit records none — its effective text is unchanged; a
+# new row, and an AMENDED item whose fail-if did not change, record none.
+# Never blocks (a post-commit hook cannot); silent when nothing changed.
+# Installed with the other hooks (core.hooksPath checks/hooks).
+# v0.9.6 (3.6, R6): under the gate (`sh checks/plan.sh gate` on) the events
+# go to the run's home — the worktree holding RUN-STATE, named by a builder
+# worktree's .vid/home — so a row amended in a builder worktree is seen by
+# the home's currency check. Outside it, to this worktree's .vid/, as before.
+# v0.9.8 (3.3, R6): each event names its cause — `by=obligation` (the row's own obligation changed) or `by=fail-if`
+# (an item it derives from changed its fail-if). Only the row's own amendment clears its authority flag
+# (checks/brief.sh authority).
+# v0.26.10.3 (R1): one row, one cause. The row sets come from `sh checks/inventory.sh impact --detail` (HEAD~1 as the
+# before, HEAD's committed PRD.md and INVENTORY.md as the after), the calculation every owner question quotes. For each
+# row present at both commits: its own obligation changed → `amended row= sha= by=obligation` (the wipe, as before);
+# else an item in its derived-from changed its effective fail-if → `law-changed row=<id> sha=<12 hex> item=<REQ-id,…>`
+# — no wipe: the row is to confirm (checks/metrics.sh to-confirm) until the next close's test-author pass keeps it
+# (brief.sh authority --kept) or amends its obligation. A row with both is amended only; a row new at HEAD gets
+# neither. From records 23 this hook never writes `amended … by=fail-if`; one already written still wipes.
+# serves: both (0.26.10.28.4, M9)
+_vidwsl=${0%/*}/../lib/wsl.sh; [ ! -f "$_vidwsl" ] || . "$_vidwsl"   # FB-7 D1: the whole hook, in ticket mode on Windows
+set -u
+IFS='
+'
+git rev-parse -q --verify HEAD~1 >/dev/null 2>&1 || exit 0
+blk() { git show "$1:INVENTORY.md" 2>/dev/null | sed -n '/^```vid-inventory/,/^```$/p' | sed '1d;$d'; }
+NEW=$(blk HEAD)
+case "$(printf '%s\n' "$NEW" | grep -v '^[[:space:]]*$' | head -n 1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')" in 'grammar: 0.9.3') ;; *) exit 0 ;; esac
+SHA=$(git rev-parse --short=12 HEAD)
+T=$(mktemp -d) || exit 0
+trap 'rm -rf "$T"' EXIT
+if [ -f checks/inventory.sh ]; then
+  git show HEAD:PRD.md > "$T/prd.new" 2>/dev/null || : > "$T/prd.new"
+  git show HEAD:INVENTORY.md > "$T/inv.new" 2>/dev/null || : > "$T/inv.new"
+  sh checks/inventory.sh impact --base HEAD~1 --prd "$T/prd.new" --inventory "$T/inv.new" --detail > "$T/sets" 2>/dev/null || : > "$T/sets"
+else : > "$T/sets"; fi
+N=$(awk -F'\t' '$1 == "reset"' "$T/sets" | grep -c . || true)
+K=$(awk -F'\t' '$1 == "confirm"' "$T/sets" | grep -c . || true)
+[ $((N + K)) -gt 0 ] || exit 0
+EVD=.vid
+if [ -f checks/plan.sh ]; then
+  _g=$(sh checks/plan.sh gate 2>/dev/null || true)
+  case "$_g" in 'on '*) EVD="${_g#on }/.vid" ;; esac
+fi
+mkdir -p "$EVD"
+AT=$(date -u '+%Y-%m-%dT%H:%M:%SZ')   # v0.9.5 3.11: every event line ends ` at=<UTC>`
+while IFS='	' read -r what id items; do
+  case "$what" in
+    reset) printf 'amended row=%s sha=%s by=obligation at=%s\n' "$id" "$SHA" "$AT" >> "$EVD/metrics-events" ;;
+    confirm) printf 'law-changed row=%s sha=%s item=%s at=%s\n' "$id" "$SHA" "$items" "$AT" >> "$EVD/metrics-events" ;;
+  esac
+done < "$T/sets"
+echo "ViD post-commit at $SHA: $N row(s) reset (own obligation changed); $K row(s) to confirm (a requirement they derive from changed): reset $(awk -F'\t' -v s=' ' '$1 == "reset" { o = o (o == "" ? "" : s) $2 } END { print (o == "" ? "-" : o) }' "$T/sets") · to confirm $(awk -F'\t' -v s=' ' '$1 == "confirm" { o = o (o == "" ? "" : s) $2 } END { print (o == "" ? "-" : o) }' "$T/sets") — a reset row's verdicts are wiped and a verdict quoted before this commit is ineligible; a row to confirm keeps its state until the next close's test-author pass keeps it or amends it"
+exit 0

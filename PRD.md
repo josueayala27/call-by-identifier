@@ -279,6 +279,85 @@ F-28 | review | blocking | REQ-031 | repaired | evidence: owner-ruling re-read, 
 
 review: whole, round 3, 24 findings
 
+### 2026-11-26 — test list strength review
+
+```vid-prd-findings
+F-29 | strength | blocking | INVENTORY.md:ROW-001 | repaired | evidence: sign-in round 1 — the real mail binding was never exercised; deploy-gate row added for a real code email on staging
+F-30 | strength | blocking | INVENTORY.md:ROW-142 | repaired | evidence: sign-in round 1 — a fake mailer or bypass could be wired in the deployed config; deploy-gate row compares deployed configurations
+F-31 | strength | blocking | INVENTORY.md:ROW-066 | routed OQ-6 | evidence: sign-in round 1 — in-memory request counters reset on idle eviction
+F-32 | strength | advisory | INVENTORY.md:ROW-065 | noted | evidence: sign-in round 1 — the 60-second rule is per email whatever the address, as A-045 states; no change
+F-33 | strength | advisory | INVENTORY.md:ROW-066 | repaired | evidence: sign-in round 1 — fixed clock-hour window; the hour is now rolling
+F-34 | strength | advisory | INVENTORY.md:ROW-165 | repaired | evidence: sign-in round 1 — limits bounded only from above; lower bounds added for tries, resend and hourly codes
+F-35 | strength | advisory | INVENTORY.md:ROW-160 | routed OQ-7 | evidence: sign-in round 1 — a failed send versus the newer-code-kills-older rule
+F-36 | strength | advisory | INVENTORY.md:ROW-085 | repaired | evidence: sign-in round 1 — a session ending while a socket is open; covered
+F-37 | strength | advisory | INVENTORY.md:ROW-072 | repaired | evidence: sign-in round 1 — no column census; tables now limited to named columns
+F-38 | strength | advisory | INVENTORY.md:ROW-107 | repaired | evidence: sign-in round 1 — cleanup cadence and superseded codes; at least daily, all dead codes
+F-39 | strength | advisory | INVENTORY.md:ROW-075 | repaired | evidence: sign-in round 1 — creation date rewritten on later sign-ins; must stay the first sign-in
+F-40 | strength | advisory | INVENTORY.md:ROW-114 | repaired | evidence: sign-in round 1 — blocklist validator; one bare address only
+F-41 | strength | advisory | INVENTORY.md:ROW-140 | repaired | evidence: sign-in round 1 — no deletion path to test through; the row now names the operator's removal of rows
+F-42 | strength | advisory | INVENTORY.md:ROW-100 | repaired | evidence: sign-in round 1 — a silent call passes a UI check; inbound audio bytes asserted
+F-43 | strength | advisory | INVENTORY.md:ROW-121 | repaired | evidence: sign-in round 1 — static assets skip the Worker's headers; asset paths fetched
+F-44 | strength | advisory | INVENTORY.md:ROW-124 | repaired | evidence: sign-in round 1 — Math.random could be bound at the root; source check added
+F-45 | strength | blocking | INVENTORY.md:ROW-141 | repaired | evidence: table round 1 — conflicted with the 60-second refusal; the someone-else-asked clause dropped
+F-46 | strength | blocking | INVENTORY.md:ROW-160 | routed OQ-7 | evidence: table round 1 — whether a failed-send request counts as requested
+F-47 | strength | blocking | INVENTORY.md:ROW-139 | repaired | evidence: table round 1 — sign-out made the whole email offline; limited to that browser
+F-48 | strength | blocking | INVENTORY.md:ROW-066 | routed OQ-6 | evidence: table round 1 — the hourly cap cannot hold across eviction under memory-only counters
+F-49 | strength | advisory | INVENTORY.md:ROW-131 | repaired | evidence: table round 1 — whether attachments count as storage; D-022 settles it
+F-50 | strength | advisory | INVENTORY.md:ROW-127 | repaired | evidence: table round 1 — the caller's permission-check track; stopped at once
+F-51 | strength | advisory | INVENTORY.md:ROW-149 | repaired | evidence: table round 1 — own servers unnamed; stun.cloudflare.com named
+F-52 | strength | advisory | INVENTORY.md:ROW-022, INVENTORY.md:ROW-033 | noted | evidence: table round 1 — near-repeat rows on busy; kept apart, each tests a separate path
+F-53 | strength | advisory | INVENTORY.md:ROW-119, INVENTORY.md:ROW-121 | noted | evidence: table round 1 — repeated no-cache clause; kept apart, one tests sessions, one headers
+F-54 | strength | advisory | INVENTORY.md:ROW-068 | noted | evidence: table round 1 — cross-cutting rows carry the whole fail-if; each test asserts only the clause its surface owns
+F-55 | strength | blocking | INVENTORY.md:ROW-039 | repaired | evidence: table round 1 — STUN never needed in Docker; DIF-002 and a staging call row added
+F-56 | strength | advisory | INVENTORY.md:ROW-068, INVENTORY.md:ROW-116 | repaired | evidence: table round 1 — edge HTTPS and client address unobservable locally; DIF-003 and a gate-2 row
+F-57 | strength | advisory | INVENTORY.md:ROW-121 | repaired | evidence: table round 1 — RULE-008 now covers assets
+F-58 | strength | advisory | INVENTORY.md:ROW-122 | repaired | evidence: table round 1 — RULE-003 now covers thrown errors
+F-59 | strength | advisory | INVENTORY.md:ROW-115 | repaired | evidence: table round 1 — RULE-006 keyed on the email type, not named entries
+F-60 | strength | advisory | INVENTORY.md:ROW-017 | repaired | evidence: table round 1 — actor corrected to anonymous
+F-61 | strength | advisory | INVENTORY.md:ROW-095 | repaired | evidence: table round 1 — actors and derived-from corrected on ROW-095, 112, 178, 014, 161, 165
+F-62 | strength | blocking | INVENTORY.md:ROW-039 | repaired | evidence: calling round 1 — one fake tone for both sides hides self-playback; distinct sources per browser
+F-63 | strength | blocking | INVENTORY.md:ROW-131 | repaired | evidence: calling round 1 — busy state lost across hibernation; D-022 attachments and a rebuild test
+F-64 | strength | blocking | INVENTORY.md:ROW-128 | repaired | evidence: calling round 1 — clean closes only; frozen connection tested
+F-65 | strength | blocking | INVENTORY.md:ROW-122 | repaired | evidence: calling round 1 — emails in URLs reach platform logs; URL rule and a deployed logging row
+F-66 | strength | blocking | INVENTORY.md:ROW-139 | repaired | evidence: calling round 1 — sign-out offline for every browser; limited to that browser
+F-67 | strength | blocking | INVENTORY.md:ROW-085 | repaired | evidence: calling round 1 — no operator for the session-end deadline; ROW-190 added
+F-68 | strength | blocking | INVENTORY.md:ROW-017 | repaired | evidence: calling round 1 — a present but invalid cookie; expired, signed-out and random cookies tested
+F-69 | strength | advisory | INVENTORY.md:ROW-149 | repaired | evidence: calling round 1 — fallback to another STUN server; allowed host named
+F-70 | strength | advisory | INVENTORY.md:ROW-152 | noted | evidence: calling round 1 — hidden-tab throttling; the row stands, the test emulates a hidden page
+F-71 | strength | advisory | INVENTORY.md:ROW-089 | repaired | evidence: calling round 1 — newest tab means most recently opened
+F-72 | strength | advisory | INVENTORY.md:ROW-027 | repaired | evidence: calling round 1 — own email in mixed case
+F-73 | strength | advisory | INVENTORY.md:ROW-113 | repaired | evidence: calling round 1 — the hostile email must pass sign-in
+F-74 | strength | advisory | INVENTORY.md:ROW-137 | repaired | evidence: calling round 1 — caps had no numbers; D-023 numbers
+F-75 | strength | advisory | INVENTORY.md:ROW-024 | repaired | evidence: calling round 1 — timing could separate the not-available cases
+F-76 | strength | advisory | INVENTORY.md:ROW-112 | repaired | evidence: calling round 1 — Origin tested from a sibling subdomain and null
+F-77 | strength | advisory | INVENTORY.md:ROW-020 | repaired | evidence: calling round 1 — busy clearing after every end reason
+F-78 | strength | advisory | INVENTORY.md:ROW-040 | repaired | evidence: calling round 1 — the camera captured but not sent
+F-79 | strength | advisory | INVENTORY.md:ROW-059 | repaired | evidence: calling round 1 — relay logs unobservable; the row now forbids any relay in the first version
+F-80 | strength | advisory | INVENTORY.md:ROW-053 | repaired | evidence: calling round 1 — ended call ids kept as tombstones
+F-81 | strength | blocking | INVENTORY.md:ROW-112 | repaired | evidence: strength round 2 — required behaviour under a never-happens prefix on 20 rows; reworded
+F-82 | strength | blocking | INVENTORY.md:ROW-131 | repaired | evidence: strength round 2 — the server closing every socket mid-call; added
+F-83 | strength | blocking | INVENTORY.md:ROW-137 | repaired | evidence: strength round 3 — nine forbidden-outcome rows inverted by the round-2 rewording; restored
+F-84 | strength | blocking | INVENTORY.md:ROW-113 | repaired | evidence: strength round 3 — the hostile email could not pass sign-in; named accepted hostile emails
+F-85 | strength | blocking | INVENTORY.md:ROW-131 | repaired | evidence: strength round 3 — timers lost on rebuild; deadlines kept in attachments and tested
+F-86 | strength | blocking | INVENTORY.md:ROW-066 | routed OQ-6 | evidence: strength round 3 — request counters across eviction
+```
+
+review: whole, round 3, 58 findings
+
+### 2026-11-26 — final review
+
+```vid-prd-findings
+F-102 | final | blocking | DECISIONS.md:D-005, DECISIONS.md:D-011, ARCHITECTURE.md, BASELINE.md, GRADING-CHECKLIST.md, INVENTORY.md:ROW-164 | repaired | evidence: round 1 — counters still placed in switchboard memory against A-053; D-025, architecture, baseline, checklist and rows updated
+F-103 | final | blocking | BASELINE.md, ARCHITECTURE.md, INVENTORY.md:ROW-117, INVENTORY.md:ROW-072 | repaired | evidence: round 1 — newer-kills-older wording out of date after A-049 and A-055; rewritten
+F-104 | final | blocking | REQ-029, INVENTORY.md:ROW-107 | repaired | evidence: round 1 — no deletion trigger for counters and totals; D-026 and ROW-217
+F-105 | final | blocking | REQ-037, REQ-038, INVENTORY.md:ROW-116 | repaired | evidence: round 1 — network address undefined outside ROW-116; D-027 and every per-address row
+F-106 | final | advisory | REQ-038, ARCHITECTURE.md, DECISIONS.md:D-008 | repaired | evidence: round 1 — operator address unrecorded, alerts unbounded; D-028 and an owner-only step
+F-107 | final | blocking | REQ-029, INVENTORY.md:ROW-073, INVENTORY.md:ROW-211 | repaired | evidence: round 2 — sweep lag against one-hour retention; owner ruled A-061
+F-108 | final | blocking | INVENTORY.md:ROW-203, DECISIONS.md:D-028 | repaired | evidence: round 2 — the row demanded an alert every day; only on a day reaching 500
+```
+
+review: final, round 3, 7 findings, read: PRD.md ARCHITECTURE.md DECISIONS.md BASELINE.md INVENTORY.md GRADING-CHECKLIST.md
+
 ## Ratifications
 
 - 2026-11-27 — thesis+contract — 4b2a9b5
@@ -286,3 +365,83 @@ review: whole, round 3, 24 findings
 - 2026-11-27 — final — b54b55b
 
 ## Appends
+
+### 2026-11-27 (test list questions raised by the reviews)
+
+RESOLVED: (OQ-1) A-048 — Before the person called presses Accept, may either browser learn the other's network address? ViD recommends no: the connection is set up only after Accept, within the 15-second limit.
+
+RESOLVED: (OQ-2) A-049 — Anyone who knows an email can request a new code every 60 seconds and so keep cancelling the owner's code. Should a new code cancel earlier ones only when requested from the same network address? ViD recommends yes.
+
+RESOLVED: (OQ-3) A-050 — Codes can be guessed slowly from many addresses. Should one network address be limited to 10 wrong code tries an hour across all emails? ViD recommends yes.
+
+RESOLVED: (OQ-4) A-051 — One network address can make the product email codes to unlimited different people. Should it be limited to 10 code emails an hour across all emails, with at most 500 code emails a day in total? ViD recommends yes.
+
+RESOLVED: (OQ-5) A-052 — Lookalike emails (foreign letters that look Latin, invisible characters) can impersonate a known caller on the ring. Should only plain ASCII emails be accepted? ViD recommends yes.
+
+RESOLVED: (OQ-6) A-053 — The code limits live in memory only, so they reset when the server restarts or sits idle. Keep the code request counters in the database for one hour instead, holding only a hashed email and address? ViD recommends yes.
+
+RESOLVED: (OQ-7) A-054 — If a code email fails to send, does that request still cancel the earlier working code? ViD recommends no: only a code actually sent cancels earlier ones.
+
+### 2026-11-27 (owner answers at the test-list sitting)
+
+```vid-prd-answers
+A-048 | human | 2026-11-26 | Q: Before Accept, may either browser learn the other's network address? | A: Accepted as recommended: no; the connection is set up only after Accept, within the 15-second limit. | settles: REQ-036 | importance: priority
+A-049 | human | 2026-11-26 | Q: Should a new code cancel earlier ones only when requested from the same network address? | A: Accepted as recommended: yes; a new code cancels earlier codes for that email only when requested from the same network address. | settles: REQ-002 | importance: priority
+A-050 | human | 2026-11-26 | Q: Should one network address be limited in wrong code tries? | A: Accepted as recommended: at most 10 wrong code tries an hour per network address, across all emails. | settles: REQ-037
+A-051 | human | 2026-11-26 | Q: Should one network address be limited in the code emails it triggers, and what happens at a daily total? | A: At most 10 code emails an hour per network address across all emails; when 500 code emails have gone out in a day the operator is alerted and sending continues under the per-address limits. | settles: REQ-038
+A-052 | human | 2026-11-26 | Q: Which emails are accepted? | A: Accepted as recommended: only plain ASCII email addresses. | settles: REQ-039
+A-053 | human | 2026-11-26 | Q: Where are the code limit counters kept? | A: Request and wrong-try counters are kept in the database for one hour, holding only a keyed hash of the email or address; the daily total of code emails holds no email or address and is kept for one day. | settles: REQ-029, REQ-037
+A-054 | human | 2026-11-26 | Q: Does a code email that fails to send cancel the earlier working code? | A: Accepted as recommended: no; only a code actually sent cancels earlier ones. | settles: REQ-002 | importance: priority
+A-015 AMENDED | human | 2026-11-26 | Q: How does the sign-in code work? | A: 6 digits, valid for 10 minutes, usable once; after 5 wrong tries the code stops working and a new one must be requested; a new code that is actually sent cancels every earlier code for that email requested from the same network address. | settles: MECH-01 | importance: priority
+A-042 AMENDED | human | 2026-11-26 | Q: What data does the product hold? | A: As little as possible: storage holds only each account's email and creation date, its sessions and live codes, for one hour the request and wrong-try counters holding only a keyed hash of the email or address, and for one day the total of code emails sent; who is online, busy or in a call is kept only in memory while live and never written to storage. | settles: REQ-029
+A-026 AMENDED | model_proposed | 2026-11-26 | Q: What personal data is held and for how long? | A: Only each account's email and creation date, its sessions and unexpired codes, for one hour the request and wrong-try counters holding only a keyed hash of the email or address, and for one day the total of code emails sent; used or expired codes and ended sessions are deleted; accounts are deleted only by the operator on request. | settles: REQ-029
+A-055 | human | 2026-11-26 | Q: When one email has several live codes, which code does a wrong try count against? | A: A typed code is checked against each live code of the email; a wrong try counts only against the codes requested from the network address that typed it. | settles: REQ-002 | importance: priority
+A-001 AMENDED | human | 2026-11-26 | Q: Who can sign in? | A: Anyone with a plain ASCII email address; the account is made the first time they sign in with a code. | settles: MECH-02 | importance: priority
+A-058 | human | 2026-11-26 | Q: When a shared network address has reached 10 wrong tries in the hour, is a correct code from that address refused? | A: Accepted as recommended: yes; the address limit wins, a correct code from that address is refused until the hour passes and still works from another address. | settles: REQ-001, REQ-037 | importance: priority
+A-059 | human | 2026-11-26 | Q: How is the operator alerted when 500 code emails go out in a day? | A: Accepted as recommended: by an email to the operator's own address; the only-the-code-email rule applies to people using the product, not the operator. | settles: REQ-038, REQ-030
+A-060 | human | 2026-11-26 | Q: Who besides the operator may receive an email other than the code they asked for? | A: Accepted as recommended: nobody; anyone other than the operator only ever gets the sign-in code they asked for, and the operator gets the daily-total alert and, when they are built, the server-error alerts. | settles: REQ-030 | unchanged: REQ-027
+A-018 AMENDED | human | 2026-11-26 | Q: Which emails does the product send? | A: To anyone other than the operator, only the sign-in code they asked for; to the operator's own address, the daily-total alert and, when built, server-error alerts. | settles: MECH-01
+```
+
+```vid-prd
+REQ-002 AMENDED | functional | T0 | A sign-in code has 6 digits, works for 10 minutes and only once; a typed code is checked against each live code of the email, and after 5 wrong tries from the network address that requested a code that code stops working; a new code that is actually sent makes every earlier code for that email requested from the same network address stop working. | fail-if: (1) a code signs someone in more than 10 minutes after it was sent; (2) a code signs someone in a second time; (3) a code still signs someone in after 5 wrong tries against it from the network address that requested it; (4) an earlier code still signs someone in after a newer one was sent for the same email at the request of the same network address; (5) a code is not 6 digits; (6) a request from another network address, or a request whose email failed to send, makes an earlier working code stop working; (7) wrong tries from one network address make a code requested from another network address stop working | serves: keeps anyone but the mailbox owner from guessing or reusing a code, and keeps others from cancelling it | authority: authoritative | source: A-015, A-049, A-054, A-055 | covers: DIM-otp-code, DIM-identity/signin_reauth, DIM-nfr-security | phase: pilot | feature: FEAT-01 | plain: A code has 6 digits, works once for 10 minutes, dies after 5 wrong tries from its own address, and only your own newer code kills it. | arms: 1 retained, 2 retained, 3 withdrawn A-055, 4 withdrawn A-049, 5 retained
+REQ-029 AMENDED | data_entity | T1 | Storage holds only each account's email and creation date, its sessions and live codes, for one hour the request and wrong-try counters holding only a keyed hash of the email or address, whose key is not stored with them, and for one day the total of code emails sent; each live code records its requesting network address only as a keyed hash; who is online, busy or in a call is kept only in memory while live and never written to storage; used or expired codes and ended sessions are deleted; accounts are deleted only by the operator on request. | fail-if: (1) storage holds any personal data beyond email, creation date, sessions, codes and keyed-hash counters; (2) online, busy or call state is written to storage, or a counter is kept over one hour, holds a plain email or address, or holds a hash computable without a key kept apart from the counters; (3) a used or expired code or an ended session is still stored; (4) an account has no recorded creation date; (5) the daily total holds an email or address or is kept over one day; (6) a stored code holds its requesting network address in plain form or as a hash computable without a key kept apart from storage | serves: as little personal data as possible while the code limits hold | authority: provisional | confirms_via: owner-decision/no | source: A-042, A-053, A-026 | covers: DIM-nfr-privacy, DIM-data-integrity/provenance | phase: pilot | feature: FEAT-01 | plain: Storage keeps your email, account date, sessions, live codes and one hour of hashed counts; who is online lives only in memory. | arms: 1 withdrawn A-053, 2 withdrawn A-053, 3 retained, 4 retained
+REQ-036 | functional | T1 | Before the person called presses Accept, no session description, connection candidate or network address passes between the two browsers in either direction, and the person called creates no peer connection; the connection is set up only after Accept. | fail-if: (1) before Accept either browser receives anything that reveals the other's network address; (2) a declined, cancelled or unanswered call reveals either person's address; (3) the person called creates a peer connection before Accept | serves: nobody can learn where a person is by ringing them | authority: authoritative | source: A-048 | covers: DIM-lookup-disclosure, DIM-nfr-privacy | phase: pilot | feature: FEAT-03 | plain: Until the person called presses Accept, neither side can learn the other's network address.
+REQ-037 | functional | T1 | One network address gets at most 10 wrong code tries an hour across all emails; further tries are refused without being checked, and the person is told to try again later. | fail-if: (1) an 11th wrong try within an hour from one network address is checked against a code; (2) the refusal differs between emails with and without an account; (3) after 10 wrong tries within an hour from one network address, a further try from that address signs someone in, even with a working code | serves: slow guessing across many accounts from one place stops | authority: authoritative | source: A-050 | covers: DIM-otp-code, DIM-nfr-security | phase: pilot | feature: FEAT-01 | plain: One network address gets at most 10 wrong code tries an hour, whatever emails it tries.
+REQ-038 | functional | T1 | One network address triggers at most 10 code emails an hour across all emails, and a refused request is told to try again later; when 500 code emails have gone out in a day the operator is alerted by an email to the operator's own address and sending continues under the per-address limits. | fail-if: (1) an 11th code email within an hour at the request of one network address is sent; (2) the 500th code email in a day sends no alert email to the operator; (3) reaching 500 code emails in a day stops code emails for everyone | serves: the product cannot be used to spam people, and nobody can stop everyone's sign-in | authority: authoritative | source: A-051, A-059 | covers: DIM-otp-code, DIM-nfr-security | phase: pilot | feature: FEAT-01 | plain: One network address can trigger at most 10 code emails an hour; at 500 a day the operator is emailed.
+REQ-039 | functional | T1 | Only plain ASCII email addresses are accepted wherever an email is typed. | fail-if: (1) an email holding any non-ASCII or invisible character is accepted at sign-in or in the call box | serves: lookalike letters cannot impersonate a known caller | authority: authoritative | source: A-052 | covers: DIM-data-integrity/record_identity, DIM-lookup-disclosure | phase: pilot | feature: FEAT-01 | plain: Only plain ASCII email addresses are accepted. | cross-cutting: sign-in screen, code request response, call input screen, call request response
+REQ-001 AMENDED | functional | T0 | Entering an email and asking for a code sends a sign-in code to that email; entering that code while it still works signs the person in, unless their network address has reached its hourly wrong-try limit, and the first sign-in with an email makes its account. | fail-if: (1) a person is signed in without entering the code sent to their email; (2) a working code entered in time does not sign the person in, while their network address is under its hourly wrong-try limit; (3) a first-time email that enters its code has no account and cannot call or be called | serves: the one way into the product, owned by whoever controls the mailbox | authority: authoritative | source: seed, A-001, A-058 | covers: DIM-identity/verification | phase: pilot | feature: FEAT-01 | plain: You sign in by entering the code sent to your email, and your account is made the first time you do. | arms: 1 retained, 2 withdrawn A-058, 3 retained
+REQ-030 AMENDED | functional | T1 | The only email the product sends to anyone other than the operator is the sign-in code that was asked for; the operator's own address gets only the daily-total alert and, when they are built, the server-error alerts. | fail-if: (1) the product sends anyone other than the operator an email they did not ask for; (2) the product sends anyone other than the operator any email other than a sign-in code; (3) the product sends the operator any email other than the daily-total alert and server-error alerts | serves: asking for a code is the only consent needed, so no unsubscribe exists | authority: authoritative | source: A-018, A-059, A-060 | covers: DIM-consent | phase: pilot | feature: FEAT-01 | plain: Nobody but the operator ever gets an email other than the sign-in code they asked for. | arms: 1 withdrawn A-059, 2 withdrawn A-059
+```
+
+```vid-prd-findings
+F-87 | review | blocking | REQ-002 | repaired | evidence: round 1 — several live codes per email left wrong-try counting undefined; owner ruled A-055
+F-88 | review | blocking | REQ-029, REQ-038, REQ-037 | repaired | evidence: round 1 — the one-hour counter limit contradicted the daily total; owner ruled A-053
+F-89 | review | blocking | REQ-037 | repaired | evidence: round 1 — a correct guess after the limit could still sign in; arm 3 added
+F-90 | review | blocking | REQ-038, REQ-023, A-045 | repaired | evidence: round 1 — the daily stop let anyone lock everyone out; owner ruled an alert instead, A-051
+F-91 | review | advisory | REQ-039 | repaired | evidence: round 1 — unmarked cross-cutting; surfaces named
+F-92 | review | advisory | A-001, A-052 | repaired | evidence: round 1 — A-001 restated for ASCII emails, owner ruling
+F-93 | review | advisory | A-026, A-053 | repaired | evidence: round 1 — A-026 amended to the new data held
+F-94 | review | advisory | REQ-037, REQ-038 | repaired | evidence: round 1 — refusal wording added: told to try again later
+F-95 | review | advisory | REQ-029 | repaired | evidence: round 1 — unkeyed hashes reversible; keyed hash with the key kept apart
+F-96 | review | blocking | REQ-037, REQ-001 | repaired | evidence: round 2 — a correct code refused on a blocked address contradicted REQ-001; owner ruled A-058
+F-97 | review | blocking | REQ-038, REQ-030 | repaired | evidence: round 2 — the operator alert had no channel; owner ruled email, A-059
+F-98 | review | blocking | REQ-029 | repaired | evidence: round 2 — the address kept with each code; keyed hash only, arm 6
+F-99 | review | blocking | REQ-030 | repaired | evidence: round 3 — the reworded email rule let non-users be emailed; owner restored it, A-060
+F-100 | review | blocking | REQ-030, REQ-027, A-024 | repaired | evidence: round 3 — operator error alerts would break arm 3; server-error alerts allowed
+F-101 | review | blocking | A-018, A-059 | repaired | evidence: round 3 — A-018 disagreed with A-059; restated
+```
+
+review: delta, round 3, 15 findings
+
+### 2026-11-27 (final review repairs)
+
+```vid-prd-answers
+A-061 | human | 2026-11-26 | Q: May counters and the daily total outlive their one hour or one day until the next cleanup? | A: Accepted as recommended: counters over one hour and daily totals over one day are deleted at the next cleanup run, which runs at least every 15 minutes. | settles: REQ-029
+```
+
+```vid-prd
+REQ-029 AMENDED | data_entity | T1 | Storage holds only each account's email and creation date, its sessions and live codes, for one hour the request and wrong-try counters holding only a keyed hash of the email or address, whose key is not stored with them, and for one day the total of code emails sent; each live code records its requesting network address only as a keyed hash; who is online, busy or in a call is kept only in memory while live and never written to storage; used or expired codes and ended sessions are deleted; accounts are deleted only by the operator on request. | fail-if: (1) storage holds any personal data beyond email, creation date, sessions, codes and keyed-hash counters; (2) online, busy or call state is written to storage, or a counter older than one hour survives the next cleanup run (at least every 15 minutes), holds a plain email or address, or holds a hash computable without a key kept apart from the counters; (3) a used or expired code or an ended session is still stored; (4) an account has no recorded creation date; (5) the daily total holds an email or address or, older than one day, survives the next cleanup run; (6) a stored code holds its requesting network address in plain form or as a hash computable without a key kept apart from storage | serves: as little personal data as possible while the code limits hold | authority: provisional | confirms_via: owner-decision/no | source: A-042, A-053, A-026, A-061 | covers: DIM-nfr-privacy, DIM-data-integrity/provenance | phase: pilot | feature: FEAT-01 | plain: Storage keeps your email, account date, sessions, live codes and one hour of hashed counts; who is online lives only in memory. | arms: 1 retained, 2 withdrawn A-061, 3 retained, 4 retained, 5 withdrawn A-061, 6 retained
+```
+
+review: final, round 3, 0 findings, see 2026-11-26 — final review

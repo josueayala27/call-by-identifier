@@ -1,0 +1,840 @@
+#!/bin/sh
+# Purpose: ViD court — the Test Inventory as a court input. Reads the
+# ```vid-inventory block in INVENTORY.md (ROW-NNN | kind | subject |
+# actor/state | marker | obligation | derived-from | test, plus optional
+# trailing "origin:" / "proved-red:" fields; the v0.7 row classes
+# rule/difference/exception/suppression are judged by checks/census.sh) and
+# the project's route table from the generated, ratified route extractor
+# (checks/extractors/routes.sh, "ok <route>" lines — the plugin ships no
+# framework parser; the extractor encodes the scaffold's routing convention).
+# Default fails closed on a code route with no inventory row, and on a row
+# citing a ledger test that does not exist (promissory refs are invalid).
+# Once any row carries proved-red, a row citing a test WITHOUT proved-red
+# counts as owed — an unproved test is not evidence (§3.6). Hostility rows
+# (hostility | HOS-NNN | attempt | protects: | disable: | test, §4) are the
+# fail-first ritual's mechanical half and are judged harder: a missing
+# protects:, a missing or "none" disable: toggle, and a cited probe with no
+# proved-red are GAPs that fail the commit, because a probe never observed
+# failing is evidence with the polarity that reassures. --strict
+# additionally fails on rows still owed, on a Tier-0 rule row with no
+# hostility sibling, and on orphan surfaces (a static route no other
+# app-source file links to). --report prints everything and
+# always exits 0 (the coverage join's input). Presence-gated: inactive when
+# INVENTORY.md is absent; route-table checks inactive (stated, never silent)
+# when no routes extractor exists.
+# v0.8.1d, inside a repository: (1) a cited test path resolves against the
+# commit under construction — the staged index, then HEAD — never the
+# working tree (a row citing a worktree-only file fails its law commit:
+# the citation-order court), and must be a file, not a directory; (2) the
+# proved-red stamp is JOINED, not merely present — the sha resolves, the
+# cited file exists at it, and the file there names the row (its id or its
+# REQ) — a row can cite a file absent at the stamped sha, or one that
+# never names the row; default mode joins the rows
+# this commit stages, --strict/--report join every row; (3) a golden-set
+# row's `divergence: DIF-NNN` must name a difference row that exists and
+# carries `paying-step:`, and its `golden:` fixture must exist at the commit.
+# All three count under missing-tests (the coverage join's bucket).
+# v0.9.2 (3.2, R3/R4; 3.10, R15), gated on the block's first line inside the
+# fence being `grammar: 0.9.2`: an owed reason reads `owed: <class> —
+# <detail>` with class in the closed table (templates/INVENTORY.md) and a
+# non-empty detail — anything else is a GAP at every commit (`unclassed
+# deferral`); the summary's `owed=O` keeps its name and position (the
+# coverage join reads it) and gains the per-class split with `other=J`; a
+# `par:` line over the ROW rows (materialised + legitimate + deploy-owed =
+# rows, other = 0) is the red gate's denominator; a seam with `credentials:
+# not-yet` born `probe: owed` is a GAP — the legal shape is
+# `unreachable-risk(credentials not-yet)`. A block without the line keeps
+# the pre-0.9.2 reading, byte-identical.
+# v0.9.3 (3.13, R22), gated on `grammar: 0.9.3` as that first line — which
+# also applies every 0.9.2 check above: every seam whose `probe:` is `owed`
+# is OWED completion debt, named, whatever its credentials and whether or
+# not client code touches it (0.9.2 rejected only the `not-yet` + `owed`
+# pair, and seams.sh judges only staged client lines, so an owed seam no
+# client touched survived "complete"); the coverage join consumes it with
+# the other counters. The summary's parenthetical gains `seam-probes=S`.
+# v0.9.7.2 (3.3, R4): `protected` prints the rows a breadth-first plan may
+# never place in a hardening step, by this court's own tier reading and its
+# hostility join. v0.9.7.3 (3.11, R11) narrows it to three routes: a row
+# derived from a Tier-0 PRD item — a Tier-0 requirement of 2d or a Tier-0
+# invariant (INV-), the effective set, amendments applied, `later` items left
+# out — (`from=<REQ|INV>`), or named by a hostility row's protects: by its
+# ROW id (`from=<HOS>`); the plan's `protected:` line is the third, read by
+# checks/plan.sh. The rule-origin tie and a probe's REQ or rule target
+# reaching every row tied to it are gone. Then `owed <ROW> by=<id>` for each
+# obligation joined to a protected row by the same routes: an unpaid
+# hostility row (its test owed, or cited without proved-red) naming it by ROW
+# id, or protecting — in 2d's per-probe meaning (prot_reqs) — a Tier-0 item
+# it derives from (HOS-…); a Tier-0 item it derives from that no probe
+# protects (REQ-…, INV-…). Other obligations remain completion debt through
+# --strict and coverage, unchanged. Last `protected rows=<n> owed=<k>`. Read
+# by checks/plan.sh (the placement check) and checks/metrics.sh step-state
+# (done). A reader: it writes nothing and needs no placement block.
+# v0.9.8 (3.3, R6): --report also lists `authority-changed row=<id> since=<commit> what=<ids>` for each row whose
+# authority bundle changed since it was last looked at (checks/brief.sh authority --changed), then `authority:
+# changed=<n>` — a flag, never a wipe, and never a gate.
+# v0.26.10.9 (R3): a new owed class, `spec-only` — a row ratified at a spec-only init whose test is not written yet;
+# its detail is exactly `first stage`, or `ticket` for a row appended under ticket mode (any other detail is
+# unclassed). Legitimate on the par line; the per-class split shows `spec-only=S` after `prerequisite=`.
+# 0.26.10.29.3 (R5): every mode but protected prints `NOTE  ROW-n — no control sibling: the allowed case is never shown
+# working (§4.4)` for each ROW a hostility row's protects: names by its ROW id when no row's obligation opens "control of
+# ROW-n", then `inventory notes: control-siblings=<n>` after the summary line when any is printed; never OWED, no exit changes.
+# 0.26.10.29.3 (R7): default and --strict refuse (GAP) a rule row new against HEAD (every row outside a repository) whose
+# inline census command writes to standard error, as checks/census.sh refuses it at commit; words that read as a missing
+# path get the advice to use an extractor-path census, any others are quoted.
+# 0.26.10.29.3 (R9, F53): every reading first runs `checks/eol.sh file` on INVENTORY.md and PRD.md (impact: its after
+# files) and refuses a CR LF file with eol.sh's line.
+# 0.26.10.29.4 (phase 3 R2): `cites <id> …` prints, verbatim, every line of the working INVENTORY.md that depends on one
+# of the ids (a ROW's derived-from, protects:, origin:, an exception's or suppression's RULE-NNN), following the chain
+# until nothing new is added; read-only, exit 0, no repository needed (init's reading after each PRD amendment).
+# Usage: sh checks/inventory.sh [--strict|--report|protected] | sh checks/inventory.sh impact [--base <commit>] [--prd <file>] [--inventory <file>] [--detail] | sh checks/inventory.sh cites <id> …
+# serves: both (0.26.10.28.4, M9)
+set -eu
+_vidwsl=${0%/*}/lib/wsl.sh; [ ! -f "$_vidwsl" ] || . "$_vidwsl"   # 0.26.10.29.3 (R6): on native Windows, with the owner's yes, this court re-runs under WSL
+IFS='
+'
+
+MODE=default
+case "${1:-}" in --strict) MODE=strict ;; --report) MODE=report ;; protected) MODE=protected ;; esac
+
+# v0.26.10.3 (R4): impact — what a change to the law would do, by post-commit's rule (R1), read-only, exit 0.
+#   sh checks/inventory.sh impact [--base <commit>] [--prd <file>] [--inventory <file>] [--detail] [--tickets]
+# The before is PRD.md and INVENTORY.md at --base (default HEAD); the after the files given (default the working
+# tree's). Under an after inventory block whose first fence line is `grammar: 0.9.3`, for each ROW row present in both:
+# its own obligation column changed → RESET (post-commit's `amended … by=obligation`, the wipe); else an item in its
+# derived-from changed its effective fail-if (checks/prd.sh --failifs) → TO CONFIRM (post-commit's `law-changed`); a
+# row with both is reset only; a row new in the after gets neither. Prints
+#   impact reset=<n> reset-passing=<n> reset-kept=<n> confirm=<n> confirm-passing=<n> confirm-kept=<n>
+#   reset <ROW-id,…|->
+#   confirm <ROW-id,…|->
+# "passing" and "kept" are the rows' current states: passing as checks/metrics.sh test-state reads it, kept a latest
+# eligible verdict KEPT (checks/metrics.sh row-state --table); without checks/metrics.sh both read `uncounted`.
+# --detail prints only the sets, `reset<TAB><row>` and `confirm<TAB><row><TAB><changed items>` a line, no states:
+# checks/hooks/post-commit's reading (HEAD~1 as the before, HEAD's committed files as the after), so a question's count
+# and what lands come from this one calculation.
+# --tickets (v0.26.10.25.5, R2): every inventory line by its id: `impact reset= added= reached= records=`, then `reset|added|
+# reached|record <ids|->` and `state <id> <state>` (.vid/decide/state, else the handed record, else planned); with --detail
+# `reset|added<TAB><id>[<TAB>transition]`, `reached|record<TAB><id>[<TAB><the changed items it cites>]`.
+# GM-3 U1: on every path impact exits 0 when it has nothing to print, and non-zero only when it fails.
+if [ "${1:-}" = impact ]; then
+  shift; IMB=HEAD; IMP=PRD.md; IMI=INVENTORY.md; IMD=no; IMK=no
+  imusage() { echo 'ViD inventory impact: usage — sh checks/inventory.sh impact [--base <commit>] [--prd <file>] [--inventory <file>] [--detail] [--tickets]' >&2; exit 2; }
+  while [ $# -gt 0 ]; do case "$1" in --base) [ $# -ge 2 ] || imusage; IMB=$2; shift 2 ;; --prd) [ $# -ge 2 ] || imusage; IMP=$2; shift 2 ;; --inventory) [ $# -ge 2 ] || imusage; IMI=$2; shift 2 ;; --detail) IMD=yes; shift ;; --tickets) IMK=yes; shift ;; *) imusage ;; esac; done
+  git rev-parse -q --verify "$IMB^{commit}" > /dev/null 2>&1 || { echo "ViD inventory impact: --base $IMB names no commit" >&2; exit 2; }
+  # 0.26.10.29.3 (R9, F53): the after files, through eol.sh's test first
+  if [ -f "$(dirname "$0")/eol.sh" ]; then sh "$(dirname "$0")/eol.sh" file "$IMI" "$IMP" || exit 1; fi
+  IMT=$(mktemp -d); trap 'rm -rf "$IMT"' EXIT
+  git show "$IMB:INVENTORY.md" > "$IMT/inv.old" 2> /dev/null || : > "$IMT/inv.old"
+  git show "$IMB:PRD.md" > "$IMT/prd.old" 2> /dev/null || : > "$IMT/prd.old"
+  if [ -f "$IMI" ]; then cp "$IMI" "$IMT/inv.new"; else : > "$IMT/inv.new"; fi
+  if [ -f "$IMP" ]; then cp "$IMP" "$IMT/prd.new"; else : > "$IMT/prd.new"; fi
+  imblk() { sed -n '/^```vid-inventory/,/^```$/p' "$1" | sed '1d;$d'; }
+  # v0.26.10.25.5 (R2): --tickets, the count of a ticket-mode draft (checks/land.sh): every line by its id, of any kind; a journey's transitions follow their row; the
+  # states from .vid/decide/state and the handed record. A difference with no paying-step: is a record: counted, owes nothing
+  if [ "$IMK" = yes ]; then
+    IMR=checks/prd.sh; [ -f "$IMR" ] || IMR=$(dirname "$0")/prd.sh
+    { sh "$IMR" --failifs "$IMT/prd.old" 2> /dev/null || true; } > "$IMT/f.old"; { sh "$IMR" --failifs "$IMT/prd.new" 2> /dev/null || true; } > "$IMT/f.new"
+    awk -F'\t' 'FILENAME == ARGV[1] { o[$1] = $2; next } { n[$1] = 1; if (!($1 in o) || o[$1] != $2) print $1 } END { for (k in o) if (!(k in n)) print k }' "$IMT/f.old" "$IMT/f.new" > "$IMT/reqs"
+    # an item that is no REQ (an INV, whose fail-if is its statement) reaches by its whole effective line
+    for w in old new; do { sh "$IMR" --effective "$IMT/prd.$w" 2> /dev/null || true; } | awk -F'|' '{ k = $1; gsub(/[ \t]/, "", k); sub(/AMENDED$/, "", k) } k ~ /^[A-Z]+-[0-9]+$/ && k !~ /^REQ-/ { l = $0; sub(/^[^|]*\|/, "", l); print k "\t" l }' > "$IMT/e.$w"; done
+    awk -F'\t' 'FILENAME == ARGV[1] { o[$1] = $2; next } { if (($1 in o) && o[$1] != $2) print $1 }' "$IMT/e.old" "$IMT/e.new" >> "$IMT/reqs"
+    imblk "$IMT/inv.old" > "$IMT/old"; imblk "$IMT/inv.new" > "$IMT/new"
+    { awk -F'\t' '{ print $1 "\t" $2 }' .vid/decide/state 2> /dev/null || true; sed -n 's/^row \([^ ]*\) \([^ |]*\).*/\1	\2/p' .vid/tw/handed 2> /dev/null || true; } > "$IMT/st"
+    awk -F'|' -v OLD="$IMT/old" -v RQ="$IMT/reqs" -v ST="$IMT/st" -v OUT="$IMT/sets" '
+      function trim(s) { gsub(/^[ \t]+|[ \t]+$/, "", s); return s }
+      function key(l,   a, k) { split(l, a, "|"); k = trim(a[1]); return (k ~ /^(rule|difference|exception|suppression|hostility|seam)$/) ? trim(a[2]) : k }
+      function norm(l) { gsub(/[ \t]+/, " ", l); return trim(l) }
+      function tcount(l,   p, r, t, q) { p = index(l, "transitions:"); if (!p) return 0; r = " " substr(l, p + 12); t = 0; while ((q = index(r, " " (t + 1) ". ")) > 0) { r = substr(r, q + 1); t++ } return t }
+      function cites(l,   a, n, i, k, o, m, b, j, x) { n = split(l, a, "|"); k = trim(a[1]); o = ""
+        if (k ~ /^ROW-[0-9]+$/) o = trim(a[7])
+        for (i = 3; i <= n; i++) { x = trim(a[i]); if (x ~ /^(protects|origin):/) { sub(/^[a-z]+:[ \t]*/, "", x); o = o " " x } }
+        gsub(/,/, " ", o); return o }
+      BEGIN { while ((getline l < OLD) > 0) { if (l ~ /^[ \t]*(#|$|grammar:)/) continue; k = key(l); if (k == "" || (k in O)) continue; O[k] = norm(l); OT[k] = tcount(l) }
+        while ((getline l < RQ) > 0) C[l] = 1; while ((getline l < ST) > 0) { split(l, x, "\t"); S[x[1]] = x[2] } }
+      /^[ \t]*(#|$|grammar:)/ { next }
+      { k = key($0); if (k == "" || (k in seen)) next; seen[k] = 1; L[++n] = k; T[k] = $0; NT[k] = tcount($0)
+        rec[k] = (trim($1) == "difference" && $0 !~ /\|[ \t]*paying-step:/)
+        if (!(k in O)) kind[k] = "added"; else if (O[k] != norm($0)) kind[k] = "reset" }
+      END { for (i = 1; i <= n; i++) { k = L[i]; if (kind[k] == "") continue; if (rec[k]) { print "record\t" k > OUT; continue }
+          print kind[k] "\t" k > OUT; m = (NT[k] > OT[k]) ? NT[k] : OT[k]; for (j = 1; j <= m; j++) print kind[k] "\t" k "-T" j "\ttransition" > OUT }
+        for (i = 1; i <= n; i++) { k = L[i]; if (kind[k] != "") continue; m = split(cites(T[k]), a, " "); it = ""
+          for (j = 1; j <= m; j++) if (a[j] != "" && ((a[j] in C) || kind[a[j]] != "") && !index(" " it " ", " " a[j] " ")) it = it (it == "" ? "" : " ") a[j]
+          if (it != "") { print (rec[k] ? "record" : "reached") "\t" k "\t" it > OUT } }
+        for (k in S) if ((k in kind) || index(k, "-T")) print "state\t" k "\t" S[k] > OUT }' "$IMT/new"
+    touch "$IMT/sets"
+    # GM-3 U1: nothing to print is exit 0 (grep -v found no line and exited 1 under set -e); only a failure exits non-zero
+    if [ "$IMD" = yes ]; then awk '!/^state\t/' "$IMT/sets"; exit 0; fi
+    cnt() { awk -F'\t' -v k="$1" '$1 == k && $3 != "transition"' "$IMT/sets" | grep -c . || true; }
+    ids() { awk -F'\t' -v k="$1" '$1 == k && $3 != "transition" { o = o (o == "" ? "" : ",") $2 } END { print (o == "" ? "-" : o) }' "$IMT/sets"; }
+    echo "impact reset=$(cnt reset) added=$(cnt added) reached=$(cnt reached) records=$(cnt record)"
+    for k in reset added reached record; do echo "$k $(ids $k)"; done
+    awk -F'\t' '$1 == "state" { S[$2] = $3 } $1 == "reset" || $1 == "reached" { if ($3 != "transition") o[++n] = $2 } END { for (i = 1; i <= n; i++) print "state " o[i] " " ((o[i] in S) ? S[o[i]] : "planned") }' "$IMT/sets"
+    exit 0
+  fi
+  : > "$IMT/sets"
+  case "$(imblk "$IMT/inv.new" | grep -v '^[[:space:]]*$' | head -n 1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')" in
+    'grammar: 0.9.3')
+      imblk "$IMT/inv.old" | grep -E '^[[:space:]]*ROW-' > "$IMT/old" || true
+      imblk "$IMT/inv.new" | grep -E '^[[:space:]]*ROW-' > "$IMT/new" || true
+      : > "$IMT/reqs"
+      if [ -f checks/prd.sh ]; then
+        sh checks/prd.sh --failifs "$IMT/prd.old" > "$IMT/f.old" 2> /dev/null || : > "$IMT/f.old"
+        sh checks/prd.sh --failifs "$IMT/prd.new" > "$IMT/f.new" 2> /dev/null || : > "$IMT/f.new"
+        awk -F'\t' 'NR == FNR { o[$1] = $2; next } ($1 in o) && o[$1] != $2 { print $1 }' "$IMT/f.old" "$IMT/f.new" > "$IMT/reqs"
+      fi
+      awk -F'|' -v of="$IMT/old" -v rf="$IMT/reqs" '
+        function trim(s) { gsub(/^[ \t]+|[ \t]+$/, "", s); return s }
+        BEGIN { while ((getline l < of) > 0) { split(l, a, "|"); ob[trim(a[1])] = trim(a[6]) } while ((getline l < rf) > 0) chg[l] = 1 }
+        { id = trim($1); if (!(id in ob) || (id in done)) next; done[id] = 1
+          if (ob[id] != trim($6)) { print "reset\t" id; next }
+          it = ""; n = split(trim($7), t, /[ ,]+/); for (k = 1; k <= n; k++) if ((t[k] in chg) && !((id, t[k]) in s)) { s[id, t[k]] = 1; it = it (it == "" ? "" : ",") t[k] }
+          if (it != "") print "confirm\t" id "\t" it }' "$IMT/new" > "$IMT/sets" ;;
+  esac
+  if [ "$IMD" = yes ]; then cat "$IMT/sets"; exit 0; fi
+  NRS=$(awk -F'\t' '$1 == "reset"' "$IMT/sets" | grep -c . || true); NCF=$(awk -F'\t' '$1 == "confirm"' "$IMT/sets" | grep -c . || true)
+  RP=0; RK=0; CP=0; CK=0
+  if [ $((NRS + NCF)) -gt 0 ]; then
+    if [ -f checks/metrics.sh ]; then
+      sh checks/metrics.sh test-state --rows "$(cut -f2 "$IMT/sets" | paste -sd, -)" 2> /dev/null | sed -n 's/^test-state row=\([^ ]*\) .* passing=yes .*$/\1/p' > "$IMT/pass"
+      sh checks/metrics.sh row-state --table 2> /dev/null | awk -F'\t' '$3 == "KEPT" { print $1 }' > "$IMT/kept"
+      set -- $(awk -F'\t' 'FILENAME == ARGV[1] { P[$1] = 1; next } FILENAME == ARGV[2] { K[$1] = 1; next }
+        { if ($2 in P) p[$1]++; if ($2 in K) k[$1]++ } END { print p["reset"] + 0; print k["reset"] + 0; print p["confirm"] + 0; print k["confirm"] + 0 }' "$IMT/pass" "$IMT/kept" "$IMT/sets")
+      RP=$1; RK=$2; CP=$3; CK=$4
+    else RP=uncounted; RK=uncounted; CP=uncounted; CK=uncounted; fi
+  fi
+  echo "impact reset=$NRS reset-passing=$RP reset-kept=$RK confirm=$NCF confirm-passing=$CP confirm-kept=$CK"
+  echo "reset $(awk -F'\t' '$1 == "reset" { o = o (o == "" ? "" : ",") $2 } END { print (o == "" ? "-" : o) }' "$IMT/sets")"
+  echo "confirm $(awk -F'\t' '$1 == "confirm" { o = o (o == "" ? "" : ",") $2 } END { print (o == "" ? "-" : o) }' "$IMT/sets")"
+  exit 0
+fi
+
+# 0.26.10.29.4 (phase 3 R2): cites — the inventory lines that depend on the ids named, read-only, exit 0, no repository
+# needed: init has no committed INVENTORY.md for impact to compare with. A line depends on an id by cites()'s reading in
+# impact (a ROW's derived-from, protects:, origin:) or, for an exception or suppression, by the RULE-NNN its census-class
+# field (the 4th) names. Every line printed adds its own id, and the reading repeats until nothing new is added, so a
+# probe protecting a rule derived from the amended item is listed too. Prints the lines verbatim, in the block's order;
+# silent when none depends.
+if [ "${1:-}" = cites ]; then
+  shift
+  [ $# -gt 0 ] || { echo 'ViD inventory cites: usage — sh checks/inventory.sh cites <id> …' >&2; exit 2; }
+  [ -f INVENTORY.md ] || exit 0
+  if [ -f "$(dirname "$0")/eol.sh" ]; then sh "$(dirname "$0")/eol.sh" file INVENTORY.md || exit 1; fi
+  CIDS=$(printf '%s ' "$@" | tr ',\t' '  ')   # the ids, one space between (IFS is a newline here)
+  sed -n '/^```vid-inventory/,/^```$/p' INVENTORY.md | sed '1d;$d' | awk -F'|' -v IDS="$CIDS" '
+    function trim(s) { gsub(/^[ \t]+|[ \t]+$/, "", s); return s }
+    function key(l,   a, k) { split(l, a, "|"); k = trim(a[1]); return (k ~ /^(rule|difference|exception|suppression|hostility|seam)$/) ? trim(a[2]) : k }
+    function cites(l,   a, n, i, k, o, x) { n = split(l, a, "|"); k = trim(a[1]); o = ""
+      if (k ~ /^ROW-[0-9]+$/) o = trim(a[7])
+      if (k ~ /^(exception|suppression)$/) { x = trim(a[4]); if (x ~ /^RULE-[0-9]+$/) o = o " " x }
+      for (i = 3; i <= n; i++) { x = trim(a[i]); if (x ~ /^(protects|origin):/) { sub(/^[a-z]+:[ \t]*/, "", x); o = o " " x } }
+      gsub(/,/, " ", o); return o }
+    /^[ \t]*(#|$|grammar:)/ { next }
+    { L[++n] = $0; K[n] = key($0); C[n] = cites($0) }
+    END { m = split(IDS, a, " "); for (i = 1; i <= m; i++) if (a[i] != "") S[a[i]] = 1
+      do { more = 0
+        for (i = 1; i <= n; i++) { if (P[i]) continue; m = split(C[i], b, " ")
+          for (j = 1; j <= m; j++) if (b[j] in S) { P[i] = 1; if (K[i] != "" && !(K[i] in S)) { S[K[i]] = 1; more = 1 } break } }
+      } while (more)
+      for (i = 1; i <= n; i++) if (P[i]) print L[i] }'
+  exit 0
+fi
+
+# Presence-gated: silent when inactive — courts speak only to reject or report.
+[ -f INVENTORY.md ] || exit 0
+# 0.26.10.29.3 (R9, F53): eol.sh's test on the spec files this court reads, first — a CR LF file is refused, never misread
+if [ -f "$(dirname "$0")/eol.sh" ]; then sh "$(dirname "$0")/eol.sh" file INVENTORY.md PRD.md || exit 1; fi
+PREFIXES=''
+# v0.26.10.26.7 (R5 a, W-6): a ticket-mode spec repository holds no app source, so no placement is read; the other checks run
+TMODE=no; grep -q '^mode:[[:space:]]*tickets' .vid/RUN-STATE.md 2>/dev/null && TMODE=yes
+if [ "$MODE" != protected ] && [ "$TMODE" = no ]; then
+[ -f CLAUDE.md ] || { echo 'ViD inventory: CLAUDE.md missing — failing closed.' >&2; exit 1; }
+PREFIXES=$(sed -n '/^```vid-placement/,/^```$/p' CLAUDE.md | sed '1d;$d' | sed 's/[[:space:]]*$//' | grep -v '^$' || true)
+[ -n "$PREFIXES" ] || { echo 'ViD inventory: no ```vid-placement block in CLAUDE.md — failing closed.' >&2; exit 1; }
+fi
+
+BLOCK=$(sed -n '/^```vid-inventory/,/^```$/p' INVENTORY.md | sed '1d;$d' || true)
+GRAMMAR=legacy; G93=no
+GL=$(printf '%s\n' "$BLOCK" | grep -v '^[[:space:]]*$' | head -n 1 | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+case "$GL" in 'grammar: 0.9.2') GRAMMAR=0.9.2 ;; 'grammar: 0.9.3') GRAMMAR=0.9.2; G93=yes ;; esac
+# 0.26.10.28.1 (9.1 R5, F2): the court refuses a grammar line it does not know, which it would read as the oldest; a block
+# with no grammar: line keeps the oldest reading, and the flags read the line as before
+case "$MODE:$GL" in default:'grammar: 0.9.2'|default:'grammar: 0.9.3') ;; default:grammar:*) echo "ViD inventory: refused — '$GL' is no inventory grammar: the known ones are 0.9.2 and 0.9.3 (the newest)." >&2; exit 1 ;; esac
+# v0.9.3 (3.13, R17): a --report run under 0.9.3 appends `court
+# name=inventory seconds=<s>`; a caller that is itself a court or a reporter
+# sets VID_COURT_EVENT=off.
+if [ "$G93" = yes ] && [ "$MODE" = report ] && [ "${VID_COURT_EVENT:-on}" != off ]; then
+  CT0=$(date +%s)
+  trap 'mkdir -p .vid; printf "court name=inventory seconds=%s at=%s\n" "$(( $(date +%s) - CT0 ))" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> .vid/metrics-events' EXIT
+fi
+SEAMS=$(printf '%s\n' "$BLOCK" | grep -E '^[[:space:]]*seam[[:space:]]*\|' || true)
+ROWS=$(printf '%s\n' "$BLOCK" | grep -E '^[[:space:]]*ROW-' || true)
+RULES=$(printf '%s\n' "$BLOCK" | grep -E '^[[:space:]]*rule[[:space:]]*\|' || true)
+HOSTS=$(printf '%s\n' "$BLOCK" | grep -E '^[[:space:]]*hostility[[:space:]]*\|' || true)
+# field and labeled are pure shell (v0.9.2): the court runs at every commit
+# over hundreds of rows, and three processes per field read was the cost.
+# Same answers as the cut/sed forms they replace: the n-th '|' field
+# trimmed (a row with no '|' is its own first field, as cut reads it); the
+# first field opening `<label>:`, its value trimmed, empty when absent.
+field() { # $1=row $2=n
+  _r=$1; _i=1
+  case "$_r" in *'|'*) ;; *) _i=$2 ;; esac
+  while [ "$_i" -lt "$2" ]; do
+    case "$_r" in *'|'*) _r=${_r#*|} ;; *) _r=''; break ;; esac
+    _i=$((_i + 1))
+  done
+  _r=${_r%%|*}
+  _r=${_r#"${_r%%[!	 ]*}"}; _r=${_r%"${_r##*[!	 ]}"}
+  printf '%s\n' "$_r"
+}
+labeled() { # $1=row $2=label — value of a labeled field, empty if absent
+  _rest=$1
+  while :; do
+    case "$_rest" in *'|'*) _f=${_rest%%|*}; _rest=${_rest#*|} ;; *) _f=$_rest; _rest='' ;; esac
+    _f=${_f#"${_f%%[!	 ]*}"}
+    case "$_f" in "$2:"*)
+      _f=${_f#"$2:"}; _f=${_f#"${_f%%[!	 ]*}"}; _f=${_f%"${_f##*[!	 ]}"}
+      printf '%s\n' "$_f"; return 0 ;;
+    esac
+    [ -n "$_rest" ] || return 0
+  done
+}
+# the last field once trailing labeled fields are stripped — the test field
+# of a rule or hostility row, whose earlier fields may contain '|'.
+lastfield() { printf '%s\n' "$1" | awk -F'|' '{ n=NF; while (n > 3 && $n ~ /^[[:space:]]*(origin|proved-red|paid-at):/) n--; print $n }' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'; }
+# rule_tier <rule row>: its tier field (2c); is_t0 <tier>: the spellings read as Tier 0
+rule_tier() { printf '%s\n' "$1" | awk -F'|' '{ n=NF; while (n > 4 && $n ~ /^[[:space:]]*(origin|proved-red|paid-at):/) n--; if (n >= 6) print $(n-1) }' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'; }
+is_t0() { case "$1" in 0|T0|t0|tier-0|tier0|Tier-0) return 0 ;; *) return 1 ;; esac; }
+# hos_targets: every id a hostility row's protects: names (2c)
+hos_targets() { for h in $HOSTS; do labeled "$h" protects; done | tr ' ,' '\n\n' | grep -v '^$' | sort -u || true; }
+# t0reqs: the Tier-0 demand items of PRD.md (2d) — the effective set, phase-aware
+t0reqs() {
+  [ -f PRD.md ] || return 0
+  if grep -q '^```vid-prd$' PRD.md; then
+    sed -n '/^```vid-prd$/,/^```$/p' PRD.md | grep -v '^```' | grep -v '^[[:space:]]*#' | awk -F'|' '{
+      id=$1; gsub(/^[ \t]+|[ \t]+$/,"",id); sub(/[ \t]+AMENDED$/,"",id);
+      t=$2; gsub(/^[ \t]+|[ \t]+$/,"",t); tier=$3; gsub(/^[ \t]+|[ \t]+$/,"",tier); ph="pilot";
+      for (i=4;i<=NF;i++) { f=$i; gsub(/^[ \t]+|[ \t]+$/,"",f); if (f ~ /^phase:/) { sub(/^phase:[ \t]*/,"",f); ph=f } }
+      if (id ~ /^REQ-[0-9]+$/) {
+        row[id] = (tier == "T0" && ph == "pilot" && (t == "functional" || t == "nfr" || t == "ux_flow" || t == "data_entity")) ? "y" : "n";
+        if (!(id in seen)) { order[++n] = id; seen[id] = 1 }
+      }
+    } END { for (i = 1; i <= n; i++) if (row[order[i]] == "y") print order[i] }'
+  else
+    grep -E '^### REQ-[0-9]+( AMENDED)? \(' PRD.md | awk '{
+      id=$2; tier=""; if (match($0, /\([^)]*\)/)) tier=substr($0, RSTART+1, RLENGTH-2);
+      last[id]=tier; if (!(id in seen)) { order[++n]=id; seen[id]=1 }
+    } END { for (i = 1; i <= n; i++) if (last[order[i]] == "T0") print order[i] }'
+  fi
+}
+# prot_reqs <targets>: the REQs a probe protects (2d) — named, carried by a protected rule row's origin:, or a protected ROW row's derived-from or origin:
+prot_reqs() {
+  printf '%s\n' "$1"
+  for p in $1; do
+    case "$p" in
+      RULE-*)
+        prow=$(printf '%s\n' "$RULES" | grep -E "^[[:space:]]*rule[[:space:]]*\|[[:space:]]*$p[[:space:]]*\|" | head -n 1 || true)
+        [ -n "$prow" ] && labeled "$prow" origin | tr ' ,' '\n\n' ;;
+      ROW-*)
+        prow=$(printf '%s\n' "$ROWS" | grep -E "^[[:space:]]*$p[[:space:]]*\|" | head -n 1 || true)
+        [ -n "$prow" ] && { field "$prow" 7 | tr ' ,' '\n\n'; labeled "$prow" origin | tr ' ,' '\n\n'; } ;;
+    esac
+  done
+}
+# t0invs: the Tier-0 invariants of PRD.md's vid-prd block (v0.9.7.3, R11) — the effective set, `later` left out
+t0invs() {
+  [ -f PRD.md ] && grep -q '^```vid-prd$' PRD.md || return 0
+  sed -n '/^```vid-prd$/,/^```$/p' PRD.md | grep -v '^```' | grep -v '^[[:space:]]*#' | awk -F'|' '{
+    id=$1; gsub(/^[ \t]+|[ \t]+$/,"",id); sub(/[ \t]+AMENDED$/,"",id); tier=$3; gsub(/^[ \t]+|[ \t]+$/,"",tier); ph="pilot";
+    for (i=4;i<=NF;i++) { f=$i; gsub(/^[ \t]+|[ \t]+$/,"",f); if (f ~ /^phase:/) { sub(/^phase:[ \t]*/,"",f); ph=f } }
+    if (id ~ /^INV-[0-9]+$/) { row[id] = (tier == "T0" && ph == "pilot") ? "y" : "n"; if (!(id in seen)) { order[++n] = id; seen[id] = 1 } }
+  } END { for (i = 1; i <= n; i++) if (row[order[i]] == "y") print order[i] }'
+}
+# --- v0.9.7.2 (3.3, R4), narrowed by v0.9.7.3 (3.11, R11): the protected rows and their unpaid hostility obligations ---
+if [ "$MODE" = protected ]; then
+  PT=$(mktemp -d); trap 'rm -rf "$PT"' EXIT
+  for r in $ROWS; do printf '%s\t%s\n' "$(field "$r" 1)" "$(field "$r" 7)"; done > "$PT/rows"
+  { t0reqs; t0invs; } > "$PT/t0req"
+  : > "$PT/hos"; : > "$PT/hreq"; for h in $HOSTS; do
+    t=$(lastfield "$h"); paid=no; hid=$(field "$h" 2)
+    case "$t" in tests/*) printf '%s\n' "$h" | grep -q 'proved-red:' && paid=yes ;; esac
+    printf '%s\t%s\t%s\n' "$hid" "$(labeled "$h" protects)" "$paid" >> "$PT/hos"
+    # the items this probe protects in 2d's meaning: named, or carried by a named rule row's origin: or a named row's derived-from
+    prot_reqs "$(labeled "$h" protects | tr ' ,' '\n\n' | grep -v '^$' || true)" | grep -v '^$' | sort -u | while read -r q; do printf '%s\t%s\n' "$hid" "$q"; done >> "$PT/hreq"
+  done
+  TG=$(hos_targets); prot_reqs "$TG" | grep -v '^$' | sort -u > "$PT/protreqs"
+  awk -F'\t' -v pd="$PT" '
+    function ids(s, A,   n, k, t) { split("", A); n = split(s, t, /[ ,]+/); for (k = 1; k <= n; k++) if (t[k] != "") A[t[k]] = 1 }
+    function prot(r, why) { if (!(r in P)) { P[r] = why; O[++no] = r } else if (index("," P[r] ",", "," why ",") == 0) P[r] = P[r] "," why }
+    function owe(r, by) { if (!((r, by) in W)) { W[r, by] = 1; WO[++nw] = r "\t" by } }
+    BEGIN {
+      while ((getline l < (pd "/rows")) > 0) { split(l, a, "\t"); R[++nr] = a[1]; ISROW[a[1]] = 1; ids(a[2], X); for (q in X) DER[a[1], q] = 1 }
+      while ((getline l < (pd "/t0req")) > 0) T0[l] = 1
+      while ((getline l < (pd "/protreqs")) > 0) PR[l] = 1
+      while ((getline l < (pd "/hos")) > 0) { split(l, a, "\t"); HP[a[1]] = a[2]; HPD[a[1]] = a[3]; HL[++nh] = a[1] }
+      # route 1: derived from a Tier-0 requirement or invariant
+      for (j = 1; j <= nr; j++) { r = R[j]; for (q in T0) if ((r, q) in DER) prot(r, q) }
+      # route 2: a hostility row names it by its ROW id; owed while that probe is unpaid
+      for (i = 1; i <= nh; i++) { h = HL[i]; ids(HP[h], X)
+        for (t in X) if (t ~ /^ROW-/ && (t in ISROW)) { prot(t, h); if (HPD[h] != "yes") owe(t, h) } }
+      # an unpaid probe protecting (2d, per probe) a Tier-0 item a row derives from
+      while ((getline l < (pd "/hreq")) > 0) { split(l, a, "\t"); if ((a[2] in T0) && HPD[a[1]] != "yes") for (j = 1; j <= nr; j++) if ((R[j], a[2]) in DER) owe(R[j], a[1]) }
+      # a Tier-0 item no probe protects (the OWED lines of 2d)
+      for (q in T0) if (!(q in PR)) for (j = 1; j <= nr; j++) if ((R[j], q) in DER) owe(R[j], q)
+      for (k = 1; k <= no; k++) print "protected " O[k] " from=" P[O[k]]
+      for (k = 1; k <= nw; k++) { split(WO[k], a, "\t"); print "owed " a[1] " by=" a[2] }
+      printf "protected rows=%d owed=%d\n", no, nw
+    }'
+  exit 0
+fi
+
+SUBJECTS=$(for r in $ROWS; do field "$r" 3; done | sort -u || true)
+DIFS=$(printf '%s\n' "$BLOCK" | grep -E '^[[:space:]]*difference[[:space:]]*\|' || true)
+
+# --- The commit under construction ------------------------------------------
+INGIT=no
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 && INGIT=yes
+# the rows this commit stages (default mode joins only these; strict/report all)
+STAGEDROWS=''
+[ "$INGIT" = yes ] && STAGEDROWS=$(git diff --cached -U0 -- INVENTORY.md 2>/dev/null | grep '^+' | grep -v '^+++' | sed 's/^+//' || true)
+# the files the commit under construction carries: the index, then HEAD —
+# listed once (blobs only, so a directory can never be cited as a test)
+CITABLE=''
+[ "$INGIT" = yes ] && CITABLE=$( { git ls-files --cached 2>/dev/null; git ls-tree -r --name-only HEAD 2>/dev/null; } | sort -u || true)
+cited_exists() { # $1=path — index, then HEAD, never the worktree; a file, never a directory
+  if [ "$INGIT" = yes ]; then
+    printf '%s\n' "$CITABLE" | grep -qxF "$1"
+  else
+    [ -f "$1" ]
+  fi
+}
+# v0.9.2 3.2: the closed deferral vocabulary. owed_class prints the class
+# word of a legal `owed: <class> — <detail>` field, or `unclassed`.
+LGF=0; LCA=0; LPC=0; LGS=0; LFS=0; LPR=0; LSO=0; LOD=0; LRV=0; OTHER=0
+PN=0; PK=0; PD=0; PJ=0   # the par, over ROW rows: materialised · legitimate · deploy-owed · other
+owed_class() { # $1=the test field
+  # FB-7 D1: in the shell's own words, no process a row (a project with no code yet owes nearly every row)
+  r=${1#[Oo][Ww][Ee][Dd]:}; r=${r#"${r%%[![:space:]]*}"}; c=${r%% *}; rest=${r#"$c"}; rest=${rest#"${rest%%[![:space:]]*}"}; det=''
+  case "$rest" in '— '*|'– '*|'- '*) det=${rest#* }; det=${det#"${det%%[![:space:]]*}"}; det=${det%"${det##*[![:space:]]}"} ;; esac
+  [ -n "$det" ] || { echo unclassed; return 0; }
+  case "$c" in
+    guard-first|census-armed|probe-capture|golden-set|fixture-source|prerequisite|reverted) echo "$c" ;;
+    owner-decision) case "$det" in OQ-[0-9]*) echo "$c" ;; *) echo unclassed ;; esac ;;
+    spec-only) case "$det" in 'first stage'|ticket) echo "$c" ;; *) echo unclassed ;; esac ;;   # v0.26.10.9 (R3)
+    *) echo unclassed ;;
+  esac
+}
+count_class() { case "$1" in guard-first) LGF=$((LGF + 1)) ;; census-armed) LCA=$((LCA + 1)) ;; probe-capture) LPC=$((LPC + 1)) ;; golden-set) LGS=$((LGS + 1)) ;; fixture-source) LFS=$((LFS + 1)) ;; prerequisite) LPR=$((LPR + 1)) ;; spec-only) LSO=$((LSO + 1)) ;; owner-decision) LOD=$((LOD + 1)) ;; reverted) LRV=$((LRV + 1)) ;; esac; }
+owed_row() { # $1=id $2=subject $3=test field $4=row|other — the OWED line, classed under 0.9.2
+  if [ "$GRAMMAR" = 0.9.2 ]; then
+    c=$(owed_class "$3")
+    if [ "$c" = unclassed ]; then
+      echo "GAP  $1 ($2) — unclassed deferral '$3': under grammar 0.9.2 a deferral is \"owed: <class> — <detail>\" with the class in the closed table (templates/INVENTORY.md) and the detail naming what is missing and when it is paid; a reason that describes a red test is a test to write."
+      OTHER=$((OTHER + 1)); OWED=$((OWED + 1)); if [ "$4" = row ]; then PJ=$((PJ + 1)); fi
+    else
+      echo "OWED  $1 ($2) — $3"
+      OWED=$((OWED + 1)); count_class "$c"; if [ "$4" = row ]; then PK=$((PK + 1)); fi
+    fi
+  else
+    echo "OWED  $1 ($2) — $3"
+    OWED=$((OWED + 1))
+  fi
+  return 0
+}
+proved_join() { # $1=id $2=path $3=sha $4=names the file must carry (space-separated) $5=whole row
+  [ "$INGIT" = yes ] || return 0
+  if [ "$MODE" = default ]; then printf '%s\n' "$STAGEDROWS" | grep -qxF "$5" || return 0; fi
+  if ! git cat-file -e "$3^{commit}" 2>/dev/null; then
+    echo "GAP  $1 — proved-red '$3' resolves to no commit; the stamp names where the test was observed red, and nowhere is not a place."
+    MISSING_TESTS=$((MISSING_TESTS + 1)); return 0
+  fi
+  if [ "$(git cat-file -t "$3:$2" 2>/dev/null)" != blob ]; then
+    echo "GAP  $1 — cites '$2' with proved-red $3, but the file does not exist at that commit; a test cannot have been red where it did not exist."
+    MISSING_TESTS=$((MISSING_TESTS + 1)); return 0
+  fi
+  pat=$(printf '%s\n' "$4" | tr ' ,' '\n\n' | grep -v '^$' | paste -sd '|' -)
+  if ! git show "$3:$2" 2>/dev/null | grep -qE "$pat"; then
+    echo "GAP  $1 — '$2' at proved-red $3 never names the row ($4); the observed red was some other row's."
+    MISSING_TESTS=$((MISSING_TESTS + 1)); return 0
+  fi
+}
+
+# --- Route table — from the generated, ratified route extractor ------------
+ROUTESRC=no
+ROUTES=''
+if [ -f checks/extractors/routes.sh ]; then
+  ROUTESRC=yes
+  ROUTES=$(sh checks/extractors/routes.sh 2>/dev/null | sed -n 's/^ok //p' | sort -u || true)
+fi
+
+# proved-red contract (§3.6) is active once any row carries the field —
+# pre-v0.7 inventories are unaffected until they adopt it.
+PROVED_ACTIVE=no
+printf '%s\n' "$BLOCK" | grep -q 'proved-red:' && PROVED_ACTIVE=yes
+
+GAPS=0; OWED=0; ORPHANS=0; MISSING_TESTS=0; HGAPS=0; NT0=0; DEPLOYOWED=0
+
+# 1. Route-table diff — a route in code with no inventory row fails the commit.
+if [ "$ROUTESRC" = yes ]; then
+  for route in $ROUTES; do
+    if ! printf '%s\n' "$SUBJECTS" | grep -qxF "$route"; then
+      echo "GAP  route $route exists in code but has no row in INVENTORY.md — additions are permitted, never silent."
+      GAPS=$((GAPS + 1))
+    fi
+  done
+else
+  echo 'note: no checks/extractors/routes.sh — route-table checks inactive (generate and ratify the routes extractor; see seed/extractors/README.md).'
+fi
+
+# 2. Rows: owed tests, promissory test refs, unproved tests (§3.6).
+check_test() { # $1=id $2=subject $3=test $4=whole-row $5=names the test must carry $6=row|other (the par counts ROW rows)
+  case "$3" in
+    'owed: paid by /vid deploy gate '[123]*)
+      # v0.9.1 3.6: a row only the deployed shape can observe — reported apart
+      # from owed debt, paid by /vid deploy's rung and stamped paid-at:
+      echo "DEPLOY-OWED  $1 ($2) — $3$(labeled "$4" paid-at | sed 's/^./ [paid-at: &/;s/$/]/;s/^ \[paid-at: \]$//')"
+      DEPLOYOWED=$((DEPLOYOWED + 1)); if [ "${6:-}" = row ]; then PD=$((PD + 1)); fi ;;
+    owed*|OWED*)
+      owed_row "$1" "$2" "$3" "${6:-}" ;;
+    tests/*)
+      if [ "${6:-}" = row ]; then PN=$((PN + 1)); fi
+      tpath=$(printf '%s\n' "$3" | cut -d' ' -f1)
+      if ! cited_exists "$tpath"; then
+        echo "GAP  $1 cites '$tpath' as its test, but no such file exists at the commit under construction (index, then HEAD) — promissory and worktree-only refs are invalid."
+        MISSING_TESTS=$((MISSING_TESTS + 1))
+      elif [ "$PROVED_ACTIVE" = yes ] && ! printf '%s\n' "$4" | grep -q 'proved-red:'; then
+        echo "OWED  $1 ($2) — unproved: test cited but never observed red (no proved-red field; §3.6)"
+        OWED=$((OWED + 1))
+      else
+        sha=$(labeled "$4" proved-red)
+        if [ -n "$sha" ]; then proved_join "$1" "$tpath" "$sha" "$1 $5" "$4"; fi
+      fi ;;
+    *)
+      # fail-closed: a typo'd path or prose in the test field must not
+      # silently exit the evidence join.
+      echo "GAP  $1 ($2) — unrecognized test field '$3'; use tests/... or \"owed: <reason>\"."
+      MISSING_TESTS=$((MISSING_TESTS + 1)); if [ "${6:-}" = row ]; then PJ=$((PJ + 1)); fi ;;
+  esac
+}
+for r in $ROWS; do
+  check_test "$(field "$r" 1)" "$(field "$r" 3)" "$(field "$r" 8)" "$r" "$(field "$r" 7)" row
+done
+for r in $RULES; do
+  # the census command may contain '|': take the test as the last field after
+  # stripping trailing labeled (origin:/proved-red:) fields.
+  check_test "$(field "$r" 2)" "$(field "$r" 3)" "$(lastfield "$r")" "$r" "$(labeled "$r" origin)" other
+done
+
+# 2-census. 0.26.10.29.3 (R7, F32): an inline census command that searches a path not there yet is refused when the rule
+# is written — a rule row new against HEAD's INVENTORY.md (every row outside a repository) — so this court agrees with
+# checks/census.sh. The test is the census court's own: each arm runs as the census runs it (`left :: right` split, from
+# the project's root, its output discarded), and any word on standard error is the refusal. Words that read as a missing
+# path get the extractor-path advice; any others are quoted. An extractor-path census, a ticket-mode `sites:` census and
+# the protected and report readings are not judged.
+CGAPS=0
+if [ "$MODE" = default ] || [ "$MODE" = strict ]; then
+  HEADRULES=''
+  [ "$INGIT" = yes ] && HEADRULES=$(git show HEAD:INVENTORY.md 2>/dev/null | sed -n '/^```vid-inventory/,/^```$/p' | grep -E '^[[:space:]]*rule[[:space:]]*\|' || true)
+  CERR=$(mktemp)
+  for r in $RULES; do
+    printf '%s\n' "$HEADRULES" | grep -qxF "$r" && continue
+    cmd=$(printf '%s\n' "$r" | awk -F'|' '{ n = NF; while (n > 4 && $n ~ /^[[:space:]]*(origin|proved-red|paid-at):/) n--; c = ""; for (i = 4; i <= n - 2; i++) c = c (i > 4 ? "|" : "") $i; gsub(/^[ \t]+|[ \t]+$/, "", c); print c }')
+    case "$cmd" in ''|checks/extractors/*|sites:*) continue ;; esac
+    case "$cmd" in *' :: '*) arms="${cmd%% :: *}
+${cmd#* :: }" ;; *) arms=$cmd ;; esac
+    for arm in $arms; do
+      sh -c "$arm" < /dev/null > /dev/null 2> "$CERR" || true
+      [ -s "$CERR" ] || continue
+      if grep -qiE 'no such file or directory|does not exist|cannot access|cannot find the path' "$CERR"; then
+        echo "GAP  $(field "$r" 2) — its census command searches a path that does not exist yet ($(head -n 1 "$CERR")); checks/census.sh refuses it at commit. Write the census as an extractor-path census, checks/extractors/invariant.<name>.sh: it reports pending while checks/extractors/ holds no extractor, and the extractor is written with the code."
+      else
+        echo "GAP  $(field "$r" 2) — its census command wrote to standard error ($(head -n 1 "$CERR")); checks/census.sh refuses it at commit: a failing arm must never silently shrink a population. If it searches a path that does not exist yet, write the census as an extractor-path census, checks/extractors/invariant.<name>.sh."
+      fi
+      CGAPS=$((CGAPS + 1)); break
+    done
+  done
+  rm -f "$CERR"
+fi
+
+# 2a. Golden-set rows (v0.8.1d): the golden fixture exists at the commit, and
+# the named difference row exists and carries its paying step — a deferred
+# test with a named step, never a permanent shrug.
+for r in $ROWS; do
+  id=$(field "$r" 1); g=$(labeled "$r" golden); d=$(labeled "$r" divergence)
+  if [ -n "$g" ] && ! cited_exists "$g"; then
+    echo "GAP  $id — golden: '$g' does not exist at the commit under construction; a golden set the test cannot read is not ratified."
+    MISSING_TESTS=$((MISSING_TESTS + 1))
+  fi
+  if [ -n "$d" ]; then
+    drow=$(printf '%s\n' "$DIFS" | grep -E "^[[:space:]]*difference[[:space:]]*\|[[:space:]]*$d[[:space:]]*\|" | head -n 1 || true)
+    if [ -z "$drow" ]; then
+      echo "GAP  $id — divergence: $d names no difference row; the divergence a golden set is deferred behind must be ratified."
+      MISSING_TESTS=$((MISSING_TESTS + 1))
+    elif [ -z "$(labeled "$drow" paying-step)" ]; then
+      echo "GAP  $id — $d carries no paying-step:; a divergence on a golden-set path is a deferred test with a named step, never a permanent shrug."
+      MISSING_TESTS=$((MISSING_TESTS + 1))
+    fi
+  fi
+done
+
+# 2b. Hostility rows (§4) — the fail-first ritual's mechanical half. Each
+# Tier-0 protection gains one sibling row that ATTEMPTS the forbidden thing
+# through the real public surface. Judged harder than a ROW row in two
+# places: the row must name the reversible toggle that produced the red (so
+# the ritual can be re-run), and proved-red is mandatory rather than
+# once-active — a probe never watched failing is evidence with the polarity
+# that reassures, since "refused" is equally green when the attempt never
+# reached the guard.
+for h in $HOSTS; do
+  id=$(field "$h" 2)
+  prot=$(labeled "$h" protects)
+  dis=$(labeled "$h" disable)
+  t=$(lastfield "$h")
+  if [ -z "$prot" ]; then
+    echo "GAP  $id has no 'protects:' field — a hostility probe is the sibling of a ratified Tier-0 protection, never free-standing."
+    HGAPS=$((HGAPS + 1))
+  fi
+  case "$dis" in
+    ''|none|None|NONE|n/a|N/A|N/a)
+      echo "GAP  $id ($prot) — no usable 'disable:' toggle (got '${dis:-<absent>}'). Name the reversible way the protection is turned off, or the probe can never be watched failing (§4.2)."
+      HGAPS=$((HGAPS + 1)) ;;
+  esac
+  case "$t" in
+    owed*|OWED*)
+      owed_row "$id" "$prot" "$t" other ;;
+    tests/*)
+      tpath=$(printf '%s\n' "$t" | cut -d' ' -f1)
+      if ! cited_exists "$tpath"; then
+        echo "GAP  $id cites '$tpath' as its probe, but no such file exists at the commit under construction (index, then HEAD) — promissory and worktree-only refs are invalid."
+        MISSING_TESTS=$((MISSING_TESTS + 1))
+      elif ! printf '%s\n' "$h" | grep -q 'proved-red:'; then
+        echo "GAP  $id ($prot) — rejected at materialisation: probe cited but never observed red (no proved-red; §4.2). Disable the protection by its own toggle, watch the probe fail on its assertion, restore, watch it pass, then stamp the sha."
+        HGAPS=$((HGAPS + 1))
+      else
+        proved_join "$id" "$tpath" "$(labeled "$h" proved-red)" "$id $prot" "$h"
+      fi ;;
+    *)
+      echo "GAP  $id ($prot) — unrecognized test field '$t'; use tests/... or \"owed: <reason>\"."
+      MISSING_TESTS=$((MISSING_TESTS + 1)) ;;
+  esac
+done
+
+# 2b2. Seams without credentials (v0.9.2 3.10, R15): under grammar 0.9.2 a
+# seam with `credentials: not-yet` is born `probe: unreachable-risk(credentials
+# not-yet)`, never `owed` — the client is written against the documented
+# contract and the probe is paid in full at deploy gate 2. Born owed, it
+# blocks its own client code for as long as nobody holds the credentials.
+if [ "$GRAMMAR" = 0.9.2 ]; then
+  for sm in $SEAMS; do
+    sid=$(field "$sm" 2); cred=$(labeled "$sm" credentials); prb=$(labeled "$sm" probe)
+    case "$cred" in not-yet) case "$prb" in owed*|OWED*)
+      echo "GAP  $sid ($(field "$sm" 3)) — credentials: not-yet born probe: owed; ratify probe: unreachable-risk(credentials not-yet) and pay the probe in full at deploy gate 2 (v0.9.2 3.10)."
+      OTHER=$((OTHER + 1)) ;; esac ;; esac
+  done
+fi
+# 2b2b. FB-4 A2: a seam's optional `place: dev`, the developers can reach the service with credentials of their own (read by the ticket-mode
+# planner alone: checks/planner.sh), is checked for form: the one word dev, and credentials: held.
+for sm in $SEAMS; do
+  plc=$(labeled "$sm" place); [ -n "$plc" ] || continue
+  if [ "$plc" != dev ]; then
+    echo "GAP  $(field "$sm" 2) ($(field "$sm" 3)) — place: $plc; a seam's place: is dev, or absent (FB-4 A2)."; GAPS=$((GAPS + 1))
+  elif [ "$(labeled "$sm" credentials)" != held ]; then
+    echo "GAP  $(field "$sm" 2) ($(field "$sm" 3)) — place: dev needs credentials: held; without them the service is checked on the test site: leave place: out (FB-4 A2)."; GAPS=$((GAPS + 1))
+  fi
+done
+# 2b3. v0.9.3 (3.13): an owed seam probe is completion debt, named.
+SEAMOWED=0
+if [ "$G93" = yes ]; then
+  for sm in $SEAMS; do
+    case "$(labeled "$sm" probe)" in owed*|OWED*)
+      echo "OWED  $(field "$sm" 2) ($(field "$sm" 3)) — probe: owed — an owed seam probe is completion debt whether or not client code touches it; pay it (probed) or ratify unreachable-risk(reason) (v0.9.3 3.13)"
+      OWED=$((OWED + 1)); SEAMOWED=$((SEAMOWED + 1)) ;; esac
+  done
+fi
+
+# 2c. Tier-0 completeness — every Tier-0 rule row has a hostility sibling.
+# Debt, not a commit gate: the rule may land before its probe (law first),
+# but the product is not done while a must-never-happen has never been
+# attempted. Blocks --strict, the same standing as any owed row.
+PROTECTED=$(hos_targets)
+for r in $RULES; do
+  rid=$(field "$r" 2)
+  is_t0 "$(rule_tier "$r")" || continue
+  NT0=$((NT0 + 1))
+  printf '%s\n' "$PROTECTED" | grep -qxF "$rid" && continue
+  echo "OWED  $rid (Tier-0) — no hostility sibling: this protection has never been attempted, only read (§4.1)."
+  OWED=$((OWED + 1))
+done
+
+# 2d. Tier-0 demand items owe a sibling too (v0.8.1b): a T0 protection may
+# be a PRD requirement rather than a rule row. The T0 set is read from
+# PRD.md — the enriched grammar's ```vid-prd rows (effective set: a later
+# AMENDED row wins; demand types only, invariants land as rule rows) or
+# the block form's "### REQ-NNN (T0)" headings. A probe protects a REQ by
+# naming it, or by naming a rule row whose origin: carries it, or a ROW
+# row derived from it. Same standing as 2c: debt, blocks --strict. The T0
+# set is phase-aware (v0.9.1 3.6, R12-i): a `later` T0 item owes no
+# sibling until an amendment moves it.
+if [ -f PRD.md ]; then
+  T0REQS=$(t0reqs)
+  PROTREQS=$(prot_reqs "$PROTECTED")
+  for q in $T0REQS; do
+    NT0=$((NT0 + 1))
+    printf '%s\n' "$PROTREQS" | grep -qxF "$q" && continue
+    echo "OWED  $q (Tier-0 item) — no hostility sibling: this protection has never been attempted, only read (§4.1)."
+    OWED=$((OWED + 1))
+  done
+fi
+# 2d2. 0.26.10.29.4 (phase 3 R3): probes per clause (§4.3). A Tier-0 demand item that at least one probe protects, by
+# fewer hostility rows than its effective fail-if has arms, is a NOTE: `NOTE  REQ-n — <a> arms, <p> probe(s) …`,
+# counted as arm-probes= on the notes line; never OWED, so --strict and every exit are unchanged. The arms are split as
+# checks/prd.sh's arms_of splits them (a top-level " or ", "; or ", ", or "; an "or" inside parentheses is no split);
+# the probes are counted per hostility row by 2d's reading (prot_reqs). An item no probe protects is 2d's OWED line, not
+# a NOTE. The join cannot pair a probe with an arm (a probe's target is often a REQ or a rule), so it counts only.
+NARM=0
+if [ -n "${T0REQS:-}" ] && [ -n "$HOSTS" ]; then
+  PRDSH=$(dirname "$0")/prd.sh; [ -f "$PRDSH" ] || PRDSH=checks/prd.sh
+  # PRDGNUM: PRD.md's header grammar at or past 0.26.11.1.2 (prd.sh's GNUM, read the same way)
+  PRDGNUM=$(awk '/^## /{exit} /^grammar:[ \t]*[0-9.]+[ \t]*$/{sub(/^grammar:[ \t]*/,""); sub(/[ \t]*$/,""); print; exit}' PRD.md | awk -F. '
+    NF { split("0.26.11.1.2", w, "."); for (i = 1; i <= 5; i++) { a = $i + 0; if (a > w[i] + 0) { print "yes"; exit } if (a < w[i] + 0) { print "no"; exit } }
+      print "yes" }')
+  ARMNOTES=$( { printf '%s\n' "$T0REQS" | awk '$0 != "" { print "T\t" $0 }'
+    { sh "$PRDSH" --failifs PRD.md 2> /dev/null || true; } | awk '{ print "F\t" $0 }'
+    for h in $HOSTS; do
+      prot_reqs "$(labeled "$h" protects | tr ' ,' '\n\n' | grep -v '^$' || true)" | grep -v '^$' | sort -u | awk -v h="$(field "$h" 2)" '{ print "H\t" h "\t" $0 }'
+    done; } | awk -F'\t' -v gnum="$PRDGNUM" '
+    # narms: arms_of in checks/prd.sh, as awk — the depth of the parentheses read in order, a trailing ";" or "," dropped;
+    # under the numbered grammar (PRDGNUM, 0.26.11.1.2, R13) the parts (1), then each "; (<n+1>) " in turn
+    function narms(s,   d, cur, p, i, j, c, n, a) { d = 0; cur = ""; n = 0
+      if (gnum == "yes") { if (substr(s, 1, 4) != "(1) ") return 1; n = 1; while (index(s, "; (" (n + 1) ") ")) n++; return n }
+      while ((i = index(s, " or ")) > 0) { p = substr(s, 1, i - 1); s = substr(s, i + 4)
+        for (j = 1; j <= length(p); j++) { c = substr(p, j, 1); if (c == "(") d++; else if (c == ")" && d > 0) d-- }
+        cur = cur p
+        if (d == 0) { sub(/[;,]$/, "", cur); a = cur; gsub(/[ \t]+/, " ", a); gsub(/^ | $/, "", a); if (a != "") n++; cur = "" } else cur = cur " or " }
+      cur = cur s; gsub(/[ \t]+/, " ", cur); gsub(/^ | $/, "", cur); if (cur != "") n++; return n }
+    $1 == "T" { T[++nt] = $2; next }
+    $1 == "F" { r = $0; sub(/^[^\t]*\t[^\t]*\t/, "", r); if (!($2 in A)) A[$2] = narms(r); next }   # the fail-if is the whole rest: a tab in it is no field break
+    $1 == "H" { if (!(($2, $3) in seen)) { seen[$2, $3] = 1; P[$3]++ } }
+    END { for (i = 1; i <= nt; i++) { q = T[i]; if (!(q in P) || !(q in A) || P[q] >= A[q]) continue
+        printf "NOTE  %s — %d arms, %d probe%s (§4.3: one hostility row per fail-if arm and way in)\n", q, A[q], P[q], (P[q] == 1 ? "" : "s") } }')
+  if [ -n "$ARMNOTES" ]; then printf '%s\n' "$ARMNOTES"; NARM=$(printf '%s\n' "$ARMNOTES" | grep -c . || true); fi
+fi
+
+# 2e. 0.26.10.29.3 (R5): a guard's "must still work" partner (§4.4). A ROW that a hostility row's protects: names by its
+# ROW id, with no row whose obligation opens "control of <that ROW>", is a NOTE: counted, never OWED, so --strict and
+# vid-fix are unchanged. A protects: target that is a REQ or a rule is not resolved to rows; the skill text is the
+# mechanism for every other guard.
+NCTL=0
+CTLOF=''
+for r in $ROWS; do
+  o=$(field "$r" 6)
+  case "$o" in 'control of ROW-'*) o=${o#control of }; CTLOF="$CTLOF${o%%[!A-Za-z0-9-]*}
+" ;; esac
+done
+for tg in $PROTECTED; do
+  case "$tg" in ROW-*) ;; *) continue ;; esac
+  printf '%s\n' "$ROWS" | grep -qE "^[[:space:]]*$tg[[:space:]]*\|" || continue
+  printf '%s\n' "$CTLOF" | grep -qxF "$tg" && continue
+  echo "NOTE  $tg — no control sibling: the allowed case is never shown working (§4.4)"
+  NCTL=$((NCTL + 1))
+done
+
+# 3. Orphans — a surface row's static route that exists in code but is linked
+# from no other app-source file has no door (F1: correct rooms, no doors).
+if [ "$ROUTESRC" = yes ]; then
+  for r in $ROWS; do
+    kind=$(field "$r" 2); subject=$(field "$r" 3)
+    [ "$kind" = surface ] || continue
+    case "$subject" in /) continue ;; /*\[*|/*\<*|/*:*) continue ;; /*) ;; *) continue ;; esac
+    printf '%s\n' "$ROUTES" | grep -qxF "$subject" || continue
+    LINKED=no
+    for p in $PREFIXES; do
+      case "$p" in tests*|checks*|design*) continue ;; esac
+      [ -e "$p" ] || continue
+      if grep -rE "(\"$subject[\"?]|'$subject['?]|\`$subject[\`?])" --exclude='*.md' "$p" 2>/dev/null \
+        | grep -vE "^[^:]*$subject[^:]*:" | grep -q .; then
+        LINKED=yes; break
+      fi
+    done
+    if [ "$LINKED" = no ]; then
+      echo "ORPHAN  $subject is built and inventoried but no app source links to it — unreachable from any navigation."
+      ORPHANS=$((ORPHANS + 1))
+    fi
+  done
+fi
+
+# 4. Guard before probe (v0.9.3 3.5, R6), --report under 0.9.3: for each
+# hostility row (`protects:`) and each control sibling (`control of ROW-NNN`)
+# one line naming its target's state, read through `sh checks/metrics.sh
+# row-state` — the headline's own computation per row, an early exit that
+# runs neither the census nor the selftest. Nothing else is printed: no
+# REQ→module assignment exists to print (the owner ruled against a serves:
+# column), and transitions, stages and trigger rows carry no ids.
+if [ "$G93" = yes ] && [ "$MODE" = report ] && [ -f checks/metrics.sh ]; then
+  GP=''
+  for h in $HOSTS; do
+    for tg in $(labeled "$h" protects | tr ' ,' '\n\n' | grep -v '^$'); do GP="$GP$(field "$h" 2) protects $tg
+"; done
+  done
+  for r in $ROWS; do
+    tg=$(field "$r" 6 | sed -n 's/^control of \(ROW-[0-9A-Za-z]*\).*/\1/p')
+    [ -n "$tg" ] && GP="$GP$(field "$r" 1) control of $tg
+"
+  done
+  if [ -n "$GP" ]; then
+    TGS=$(printf '%s' "$GP" | awk '{print $NF}' | sort -u | tr '\n' ' ')
+    GST=$(IFS=' '; sh checks/metrics.sh row-state $TGS 2>/dev/null || true)
+    for gp in $(printf '%s' "$GP"); do
+      tg=${gp##* }
+      st=$(printf '%s\n' "$GST" | sed -n "s/^$tg: //p" | head -n 1)
+      echo "guard $gp: ${st:-unknown (no state computed)}"
+    done
+  fi
+fi
+
+NROWS=$(printf '%s\n' "$ROWS" | grep -c . || true)
+NROUTES=$(printf '%s\n' "$ROUTES" | grep -c . || true)
+echo ''
+NHOST=$(printf '%s\n' "$HOSTS" | grep -c . || true)
+OWEDSTR="owed=$OWED"
+if [ "$GRAMMAR" = 0.9.2 ]; then
+  LEGIT=$((LGF + LCA + LPC + LGS + LFS + LPR + LSO + LOD + LRV))
+  OWEDSTR="owed=$OWED (legitimate=$LEGIT: guard-first=$LGF census-armed=$LCA probe-capture=$LPC golden-set=$LGS fixture-source=$LFS prerequisite=$LPR spec-only=$LSO owner-decision=$LOD reverted=$LRV; other=$OTHER)"
+  if [ "$G93" = yes ]; then OWEDSTR="owed=$OWED (legitimate=$LEGIT: guard-first=$LGF census-armed=$LCA probe-capture=$LPC golden-set=$LGS fixture-source=$LFS prerequisite=$LPR spec-only=$LSO owner-decision=$LOD reverted=$LRV; other=$OTHER; seam-probes=$SEAMOWED)"; fi
+fi
+echo "inventory: rows=$NROWS routes=$NROUTES route-gaps=$GAPS $OWEDSTR deploy-owed=$DEPLOYOWED orphans=$ORPHANS missing-tests=$MISSING_TESTS hostility=$NHOST tier0=$NT0 hostility-gaps=$HGAPS"
+# 0.26.10.29.3 (R5): the NOTEs' count, on its own line so the summary line keeps its fields
+# 0.26.10.29.4 (phase 3 R3): the arm-probe NOTEs on the same line, after control-siblings=; a count of 0 is not printed
+NOTESTR=''; [ "$NCTL" -eq 0 ] || NOTESTR="control-siblings=$NCTL"
+[ "$NARM" -eq 0 ] || NOTESTR="${NOTESTR:+$NOTESTR }arm-probes=$NARM"
+[ -z "$NOTESTR" ] || echo "inventory notes: $NOTESTR"
+if [ "$GRAMMAR" = 0.9.2 ]; then
+  # the par (R4): every ROW row is materialised, legitimately deferred, or deploy-owed — nothing else
+  if [ "$PJ" -eq 0 ] && [ $((PN + PK + PD)) -eq "$NROWS" ]; then PARV='holds'; else PARV='FAILS — every row is materialised or legitimately deferred; the gate does not open'; fi
+  echo "par: rows=$NROWS materialised=$PN legitimate=$PK deploy-owed=$PD other=$PJ — $PARV"
+fi
+
+# v0.9.8 (3.3, R6): authority changes raise a flag, never a wipe — each row whose authority bundle changed since its
+# baseline (checks/brief.sh authority --changed: an arm, an owner answer, a decision's rule), then the count. The next
+# close's test-author pass revisits it: kept (brief.sh authority --kept) or amended. Verdicts, attempts and holds are untouched; nothing here gates.
+# v0.26.10.3 (R3): the listing adds every row to confirm (brief.sh's default listing, R2's rule), `… to-confirm=yes`,
+# whatever its baseline says, and the count names them: `authority: changed=<n> (to confirm: <k>)`.
+if [ "$MODE" = report ] && [ -f checks/brief.sh ] && git rev-parse -q --verify HEAD > /dev/null 2>&1; then
+  AUTHC=$(sh checks/brief.sh authority --changed 2>/dev/null | grep '^authority-changed ' || true)
+  [ -n "$AUTHC" ] && printf '%s\n' "$AUTHC"
+  AUTHK=$(printf '%s\n' "$AUTHC" | grep -c ' to-confirm=yes$' || true)
+  echo "authority: changed=$(printf '%s\n' "$AUTHC" | grep -c . || true)$( [ "$AUTHK" -gt 0 ] && echo " (to confirm: $AUTHK)")"
+fi
+
+case "$MODE" in
+  report) exit 0 ;;
+  strict)
+    if [ $((GAPS + OWED + ORPHANS + MISSING_TESTS + HGAPS + CGAPS)) -gt 0 ]; then
+      echo 'ViD inventory --strict: not done — every route inventoried, every owed row materialised and proved red, every Tier-0 protection attempted by its hostility sibling, every surface reachable.' >&2
+      exit 1
+    fi ;;
+  *)
+    if [ $((GAPS + MISSING_TESTS + HGAPS + OTHER + CGAPS)) -gt 0 ]; then
+      echo 'ViD inventory: rejected — add the inventory row (and its test, or "owed: <reason>") for every new route; a hostility row names its protects:, its disable: toggle, and the sha where its probe was watched failing; under grammar 0.9.2 every deferral is classed.' >&2
+      exit 1
+    fi ;;
+esac
+exit 0
